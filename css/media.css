@@ -1,0 +1,28 @@
+/* // Extra small devices (portrait phones, less than 576px)
+// No media query since this is the default in Bootstrap */
+
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px)  {  }
+
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) {  }
+
+
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {  }
+
+
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and  (max-width: 767px) {  }
+
+
+
+@media (min-width: 375px) and  (max-width: 575px){}
+
+
+
+@media (min-width: 320px) and  (max-width: 374px){}
