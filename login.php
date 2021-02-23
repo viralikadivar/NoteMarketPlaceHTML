@@ -28,7 +28,7 @@
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/login.css?version=1">
 
 
 </head>
