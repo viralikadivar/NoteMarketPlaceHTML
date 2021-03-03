@@ -77,7 +77,9 @@ label {
     line-height: 20px;
     color: #333333; 
 }
-
+.text-hide {
+    visibility: collapse;
+}
 /* Input Fields */
 #inputEmail ,
 #inputPassword{
