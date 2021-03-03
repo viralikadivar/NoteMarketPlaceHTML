@@ -104,7 +104,7 @@
                     <h2>Dashboard</h2>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 text-right add-notes">
-                    <a href="add-notes.html" class="btn" role="button">Add Note</a>
+                    <a href="add-notes.php" class="btn" role="button">Add Note</a>
                 </div>
             </div>
 
