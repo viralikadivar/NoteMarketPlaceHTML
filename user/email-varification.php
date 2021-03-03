@@ -1,3 +1,85 @@
+<?php 
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+session_start();
+
+require "../db_connection.php";
+global $connection;
+
+
+$email = $_SESSION['userSignUpEmailId'] ;
+$userName =  $_SESSION['userSignUpName'];
+
+$query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' " ;
+$queryResult = mysqli_query($connection , $query );
+$supportField = mysqli_fetch_assoc($queryResult);
+$supportEmailAddress = $supportField['Value'];
+
+
+$userQuery = "SELECT ID FROM Users WHERE EmailID = '$email' and IsEmailVerified = 0 ";
+$userqueryResult = mysqli_query($connection , $userQuery );
+$userId = mysqli_fetch_assoc($userqueryResult);
+$ID = $userId['ID'];
+
+$token = $ID * $ID ;
+
+if(isset($_POST['verifyButton'])){
+
+
+    // For Sending Confirmation Mail 
+    require "../smtp/src/Exception.php";
+    require "../smtp/src/PHPMailer.php";
+    require "../smtp/src/SMTP.php";
+
+    $mail = new PHPMailer(true);
+    
+
+try {
+    //Server settings
+    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+    $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+    // UserName And Password
+    $senderEmail = $supportEmailAddress;
+    $mail->Username   = $senderEmail;                     //SMTP username
+    $mail->Password   = 'vira3333';                               //SMTP password
+
+
+    // Sender And Receiver Detail 
+    $mail->setFrom($senderEmail , 'Notes MarkePlace');  //Sender Detail
+    $mail->addAddress($email, $userName  );  //Receiver Detail
+
+
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Note Marketplace - Email Verification';
+    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+    $mail->Body    =  'Hello '.$userName.','.'<br>'.
+                    'Thank you for signing up with us. Please click on below link to verify your email address and to do login.'.'<br>'.
+'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/user/activation.php?token='.$token.'<br>'.
+'Regards,'.'<br>'.
+'Notes Marketplace';
+    // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+    $mail->send();
+
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+
+}
+
+?>
+<!-- http://localhost/user/activation.php?token= $token -->
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +110,7 @@
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/email-varification.css">
+    <link rel="stylesheet" href="../css/user/email-varification.css?version=24520105">
 
 </head>
 
@@ -38,6 +120,9 @@
     <div id="preloader">
         <div id="status">&nbsp;</div>
     </div>
+
+
+
     <!-- Preloader Ends -->
     <section>
         <table>
@@ -71,7 +156,12 @@
                 </tr>
                 <tr>
                     <th>
-                        <button type="submit"><span class="text-center">Verify Email Address</span></button>
+
+                    <form action="email-varification.php" method="post">
+
+                        <button type="submit" name="verifyButton"><span class="text-center">Verify Email Address</span></button>
+                    
+                        </form>
                     </th>
                 </tr>
             </tbody>
