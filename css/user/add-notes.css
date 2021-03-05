@@ -84,6 +84,18 @@ section {
     margin: 0;
 }
 
+select {
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+  }
+  
+  /* For IE10 */
+  select::-ms-expand {
+    display: none;
+  }
+
 /* Label for feilds */
 label {
     font-family: "Open sans" , sans-serif;
@@ -163,6 +175,13 @@ button.select-field img {
     color: #8a8a8a;
    
 }
+span.option-value {
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+}
 /* Description field */
 #description {
     border: 1px solid #d1d1d1;
@@ -214,7 +233,6 @@ button.save-finish:focus {
     background-color: #ffffff;
     border: 1px solid #6255a5;
     color: #6255a5;
-    box-shadow: 1px 1px 1.5px 1.5px #6255a5;   
 }
 
 
