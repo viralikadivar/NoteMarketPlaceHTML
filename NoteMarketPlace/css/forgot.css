@@ -1,0 +1,560 @@
+/*=============================================================
+                       Costom CSS Styles
+font-family: "Open sans" , sans-serif;
+    font-weight: 300;
+    font-weight: 400;
+    font-weight: 600;
+    font-weight: 700;
+
+color : #6255a5  OR rbg(98,85,165)
+==============================================================*/
+
+/* =========================================
+                Html, Body
+============================================ */
+html,
+body {
+    height: 100%;
+}
+section {
+    background: #fff;
+    overflow: hidden;
+}
+
+/* =========================================
+                Background Image
+============================================ */
+#forgot-password-page {
+    background-image: url("../images/pre-login/banner-with-overlay.jpg");
+    height: 1000px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* =========================================
+                form
+============================================ */
+input,
+form {
+    margin: 0;
+    padding: 0;
+}
+.container{
+    padding:0;
+    margin-top: 250px;
+    width: 580px;
+}
+.form-wrapper{
+    background-color: #fff;
+    padding: 50px;
+}
+.logo img {
+     margin-bottom: 25px;
+}
+
+/* Header */
+.form-wrapper h1 {
+    font-family: "Open sans" , sans-serif;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 38px;
+    color: #6255a5; 
+}
+.form-wrapper h5 {
+    font-family: "Open sans" , sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #333333;
+    margin: 15px 0 40px 0;
+}
+
+h6#message {
+    font-family: "Open sans" , sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 19px;
+    color: #333333;
+    margin: 0;
+}
+ 
+/* Label for feilds */
+label {
+    font-family: "Open sans" , sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333; 
+}
+
+/* Input Fields */
+#inputEmail{
+    border: 1px solid #6255a5;
+    border-radius: 3px;
+    width: 480px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+#inputEmail::placeholder {
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+}
+#inputEmail:focus,
+#inputEmail:hover{
+    background: #ffffff;
+    outline: none;
+    box-shadow: 0px 0px 15px -5px #6255a5;
+    border: transparent;
+}
+
+/*  Submit Button */
+button {
+    background-color: #6255a5;
+    width: 480px;
+    height: 50px;
+    border-radius: 3px;
+    margin-top: 20px ;
+    border: transparent;
+    font-family: "Open sans" , sans-serif;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: px;
+    line-height: 22px;
+    font-weight: 600;
+}
+button:hover ,
+button:focus {
+    background-color: #ffffff;
+    border: 1px solid #6255a5;
+    color: #6255a5;
+    
+}
+
+/* for responsive  */
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {  
+    
+    /* =========================================
+                    Background Image
+    ============================================ */
+    #forgot-password-page {
+        height: 550px;
+    }
+    
+    /* =========================================
+                    form
+    ============================================ */
+    .container{
+        margin-top: 75px;
+        width: 500px;
+    }
+    .form-wrapper{
+        padding: 30px;
+    }
+    .logo img {
+         margin-bottom: 20px;
+    }
+    
+    /* Header */
+    .form-wrapper h1 {
+        font-size: 32px;
+        line-height: 32px;
+    }
+    .form-wrapper h5 {
+        font-size: 14px;
+        line-height: 15px;
+        margin: 15px 0 40px 0;
+    }
+     
+    /* Label for feilds */
+    label {
+        font-size: 14px;
+        line-height: 18px;
+    }
+    
+    /* Input Fields */
+    #inputEmail ,
+    #inputPassword{
+        width: 440px;
+        height: 40px;
+        margin-bottom: 20px;
+    }
+    #inputPassword{
+        margin-bottom: 8px;
+    }
+    #inputEmail::placeholder ,
+    #inputPassword::placeholder {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    
+    /* Show-hide image icon  */
+    #show-hide {
+        float: right;
+        transform: translateY(-37px) translateX(-15px);
+    }
+    
+    /* Forgot Password */
+    #forgot-password {
+        font-size: 14px;
+        line-height: 20px;    
+        margin-left: 260px;
+    }
+    
+    
+    /* Check box */
+    .form-check input {
+        width: 25px;
+        height: 25px;
+    }
+    .form-check label {
+        font-size: 15px;
+        line-height: 20px;
+        margin-left: 19px;
+        margin-top: 6px;
+    }
+    
+    /*  Login Button */
+    button {
+        width: 440px;
+        height: 40px;
+        margin-top: 15px ;
+        margin-bottom: 15px;
+        font-size: 16px;
+        line-height: 22px;
+    }
+    
+    /* Sign Up */
+    .form-wrapper h4{
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0px 0 30px 0;
+    }
+    }
+    
+    
+    
+    /* // Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) and  (max-width: 767px) {
+         
+    /* =========================================
+                    Background Image
+    ============================================ */
+    #forgot-password-page {
+        height: 480px;
+    }
+    
+    /* =========================================
+                    form
+    ============================================ */
+    .container{
+        margin-top: 75px;
+        width: 420px;
+    }
+    .form-wrapper{
+        padding: 20px;
+    }
+    .logo img {
+        height: 35px;
+         margin-bottom: 15px;
+    }
+    
+    /* Header */
+    .form-wrapper h1 {
+        font-size: 30px;
+        line-height: 30px;
+    }
+    .form-wrapper h5 {
+        font-size: 14px;
+        line-height: 15px;
+        margin: 15px 0 30px 0;
+    }
+     
+    /* Label for feilds */
+    label {
+        font-size: 13px;
+        line-height: 15px;
+    }
+    
+    /* Input Fields */
+    #inputEmail ,
+    #inputPassword{
+        width: 380px;
+        height: 35px;
+        margin-bottom: 20px;
+    }
+    #inputPassword{
+        margin-bottom: 8px;
+    }
+    #inputEmail::placeholder ,
+    #inputPassword::placeholder {
+        font-size: 13px;
+        line-height: 20px;
+    }
+    
+    /* Show-hide image icon  */
+    #show-hide {
+        float: right;
+        height: 13px;
+        transform: translateY(-33px) translateX(-15px);
+    }
+    
+    /* Forgot Password */
+    #forgot-password {
+        font-size: 13px;
+        line-height: 20px;    
+        margin-left: 210px;
+    }
+    
+    
+    /* Check box */
+    .form-check input {
+        width: 20px;
+        height: 20px;
+    }
+    .form-check label {
+        font-size: 14px;
+        line-height: 20px;
+        margin-left: 15px;
+        margin-top: 2px;
+    }
+    
+    /*  Login Button */
+    button {
+        width: 380px;
+        height: 35px;
+        margin-top: 5px ;
+        margin-bottom: 15px;
+        font-size: 14px;
+        line-height: 22px;
+    }
+    
+    /* Sign Up */
+    .form-wrapper h4{
+        font-size: 13px;
+        line-height: 20px;
+        margin: 0px 0 30px 0;
+    }
+      }
+    
+    
+    
+    @media (min-width: 375px) and  (max-width: 575px){
+            
+    /* =========================================
+                    Background Image
+    ============================================ */
+    #forgot-password-page {
+        height: 380px;
+    }
+    
+    /* =========================================
+                    form
+    ============================================ */
+    .container{
+        margin-top: 55px;
+        width: 320px;
+    }
+    .form-wrapper{
+        padding: 20px;
+    }
+    .logo img {
+        height: 30px;
+         margin-bottom: 15px;
+    }
+    
+    /* Header */
+    .form-wrapper h1 {
+        font-size: 25px;
+        line-height: 25px;
+    }
+    .form-wrapper h5 {
+        font-size: 12px;
+        line-height: 12px;
+        margin: 8px 0 20px 0;
+    }
+     
+    /* Label for feilds */
+    label {
+        font-size: 12px;
+        line-height: 12px;
+        margin-bottom: 0;
+    }
+    
+    /* Input Fields */
+    #inputEmail ,
+    #inputPassword{
+        width: 280px;
+        height: 30px;
+        margin-bottom: 10px;
+    }
+    #inputPassword{
+        margin-bottom: 5px;
+    }
+    #inputEmail::placeholder ,
+    #inputPassword::placeholder {
+        font-size: 12px;
+        line-height: 12px;
+    }
+    
+    /* Show-hide image icon  */
+    #show-hide {
+        float: right;
+        height: 11px;
+        transform: translateY(-25px) translateX(-12px);
+    }
+    
+    /* Forgot Password */
+    #forgot-password {
+        font-size: 12px;
+        line-height: 12px;    
+        margin-left: 126px;
+    }
+    
+    
+    /* Check box */
+    .form-check input {
+        width: 15px;
+        height: 15px;
+    }
+    .form-check label {
+        font-size: 13px;
+        line-height: 20px;
+        margin-left: 5px;
+        margin-top: 0px;
+    }
+    
+    /*  Login Button */
+    button {
+        width: 280px;
+        height: 30px;
+        margin-top: 5px ;
+        margin-bottom: 5px;
+        font-size: 13px;
+        line-height: 22px;
+    }
+    
+    /* Sign Up */
+    .form-wrapper h4{
+        font-size: 12px;
+        line-height: 20px;
+        margin: 0px 0 20px 0;
+    }
+     
+    }
+    
+    
+    
+    @media (min-width: 320px) and  (max-width: 374px){
+        /* =========================================
+                    Background Image
+    ============================================ */
+    #forgot-password-page {
+        height: 300px;
+    }
+    
+    /* =========================================
+                    form
+    ============================================ */
+    .container{
+        margin-top: 40px;
+        width: 280px;
+    }
+    .form-wrapper{
+        padding: 15px;
+    }
+    .logo img {
+        height: 25px;
+         margin-bottom: 10px;
+    }
+    
+    /* Header */
+    .form-wrapper h1 {
+        font-size: 22px;
+        line-height: 23px;
+    }
+    .form-wrapper h5 {
+        font-size: 10px;
+        line-height: 12px;
+        margin: 3px 0 5px 0;
+    }
+     
+    /* Label for feilds */
+    label {
+        font-size: 10px;
+        line-height: 12px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    
+    /* Input Fields */
+    #inputEmail ,
+    #inputPassword{
+        width: 250px;
+        height: 25px;
+        margin-bottom: 0px;
+    }
+    #inputPassword{
+        margin-bottom: 5px;
+    }
+    #inputEmail::placeholder ,
+    #inputPassword::placeholder {
+        font-size: 10px;
+        line-height: 12px;
+    }
+    
+    /* Show-hide image icon  */
+    #show-hide {
+        float: right;
+        height: 10px;
+        transform: translateY(-23px) translateX(-10px);
+    }
+    
+    /* Forgot Password */
+    #forgot-password {
+        font-size: 10px;
+        line-height: 12px;    
+        margin-left: 120px;
+    }
+    small#passwordVarification{
+        font-size: 10px;
+    }
+    /* Check box */
+    .form-check input {
+        width: 11px;
+        height: 11px;
+        margin-top: 8px;
+    }
+    .form-check label {
+        font-size: 11px;
+        line-height: 11px;
+        margin-left: 0px;
+        margin-top: 0;
+    }
+    
+    /*  Login Button */
+    button {
+        width: 250px;
+        height: 25px;
+        margin-top: 0px ;
+        margin-bottom: 0px;
+        font-size: 11px;
+        line-height: 22px;
+    }
+    
+    /* Sign Up */
+    .form-wrapper h4{
+        font-size: 10px;
+        line-height: 20px;
+        margin: 0px 0 10px 0;
+    }
+     
+    }
+    
+
+
