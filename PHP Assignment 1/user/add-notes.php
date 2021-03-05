@@ -397,10 +397,10 @@ global $connection;
                 <!-- save and finish button -->
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3">
-                        <button class="save-finish" type="submit" name="save"><span class="text-center">save</span></button>
+                        <button type="submit"  name="save" class="save-finish" ><span class="text-center">save</span></button>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
-                        <button class="save-finish" type="submit" name="publish"><span class="text-center">publish</span></button>
+                        <button type="submit"  name="publish" class="save-finish" ><span class="text-center">publish</span></button>
                     </div>
                 </div>
 
@@ -457,7 +457,7 @@ if(isset($_POST['save'])){
     $title = $_POST['book-title'];
     $category = $_POST['category'];
     $type = $_POST['type'];
-    $noOfPages = $_POST['number-of-pages'];
+    $noOfPages =$_POST['number-of-pages'];
     $description = $_POST['book-description'];
     $counrty = $_POST['country'];
     $institutionName = $_POST['institute-name'];
@@ -465,12 +465,11 @@ if(isset($_POST['save'])){
     $courseCode = $_POST['course-code'];
     $professor = $_POST['pofessor-name'];
     $sellFor = $_POST['free-paid'];
-    $sellPrice = $_POST['sell-price'];
+    $sellPrice = (int)$_POST['sell-price'];
 
     $sellFor = mysqli_query($connection , "SELECT * FROM ReferenceData WHERE Value = '$sellFor' ");
     $sellForResult = mysqli_fetch_assoc($sellFor);
     $isPaid = $sellForResult['ID'];
-
 
     $getCountry = mysqli_query($connection , "SELECT * FROM Countries WHERE Name = '$counrty'");
     $getCountryResult = mysqli_fetch_assoc($getCountry);
@@ -484,42 +483,44 @@ if(isset($_POST['save'])){
     $getCategoryResult = mysqli_fetch_assoc($getCategory);
     $categoryID = $getCategoryResult['ID'];
 
-
-   $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberOfPages , Description ,  Country , Course , CourseCode , Professor , IsPaid , SellingPrice  )
-                                       VALUES( $sellerID ,  6 , '$title' , $categoryID   , $typeID  ,  (int)$noOfPages , '$description' , $countryID  , '$courseName' , '$courseCode' , '$professor' , $isPaid ,$sellPrice  )";
-
+   $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages , Description ,  Country , Course , CourseCode , Professor , IsPaid , SellingPrice  ) VALUES( $sellerID ,  6 , '$title' , $categoryID   , $typeID  ,  $noOfPages , '$description' , $countryID  , '$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
    $queryAddNotesResult = mysqli_query($connection , $queryAddNotes) ; 
 
    if($queryAddNotesResult){
+
     $addedNote = mysqli_insert_id($connection) ;
     print_r( $addedNote );
+    $pathToCreateNoteFolder = "../members/".$sellerID."/".$addedNote ;
+    mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
    }
-    
+
 
 }
 
  // file To upload 
+ $dateTime  = new DateTime();
+ $timeStamp = $dateTime->getTimestamp();
     // Book Image
     if(isset($_FILES['book-image'])){
 
-        $file_temp = $_FILES['book-image']['tmp_name'];
-
+        $book_image  = $_FILES['book-image']['tmp_name'];
+        move_uploaded_file ( $book_image ,$pathToCreateNoteFolder."/DP_".$timeStamp);
     };
         
+ 
+    // //Book PDF
+    // if(isset($_FILES['note-file'])){
 
-    //Book PDF
-    if(isset($_FILES['note-file'])){
+    //     $boo_file = $_FILES['note-file']['tmp_name'];
+    //     move_uploaded_file ( string $from , $pathToCreateNoteFolder);
+    // }
 
-        $file_temp = $_FILES['note-file']['tmp_name'];
+    // //Book Preview
+    // if(isset($_FILES['notes-preview'])){
 
-    }
+    //     $file_temp = $_FILES['notes-preview']['tmp_name'];
 
-    //Book Preview
-    if(isset($_FILES['notes-preview'])){
-
-        $file_temp = $_FILES['notes-preview']['tmp_name'];
-
-    }
+    // }
 
 
 ?>
