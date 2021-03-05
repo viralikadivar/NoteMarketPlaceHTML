@@ -1,6 +1,7 @@
 <?php require "db_connection.php" ?>
 <?php
 
+session_start();
 $password_class = "";
 $warning_class = "text-hide";
 
@@ -9,6 +10,7 @@ if (isset($_POST["submit"])) {
     global $connection;
 
     $email = $_POST["email"];
+    $_SESSION['userEmail'] = $email;
     $password  = $_POST["password"];
 
 
