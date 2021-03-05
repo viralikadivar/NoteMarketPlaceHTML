@@ -1,0 +1,794 @@
+/*=============================================================
+                       Costom CSS Styles
+font-family: "Open sans" , sans-serif;
+    font-weight: 300;
+    font-weight: 400;
+    font-weight: 600;
+    font-weight: 700;
+
+color : #6255a5  OR rbg(98,85,165)
+==============================================================*/
+
+/* =========================================
+                Html, Body
+============================================ */
+html,
+body {
+    height: 100%;
+}
+section {
+    background: #fff;
+    overflow: hidden;
+}
+
+
+
+/* ===========================================
+                Heading
+============================================ */
+.heading h2 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    margin-top: 60px ;
+}
+.heading h4 {
+    color: #333333;
+    font-family: "Open sans" , sans-serif;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 50px;
+}
+
+
+
+/* ===========================================
+                   Search Banner
+============================================ */
+#add-notes-banner{
+    background: none;
+    height: 200px;
+}
+#add-notes-bg-image {
+    position: fixed; 
+    z-index: -1;
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    top: 68px;
+}
+#add-notes-overlay {
+    background-color: rgba(57, 47, 105, 0.6);
+    width: 100%;
+    height: 200px;
+    position: fixed;
+    top: 68px;
+    z-index: -1;
+}
+
+/* FAQ Heading */
+#add-notes-heading {
+    height: 200px;
+    padding-top:72px;
+} 
+#add-notes-heading h2 {
+    color: #ffffff;
+    font-family: "Open sans" , sans-serif;
+    font-weight: 600;
+    font-size: 35px;
+    line-height: 42px;
+    padding: 0;
+    margin: 0;
+}
+
+select {
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+  }
+  
+  /* For IE10 */
+  select::-ms-expand {
+    display: none;
+  }
+
+/* Label for feilds */
+label {
+    font-family: "Open sans" , sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333; 
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Input Fields */
+#sell-price,
+#professor-name,
+#course-code,
+#course-name,
+#institution-name,
+#book-title,
+#note-page,
+.select-field{
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 50px;
+    width: 100%;
+}
+.dropdown {
+    margin: 0;
+}
+
+/* for taking input from user - photo and file */
+.take-note-detail {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 126px;
+}
+.take-note-detail label { 
+    text-align: center;
+    margin-left: 210px;
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;  
+    margin-top: 30px;
+}
+
+/* select note type */
+button.select-field {
+    padding-left: 13px;
+    background-color: #ffffff;
+    text-align: left;
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+}
+button.select-field img {
+    float: right;
+    padding-top: 5px;
+    padding-right: 8px;
+}
+
+/* placeholder of all inpit fields */
+#sell-price::placeholder,
+#professor-name::placeholder,
+#course-code::placeholder,
+#course-name::placeholder,
+#institution-name::placeholder,
+#note-page::placeholder,
+#book-title::placeholder,
+#description::placeholder{
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+   
+}
+span.option-value {
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+}
+/* Description field */
+#description {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    width: 100%;
+    height: 150px;
+    resize: none;
+}
+#description::placeholder {
+    padding-left: 13px;
+    padding-top: 10px;
+}
+
+/* radio buttons */
+.form-check-label{
+    margin-left: 20px;
+}
+.form-check-input{
+    height: 26px;
+    width: 26px;
+}
+.form-check-label{
+    margin-top: 8px;
+    margin-left: 13px;
+}
+/* hsl(250, 32%, 49%); */
+.form-check-input{
+    filter:   saturate(30%) hue-rotate(45deg);
+}
+/*  Submit Button */
+button.save-finish {
+    background-color: #6255a5;
+    width: 160px;
+    height: 50px;
+    border-radius: 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: transparent;
+    font-family: "Open sans" , sans-serif;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 22px;
+    font-weight: 600;
+}
+
+button.save-finish:hover ,
+button.save-finish:focus {
+    background-color: #ffffff;
+    border: 1px solid #6255a5;
+    color: #6255a5;
+}
+
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    #add-notes-banner{
+        height: 180px;
+    }
+    #add-notes-bg-image {
+        height: 200px;
+        top: 62px;
+    }
+    #add-notes-overlay {
+        background-color: rgba(57, 47, 105, 0.6);
+        width: 100%;
+        height: 200px;
+        position: fixed;
+        top: 62px;
+        z-index: -1;
+    }
+    
+    /* FAQ Heading */
+    #add-notes-heading {
+        height: 190px;
+        padding-top:65px;
+    } 
+    .take-note-detail label { 
+        margin-left: 170px;
+    }
+  }
+
+
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) { 
+.heading h2 {
+    font-size: 30px;
+    line-height: 36px;
+    margin-top: 30px ;
+}
+#add-notes-banner{
+    height: 170px;
+}
+#add-notes-bg-image {
+    height: 170px;
+    top: 52px;
+}
+#add-notes-overlay {
+    height: 170px;
+    top: 52px;
+}
+
+/* FAQ Heading */
+#add-notes-heading {
+    height: 150px;
+    padding-top:45px;
+}
+#add-notes-heading h2 {
+    font-size: 32px;
+    line-height: 42px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Label for feilds */
+label {
+    font-size: 15px;
+    line-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+/* Input Fields */
+#sell-price,
+#professor-name,
+#course-code,
+#course-name,
+#institution-name,
+#book-title,
+#note-page,
+.select-field{
+    height: 40px;
+    width: 100%;
+}
+.dropdown {
+    margin: 0;
+}
+
+/* for taking input from user - photo and file */
+.take-note-detail {
+    height: 90px;
+}
+.take-note-detail label  img{
+    height: 45px;
+}
+.take-note-detail label { 
+    margin-left: 270px;
+    margin-top: 13px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/* select note type */
+button.select-field {
+    padding-left: 13px;
+    font-size: 15px;
+    line-height: 20px;
+}
+button.select-field img {
+    padding-top: 5px;
+    padding-right: 8px;
+}
+
+/* placeholder of all inpit fields */
+#sell-price::placeholder,
+#professor-name::placeholder,
+#course-code::placeholder,
+#course-name::placeholder,
+#institution-name::placeholder,
+#note-page::placeholder,
+#book-title::placeholder,
+#description::placeholder{ 
+    font-size: 15px;
+    line-height: 20px;
+   
+}
+/* Description field */
+#description {
+    width: 100%;
+    height: 110px;
+}
+#description::placeholder {
+    padding-left: 11px;
+    padding-top: 8px;
+}
+
+/* radio buttons */
+.form-check-label{
+    margin-left: 20px;
+}
+.form-check-input{
+    height: 24px;
+    width: 24px;
+}
+.form-check-label{
+    margin-top: 6px;
+    margin-left: 10px;
+
+}
+/*  Submit Button */
+button.save-finish {
+    width: 140px;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+}
+
+
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and  (max-width: 767px) {
+    .heading h2 {
+        font-size: 27px;
+        line-height: 36px;
+        margin-top: 20px ;
+    }
+    #add-notes-banner{
+        height: 150px;
+    }
+    #add-notes-bg-image {
+        height: 150px;
+        top: 50px;
+    }
+    #add-notes-overlay {
+        height: 150px;
+        top: 50px;
+    }
+    
+    /* FAQ Heading */
+    #add-notes-heading {
+        height: 125px;
+        padding-top:30px;
+    }
+    #add-notes-heading h2 {
+        font-size: 32px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 14px;
+        line-height: 20px;
+        margin-top: 7px;
+        margin-bottom: 5px;
+    }
+    
+    /* Input Fields */
+    #sell-price,
+    #professor-name,
+    #course-code,
+    #course-name,
+    #institution-name,
+    #book-title,
+    #note-page,
+    .select-field{
+        height: 35px;
+        width: 100%;
+    }
+    .dropdown {
+        margin: 0;
+    }
+    
+    /* for taking input from user - photo and file */
+    .take-note-detail {
+        height: 90px;
+    }
+    .take-note-detail label  img{
+        height: 35px;
+    }
+    .take-note-detail label { 
+        margin-left: 210px;
+        margin-top: 17px;
+        font-size: 13px;
+        line-height: 20px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 12px;
+        font-size: 15px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    
+    /* placeholder of all inpit fields */
+    #sell-price::placeholder,
+    #professor-name::placeholder,
+    #course-code::placeholder,
+    #course-name::placeholder,
+    #institution-name::placeholder,
+    #note-page::placeholder,
+    #book-title::placeholder,
+    #description::placeholder{ 
+        font-size: 14px;
+        line-height: 20px;
+       
+    }
+    /* Description field */
+    #description {
+        width: 100%;
+        height: 100px;
+    }
+    #description::placeholder {
+        padding-left: 11px;
+        padding-top: 8px;
+    }
+    
+    /* radio buttons */
+    .form-check-label{
+        margin-left: 20px;
+    }
+    .form-check-input{
+        height: 22px;
+        width: 22px;
+    }
+    .form-check-label{
+        margin-top: 6px;
+        margin-left: 10px;
+    
+    }
+    /*  Submit Button */
+    button.save-finish {
+        width: 140px;
+        height: 40px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        line-height: 22px;
+    }
+    
+  }
+
+
+
+@media (min-width: 375px) and  (max-width: 575px){
+    .heading h2 {
+        font-size: 25px;
+        line-height: 30px;
+        margin-top: 10px ;
+    }
+    #add-notes-banner{
+        height: 120px;
+    }
+    #add-notes-bg-image {
+        height: 120px;
+        top: 48px;
+    }
+    #add-notes-overlay {
+        height: 120px;
+        top: 48px;
+    }
+    
+    /* FAQ Heading */
+    #add-notes-heading {
+        height: 90px;
+        padding-top: 15px;
+    }
+    #add-notes-heading h2 {
+        font-size: 25px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 12px;
+        line-height: 12px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    /* Input Fields */
+    #sell-price,
+    #professor-name,
+    #course-code,
+    #course-name,
+    #institution-name,
+    #book-title,
+    #note-page,
+    .select-field{
+        height: 30px;
+        width: 100%;
+    }
+    .dropdown {
+        margin: 0;
+    }
+    
+    /* for taking input from user - photo and file */
+    .take-note-detail {
+        height: 70px;
+    }
+    .take-note-detail label  img{
+        height: 30px;
+    }
+    .take-note-detail label { 
+        margin-left: 41%;
+        margin-top: 13px;
+        font-size: 11px;
+        line-height: 20px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 12px;
+        font-size: 11px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        height: 13px;
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    
+    /* placeholder of all inpit fields */
+    #sell-price::placeholder,
+    #professor-name::placeholder,
+    #course-code::placeholder,
+    #course-name::placeholder,
+    #institution-name::placeholder,
+    #note-page::placeholder,
+    #book-title::placeholder,
+    #description::placeholder{ 
+        font-size: 12px;
+        line-height: 20px;
+       
+    }
+    /* Description field */
+    #description {
+        width: 100%;
+        height: 80px;
+    }
+    #description::placeholder {
+        padding-left: 8px;
+        padding-top: 4px;
+    }
+    
+    /* radio buttons */
+    .form-check-label{
+        margin-left: 20px;
+    }
+    .form-check-input{
+        height: 20px;
+        width: 20px;
+    }
+    .form-check-label{
+        margin-top: 6px;
+        margin-left: 10px;
+    
+    }
+    /*  Submit Button */
+    button.save-finish {
+        width: 100px;
+        height: 30px;
+        margin-top: 20px;
+        margin-bottom: 0px;
+        font-size: 13px;
+        line-height: 22px;
+    }
+    #add-notes-form > div > form > div:nth-child(10) > div:nth-child(2)
+    {
+        margin-left: 120px;
+        margin-top: -50px;
+    }
+}
+
+
+
+@media (min-width: 320px) and  (max-width: 374px){
+    .heading h2 {
+        font-size: 22px;
+        line-height: 30px;
+        margin-top: 10px ;
+    }
+    #add-notes-banner{
+        height: 100px;
+    }
+    #add-notes-bg-image {
+        height: 100px;
+        top: 45px;
+    }
+    #add-notes-overlay {
+        height: 100px;
+        top: 45px;
+    }
+    
+    /* FAQ Heading */
+    #add-notes-heading {
+        height: 70px;
+        padding-top:0px;
+    }
+    #add-notes-heading h2 {
+        font-size: 25px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 12px;
+        line-height: 12px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    
+    /* Input Fields */
+    #sell-price,
+    #professor-name,
+    #course-code,
+    #course-name,
+    #institution-name,
+    #book-title,
+    #note-page,
+    .select-field{
+        height: 30px;
+        width: 100%;
+    }
+    .dropdown {
+        margin: 0;
+    }
+    
+    /* for taking input from user - photo and file */
+    .take-note-detail {
+        height: 70px;
+    }
+    .take-note-detail label  img{
+        height: 30px;
+    }
+    .take-note-detail label { 
+        margin-left: 38%;
+        margin-top: 13px;
+        font-size: 11px;
+        line-height: 20px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 12px;
+        font-size: 11px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        height: 13px;
+        padding-top: 7px;
+        padding-right: 8px;
+    }
+    
+    /* placeholder of all inpit fields */
+    #sell-price::placeholder,
+    #professor-name::placeholder,
+    #course-code::placeholder,
+    #course-name::placeholder,
+    #institution-name::placeholder,
+    #note-page::placeholder,
+    #book-title::placeholder,
+    #description::placeholder{ 
+        font-size: 12px;
+        line-height: 20px;
+       
+    }
+    /* Description field */
+    #description {
+        width: 100%;
+        height: 80px;
+    }
+    #description::placeholder {
+        padding-left: 8px;
+        padding-top: 4px;
+    }
+    
+    /* radio buttons */
+    .form-check-label{
+        margin-left: 20px;
+    }
+    .form-check-input{
+        height: 20px;
+        width: 20px;
+    }
+    .form-check-label{
+        margin-top: 6px;
+        margin-left: 10px;
+    
+    }
+    /*  Submit Button */
+    button.save-finish {
+        width: 100px;
+        height: 30px;
+        margin-top: 20px;
+        margin-bottom: 0px;
+        font-size: 13px;
+        line-height: 22px;
+    }
+    #add-notes-form > div > form > div:nth-child(10) > div:nth-child(2)
+    {
+        margin-left: 120px;
+        margin-top: -50px;
+    }
+}
+
