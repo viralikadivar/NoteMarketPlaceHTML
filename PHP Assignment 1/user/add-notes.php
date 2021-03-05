@@ -489,7 +489,6 @@ if(isset($_POST['save'])){
    if($queryAddNotesResult){
 
     $addedNote = mysqli_insert_id($connection) ;
-    print_r( $addedNote );
     $pathToCreateNoteFolder = "../members/".$sellerID."/".$addedNote ;
     mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
    }
@@ -504,23 +503,32 @@ if(isset($_POST['save'])){
     if(isset($_FILES['book-image'])){
 
         $book_image  = $_FILES['book-image']['tmp_name'];
-        move_uploaded_file ( $book_image ,$pathToCreateNoteFolder."/DP_".$timeStamp);
+        $book_path = $pathToCreateNoteFolder."/DP_".$timeStamp ;
+        move_uploaded_file ( $book_image , $book_path);
+        mysqli_query($connection , "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
+
     };
         
- 
-    // //Book PDF
-    // if(isset($_FILES['note-file'])){
 
-    //     $boo_file = $_FILES['note-file']['tmp_name'];
-    //     move_uploaded_file ( string $from , $pathToCreateNoteFolder);
-    // }
 
-    // //Book Preview
-    // if(isset($_FILES['notes-preview'])){
+    //Book Preview
+    if(isset($_FILES['notes-preview'])){
 
-    //     $file_temp = $_FILES['notes-preview']['tmp_name'];
+        $bookPreview = $_FILES['notes-preview']['tmp_name'];
+        $preview_path = $pathToCreateNoteFolder."/Preview_".$bookPreview ;
+        move_uploaded_file ( $bookPreview , $preview_path);
+        mysqli_query($connection , "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID =  $addedNote");
 
-    // }
+    }
+
+     
+    //Book PDF
+    if(isset($_FILES['note-file'])){
+
+        $book_file = $_FILES['note-file']['tmp_name'];
+        $file_path = $pathToCreateNoteFolder."/Attachements"."/Preview_".$timeStamp ;
+        move_uploaded_file ( $book_file, $file_path);
+    }
 
 
 ?>
