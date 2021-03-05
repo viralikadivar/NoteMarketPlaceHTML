@@ -1,0 +1,101 @@
+/* ===========================================
+                Heading
+============================================ */
+.heading h2 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 38px;
+    margin-top: 30px ;
+    /* margin-bottom: -45px; */
+}
+
+/* not to edit  */
+  /* table  */
+  .table thead th:nth-child(8),
+  .table tbody tr td:nth-child(8),
+  .table thead th:nth-child(7),
+  .table tbody tr td:nth-child(7),
+  .table thead th:nth-child(1),
+.table tbody tr td:nth-child(1) {
+    text-align: center;
+}
+
+/* add administrator button  */
+.add-field{
+    margin-bottom: -57px;
+}
+button.add-button{
+    background-color: #6255a5;
+    width: 240px;
+    height: 50px;
+    border-radius: 3px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border: transparent;
+}
+button.add-button a {
+    font-family: "Open sans" , sans-serif;
+    color: #fff;
+    font-size: 18px;
+    text-decoration : none ;
+    text-transform: uppercase;
+    line-height: 22px;
+    font-weight: 600;
+}
+
+
+/* responsive  */
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {  
+    .heading h2 {
+        margin-top: 10px;
+    }
+    button.add-button{
+        height: 40px;
+    }
+    .add-field{
+        margin-bottom: -50px;
+    }
+}
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and  (max-width: 767px) { 
+    .heading h2 {
+        margin-top: 0px;
+    }
+    button.add-button{
+        height: 40px;
+    }
+    .add-field{
+        margin-bottom: -18px;
+    }
+ }
+
+ 
+@media (min-width: 375px) and  (max-width: 575px){
+    .heading h2 {
+        margin-top: 0;
+        margin-bottom: 0px;
+    }
+    button.add-button{
+        height: 40px;
+    }
+    .add-field{
+        margin-bottom: -25px;
+    }
+}
+
+@media (min-width: 320px) and  (max-width: 374px){
+    .heading h2 {
+        margin-top: 0;
+        margin-bottom: 0px;
+    }
+    button.add-button{
+        height: 40px;
+    }
+    .add-field{
+        margin-bottom: -25px;
+    }
+}
