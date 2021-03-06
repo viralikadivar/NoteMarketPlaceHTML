@@ -483,15 +483,7 @@ if (isset($_POST['save'])) {
         mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
         $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
         mkdir($pathToCreateNoteFolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
-    } else {
-        echo "Not Inserted";
-    }
-
-
-
-    global $pathToCreateNoteFolder;
-    global $FolderNotesAttachments;
-    global $addedNote;
+ 
     // file To upload 
     $dateTime  = new DateTime();
     $timeStamp = $dateTime->getTimestamp();
@@ -546,6 +538,10 @@ if (isset($_POST['save'])) {
             }
         }
     }
+} else {
+    echo "Not Inserted";
+}
+
 }
 
 ?>
