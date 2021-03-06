@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require "../db_connection.php";
 global $connection;
@@ -7,7 +7,7 @@ global $connection;
 
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
 
     <!-- important meta tags -->
@@ -66,8 +66,7 @@ global $connection;
                         <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
                         <li class="nav-item">
                             <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="User">
+                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png" alt="User">
                                 <div class="dropdown-menu" aria-labelledby="user-menu">
                                     <a class="dropdown-item" href="user-profile.html">My Profile</a>
                                     <a class="dropdown-item" href="my-download.html">My Downloads</a>
@@ -87,8 +86,7 @@ global $connection;
 
 
         <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span id="open" class="navbar-toggler-icon">&#9776;</span>
                 <span id="close" class="navbar-toggler-icon">&times;</span>
             </button>
@@ -144,8 +142,7 @@ global $connection;
                             <div class="take-note-detail">
                                 <label for="photo"><img src="../images/form/upload-file.png" alt="Uplaod"><br>
                                     Upload a photo</label>
-                                <input type="file" name="book-image" id="photo" style="visibility: hidden;"
-                                    accept="image/png, image/jpeg">
+                                <input type="file" name="book-image" id="photo" style="visibility: hidden;" accept="image/png, image/jpeg">
                             </div>
                         </div>
 
@@ -157,24 +154,24 @@ global $connection;
                                 <button type="button" id="selectBookType" class="select-field" data-toggle="dropdown">
                                     Select your Note type <img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
-                                <ul class="dropdown-menu dropdown-from-db types"  aria-labelledby="selectBookType" style="width:100%">
-                                <?php 
-                                    
+                                <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookType" style="width:100%">
+                                    <?php
+
                                     $queryType = "SELECT * FROM NoteTypes WHERE IsActive = 1";
-                                    $noteType = mysqli_query( $connection , $queryType );
-                                    while( $type = mysqli_fetch_assoc($noteType)) {
-                                        echo "<li value='".$type['Name']."'>".$type['Name']."</li>";
+                                    $noteType = mysqli_query($connection, $queryType);
+                                    while ($type = mysqli_fetch_assoc($noteType)) {
+                                        echo "<li value='" . $type['Name'] . "'>" . $type['Name'] . "</li>";
                                     }
-                                
-                                ?>
-                                  
+
+                                    ?>
+
                                 </ul>
-                              
+
 
                             </div>
                             <input type="hidden" name="type">
                         </div>
-                       
+
                     </div>
 
                     <div class="col-lg-6">
@@ -187,18 +184,18 @@ global $connection;
                                     Select your Category<img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
                                 <ul class="dropdown-menu dropdown-from-db categories" aria-labelledby="book-category" style="width:100%">
-                                    <?php 
-                                    
-                                        $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
-                                        $noteCategories = mysqli_query( $connection , $queryCategories);
-                                        while( $categories = mysqli_fetch_assoc($noteCategories)) {
-                                            echo "<li value='".$categories['Name']."'>".$categories['Name']."</li>";
-                                        }
-                                    
+                                    <?php
+
+                                    $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
+                                    $noteCategories = mysqli_query($connection, $queryCategories);
+                                    while ($categories = mysqli_fetch_assoc($noteCategories)) {
+                                        echo "<li value='" . $categories['Name'] . "'>" . $categories['Name'] . "</li>";
+                                    }
+
                                     ?>
-                                  
+
                                 </ul>
-                                
+
                             </div>
                             <input type="hidden" name="category">
                         </div>
@@ -216,8 +213,7 @@ global $connection;
                         <!-- Number Of Pages -->
                         <div class="form-group">
                             <label for="note-page">Number of Pages</label>
-                            <input type="text" name="number-of-pages" class="form-control" id="note-page"
-                                placeholder="Enter number of note pages">
+                            <input type="text" name="number-of-pages" class="form-control" id="note-page" placeholder="Enter number of note pages">
                         </div>
                     </div>
                 </div>
@@ -258,20 +254,20 @@ global $connection;
                                     Select your country<img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
                                 <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%">
-                                    <?php 
-                                    
-                                        $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
-                                        $countryResult = mysqli_query( $connection , $queryCountry );
-                                        while( $country = mysqli_fetch_assoc($countryResult)) {
-                                            echo "<li value='".$country['Name']."'>".$country['Name']."</li>";
-                                        }
-                                    
+                                    <?php
+
+                                    $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
+                                    $countryResult = mysqli_query($connection, $queryCountry);
+                                    while ($country = mysqli_fetch_assoc($countryResult)) {
+                                        echo "<li value='" . $country['Name'] . "'>" . $country['Name'] . "</li>";
+                                    }
+
                                     ?>
-                                  
+
                                 </ul>
                             </div>
                             <input type="hidden" name="country">
-                            
+
                         </div>
                     </div>
 
@@ -280,8 +276,7 @@ global $connection;
                         <!-- Title of Institute  -->
                         <div class="form-group">
                             <label for="institution-name" required>Institution Name</label>
-                            <input type="text" name="institute-name" class="form-control" id="institution-name"
-                                placeholder="Enter Your Institution name">
+                            <input type="text" name="institute-name" class="form-control" id="institution-name" placeholder="Enter Your Institution name">
                         </div>
                     </div>
                 </div>
@@ -300,8 +295,7 @@ global $connection;
                         <!-- Course Name -->
                         <div class="form-group">
                             <label for="course-name" required>Course Name</label>
-                            <input type="text" name="course-name" class="form-control" id="course-name"
-                                placeholder="Enter Your course name">
+                            <input type="text" name="course-name" class="form-control" id="course-name" placeholder="Enter Your course name">
                         </div>
 
                     </div>
@@ -311,8 +305,7 @@ global $connection;
                         <!-- Course code -->
                         <div class="form-group">
                             <label for="course-code" required>Course Code</label>
-                            <input type="text" name="course-code" class="form-control" id="course-code"
-                                placeholder="Enter Your course code">
+                            <input type="text" name="course-code" class="form-control" id="course-code" placeholder="Enter Your course code">
                         </div>
 
                     </div>
@@ -322,8 +315,7 @@ global $connection;
                         <!-- professor/Lecturer -->
                         <div class="form-group">
                             <label for="professor-name" required>Professor/Lecturer</label>
-                            <input type="text" name="pofessor-name"class="form-control" id="professor-name"
-                                placeholder="Enter Your professor name">
+                            <input type="text" name="pofessor-name" class="form-control" id="professor-name" placeholder="Enter Your professor name">
                         </div>
 
                     </div>
@@ -348,8 +340,7 @@ global $connection;
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="free-paid" id="free"
-                                        value="Free" checked>
+                                    <input class="form-check-input" type="radio" name="free-paid" id="free" value="Free" checked>
                                     <label class="form-check-label" for="free">
                                         Free
                                     </label>
@@ -357,8 +348,7 @@ global $connection;
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="free-paid" id="paid"
-                                        value="Paid">
+                                    <input class="form-check-input" type="radio" name="free-paid" id="paid" value="Paid">
                                     <label class="form-check-label" for="paid">
                                         Paid
                                     </label>
@@ -371,8 +361,7 @@ global $connection;
                                 <!-- Sell Price -->
                                 <div class="form-group">
                                     <label for="sell-price" required>Sell Price *</label>
-                                    <input type="text" name="sell-price" class="form-control" id="sell-price"
-                                        placeholder="Enter Your price" required>
+                                    <input type="text" name="sell-price" class="form-control" id="sell-price" placeholder="Enter Your price" required>
                                 </div>
                             </div>
                         </div>
@@ -385,8 +374,7 @@ global $connection;
                             <div class="take-note-detail">
                                 <label for="preview"><img src="../images/form/upload-file.png" alt="Uplaod"><br>
                                     Upload a photo</label>
-                                <input type="file" name='notes-preview' id="preview" style="visibility: hidden;"
-                                    accept="application/pdf" required>
+                                <input type="file" name='notes-preview' id="preview" style="visibility: hidden;" accept="application/pdf" required>
                             </div>
                         </div>
 
@@ -397,10 +385,10 @@ global $connection;
                 <!-- save and finish button -->
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-3">
-                        <button type="submit"  name="save" class="save-finish" ><span class="text-center">save</span></button>
+                        <button type="submit" name="save" class="save-finish"><span class="text-center">save</span></button>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3">
-                        <button type="submit"  name="publish" class="save-finish" ><span class="text-center">publish</span></button>
+                        <button type="submit" name="publish" class="save-finish"><span class="text-center">publish</span></button>
                     </div>
                 </div>
 
@@ -451,13 +439,14 @@ global $connection;
 
 <?php
 
-if(isset($_POST['save'])){
+if (isset($_POST['save'])) {
 
-    $sellerID = 1 ;
+    $sellerID = 1;
+    $Status = 6 ;
     $title = $_POST['book-title'];
     $category = $_POST['category'];
     $type = $_POST['type'];
-    $noOfPages =$_POST['number-of-pages'];
+    $noOfPages = (int)$_POST['number-of-pages'];
     $description = $_POST['book-description'];
     $counrty = $_POST['country'];
     $institutionName = $_POST['institute-name'];
@@ -467,68 +456,96 @@ if(isset($_POST['save'])){
     $sellFor = $_POST['free-paid'];
     $sellPrice = (int)$_POST['sell-price'];
 
-    $sellFor = mysqli_query($connection , "SELECT * FROM ReferenceData WHERE Value = '$sellFor' ");
+    $sellFor = mysqli_query($connection, "SELECT * FROM ReferenceData WHERE Value = '$sellFor' ");
     $sellForResult = mysqli_fetch_assoc($sellFor);
     $isPaid = $sellForResult['ID'];
 
-    $getCountry = mysqli_query($connection , "SELECT * FROM Countries WHERE Name = '$counrty'");
+    $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
     $getCountryResult = mysqli_fetch_assoc($getCountry);
     $countryID = $getCountryResult['ID'];
-    
-    $getType = mysqli_query($connection , "SELECT * FROM NoteTypes WHERE Name = '$type' ");
+
+    $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
     $getTypeResult = mysqli_fetch_assoc($getType);
     $typeID = $getTypeResult['ID'];
 
-    $getCategory = mysqli_query($connection , "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
+    $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
     $getCategoryResult = mysqli_fetch_assoc($getCategory);
     $categoryID = $getCategoryResult['ID'];
 
-   $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages , Description ,  Country , Course , CourseCode , Professor , IsPaid , SellingPrice  ) VALUES( $sellerID ,  6 , '$title' , $categoryID   , $typeID  ,  $noOfPages , '$description' , $countryID  , '$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
-   $queryAddNotesResult = mysqli_query($connection , $queryAddNotes) ; 
+    // $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages , Description ,  Country , Course , CourseCode , Professor , IsPaid , SellingPrice  ) VALUES( $sellerID ,  6 , '$title' , $categoryID   , $typeID  ,  $noOfPages , '$description' , $countryID  , '$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
+    $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages , Description , UniversityName , Country , Course , CourseCode , Professor , IsPaid , SellingPrice ) VALUES( $sellerID , $Status , '$title' , $categoryID , $type , $noOfPages , '$description' , '$institutionName' , $countryID ,'$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
+    $queryAddNotesResult = mysqli_query($connection,  $queryAddNotes);
 
-   if($queryAddNotesResult){
+    if ($queryAddNotesResult) {
 
-    $addedNote = mysqli_insert_id($connection) ;
-    $pathToCreateNoteFolder = "../members/".$sellerID."/".$addedNote ;
-    mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
-   }
+        $addedNote = mysqli_insert_id($connection);
+        $pathToCreateNoteFolder = "../members/" . $sellerID . "/" . $addedNote . "/";
+        mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
+        $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
+        mkdir($pathToCreateNoteFolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
+    } else {
+        echo "Not Inserted";
+    }
 
 
-}
 
- // file To upload 
- $dateTime  = new DateTime();
- $timeStamp = $dateTime->getTimestamp();
+    global $pathToCreateNoteFolder;
+    global $FolderNotesAttachments;
+    global $addedNote;
+    // file To upload 
+    $dateTime  = new DateTime();
+    $timeStamp = $dateTime->getTimestamp();
+
     // Book Image
-    if(isset($_FILES['book-image'])){
+    if (isset($_FILES['book-image'])) {
 
         $book_image  = $_FILES['book-image']['tmp_name'];
-        $book_path = $pathToCreateNoteFolder."/DP_".$timeStamp ;
-        move_uploaded_file ( $book_image , $book_path);
-        mysqli_query($connection , "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
-
-    };
-        
-
+        $book_path = $pathToCreateNoteFolder . "DP_" . $timeStamp;
+        $bookImageUploades = move_uploaded_file($book_image, $book_path);
+        if ($bookImageUploades) {
+            mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
+        }
+    }
 
     //Book Preview
-    if(isset($_FILES['notes-preview'])){
+    if (isset($_FILES['notes-preview'])) {
 
         $bookPreview = $_FILES['notes-preview']['tmp_name'];
-        $preview_path = $pathToCreateNoteFolder."/Preview_".$bookPreview ;
-        move_uploaded_file ( $bookPreview , $preview_path);
-        mysqli_query($connection , "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID =  $addedNote");
+        $preview_path = $pathToCreateNoteFolder . "Preview_" . $timeStamp;
+        $notePreviewUploaded =  move_uploaded_file($bookPreview, $preview_path);
 
+        if ($notePreviewUploaded) {
+            mysqli_query($connection, "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID =  $addedNote");
+        }
     }
 
-     
+
     //Book PDF
-    if(isset($_FILES['note-file'])){
+    if (isset($_FILES['note-file'])) {
 
         $book_file = $_FILES['note-file']['tmp_name'];
-        $file_path = $pathToCreateNoteFolder."/Attachements"."/Preview_".$timeStamp ;
-        move_uploaded_file ( $book_file, $file_path);
-    }
+        $fileNumber = count($book_file);
 
+        for ($i = 0; $i < $fileNumber; $i++) {
+
+            $result = mysqli_query($connection, "SELECT MAX('ID') FROM NotesAttachments ");
+            $row = mysqli_fetch_row($result);
+            $highest_id = $row[0];
+            $currentID = (int)$highest_id + 1;
+
+            $fileName = $_FILES['note-file']['name'][$i];
+            $fileTempName = $_FILES['note-file']['tmp_name'][$i];
+
+            $file_path = $FolderNotesAttachments . $currentID . "_" . $timeStamp;
+
+
+            $fileUploaded = move_uploaded_file($fileTempName, $file_path);
+
+            if ($fileUploaded) {
+                mysqli_query($connection, "INSERT INTO NotesAttachments( ID , NoteID , FileName , FilePath ) VALUES( $currentID , $addedNote , '$fileName' , '$file_path' )");
+            }
+        }
+    }
+}
 
 ?>
