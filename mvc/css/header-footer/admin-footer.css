@@ -1,0 +1,135 @@
+/* =========================================
+                Footer
+============================================ */
+#footer hr {
+    width: 100%;
+    border: 1px solid #f4f4f4;
+    margin: 0;
+    margin-top: 40px;
+}
+#footer .row {
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+h6 {
+    font-size: 17px;
+    color: #333333;
+    font-family: "Open sans" , sans-serif;
+    font-weight: 400;
+}
+#version h6 {
+    text-align: right;
+}
+#copyright h6 {
+    text-align: right;
+}
+
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+    #footer hr {
+        width: 100%;
+        border: 1px solid #f4f4f4;
+        margin: 0;
+        margin-top: 35px;
+    }
+    #footer .row {
+        padding-top: 17px;
+        padding-bottom: 40px;
+    }
+    h6 {
+        font-size: 15px;
+        color: #333333;
+        font-family: "Open sans" , sans-serif;
+        font-weight: 400;
+    }
+    #version h6 {
+        text-align: right;
+    }
+    #copyright h6 {
+        text-align: right;
+    }
+    
+  }
+
+
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and  (max-width: 767px) { 
+    #footer hr {
+        width: 100%;
+        border: 1px solid #f4f4f4;
+        margin: 0;
+        margin-top: 35px;
+    }
+    #footer .row {
+        padding-top: 17px;
+        padding-bottom: 30px;
+    }
+    h6 {
+        font-size: 13px;
+        color: #333333;
+        font-family: "Open sans" , sans-serif;
+        font-weight: 400;
+    }
+    #version h6 {
+        text-align: right;
+    }
+    #copyright h6 {
+        text-align: right;
+    }
+ }
+
+
+
+@media (min-width: 375px) and  (max-width: 575px){
+    #footer hr {
+        width: 100%;
+        border: 1px solid #f4f4f4;
+        margin: 0;
+        margin-top: 35px;
+    }
+    #footer .row {
+        padding-top: 17px;
+        padding-bottom: 30px;
+    }
+    h6 {
+        font-size: 13px;
+        color: #333333;
+        font-family: "Open sans" , sans-serif;
+        font-weight: 400;
+    }
+    #version h6 {
+        text-align: center;
+    }
+    #copyright h6 {
+        text-align: center;
+    }
+}
+
+
+
+@media (min-width: 320px) and  (max-width: 374px){
+    #footer hr {
+        width: 100%;
+        border: 1px solid #f4f4f4;
+        margin: 0;
+        margin-top: 35px;
+    }
+    #footer .row {
+        padding-top: 13px;
+        padding-bottom: 30px;
+    }
+    h6 {
+        font-size: 11px;
+        color: #333333;
+        font-family: "Open sans" , sans-serif;
+        font-weight: 400;
+    }
+    #version h6 {
+        text-align: center;
+    }
+    #copyright h6 {
+        text-align: center;
+    }
+}
