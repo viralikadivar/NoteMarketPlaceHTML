@@ -1,3 +1,10 @@
+<?php
+
+require "db_connection.php";
+global $connection;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +37,7 @@
     <link rel="stylesheet" href="css/header-footer/footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/search-notes.css">
+    <link rel="stylesheet" href="css/search-notes.css?version=213250">
 
 </head>
 
@@ -42,29 +49,28 @@
     </div>
     <!-- Preloader Ends -->
 
-      <!-- Header -->
-      <header id="header">
+    <!-- Header -->
+    <header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
             <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="index.php">
                     <img class="img-responsive" src="images/logo/logo-dark.png" alt="logo">
                 </a>
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item active"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.html">Sell Your Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="login.html">Login</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Sell Your Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
+                        <li class="nav-item loginNavTab"><a class="nav-link" href="login.php">Login</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
         <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span id="open" class="navbar-toggler-icon">&#9776;</span>
                 <span id="close" class="navbar-toggler-icon">&times;</span>
             </button>
@@ -108,52 +114,83 @@
                 <div id="filter-wrapper">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <input type="text" class="form-control search-icon" id="filter-with-icon"
-                                placeholder="&ensp;&ensp;&ensp; Search notes here...">
+                            <input type="text" class="form-control search-icon" id="filter-with-icon" placeholder="&ensp;&ensp;&ensp; Search notes here...">
                         </div>
                     </div>
                     <div class="row">
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select type</span><img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectBookType" data-toggle="dropdown"><span>Select type</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookType" style="width:100%">
+                                    <?php
+                                    $queryType = "SELECT * FROM NoteTypes WHERE IsActive = 1";
+                                    $noteType = mysqli_query($connection, $queryType);
+                                    while ($type = mysqli_fetch_assoc($noteType)) {
+                                        echo "<li value='" . $type['Name'] . "'>" . $type['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="type">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="dropdown seach-fields">
+                                <button class="form-control text-left" id="book-category" data-toggle="dropdown"><span>Select category</span> <img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db categories" aria-labelledby="book-category" style="width:100%">
+                                    <?php
+                                    $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
+                                    $noteCategories = mysqli_query($connection, $queryCategories);
+                                    while ($categories = mysqli_fetch_assoc($noteCategories)) {
+                                        echo "<li value='" . $categories['Name'] . "'>" . $categories['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="category">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="dropdown seach-fields">
+                                <button class="form-control text-left"><span>Select university</span><img src="images/form/arrow-down.png" alt="Down"></button>
                             </div>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select category</span> <img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left"><span>Select course</span><img src="images/form/arrow-down.png" alt="Down"></button>
                             </div>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select university</span><img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectCountry" data-toggle="dropdown"> <span>Select country</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%" >
+                                    <?php
+                                    $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
+                                    $countryResult = mysqli_query($connection, $queryCountry);
+                                    while ($country = mysqli_fetch_assoc($countryResult)) {
+                                        echo "<li value='" . $country['Name'] . "'>" . $country['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="country">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select course</span><img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left"  id="selectBookRatings" data-toggle="dropdown"><span>Select rating</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookRatings" style="width:100%">
+                                <li value="1">1 +</li>
+                                <li value="2">2 +</li>
+                                <li value="3">3 +</li>
+                                <li value="4">4 +</li>
+                                <li value="5">5</li>
+                                </ul> 
                             </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <div class="dropdown seach-fields">
-                                <button class="form-control text-left"> <span>Select country</span><img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select rating</span><img
-                                        src="images/form/arrow-down.png" alt="Down"></button>
-                            </div>
+                            <input type="hidden" name="country">
                         </div>
 
                     </div>
@@ -180,14 +217,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Computer Operating System-Final Exam Book With Paper Solution</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -224,14 +260,13 @@
                         <img src="images/search/2.jpg" class="img-responsive book-img" alt="Book">
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Computer Science</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -269,14 +304,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Basic Computer Engineering Tech India Publication Series</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -314,14 +348,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Computer Science Illuminted-Seventh Edition</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -360,14 +393,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>The Principle of Computer Hardware-Oxford</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -406,14 +438,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>The Computer Book</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -451,14 +482,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Computer Operating System-Final Exam Book With Paper Solution</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -496,14 +526,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Computer Science</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -541,14 +570,13 @@
 
                         <div class="book-short-info">
                             <div class="book-heading">
-                                <a class="link-to-note-preview" href="notes-detail.html">
+                                <a class="link-to-note-preview" href="notes-detail.php">
                                     <h5>Basic Computer Engineering Tech India Publication Series</h5>
                                 </a>
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -611,26 +639,26 @@
     <!-- paginaation Main Ends -->
 
     <!-- Footer  -->
-<footer id="footer">
-    <hr>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9">
-                <p>
-                    Copyright &copy; TatvaSoft All rights reserved.
-                </p>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3">
-                <ul class="social-icons">
-                    <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                    <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                    <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                </ul>
+    <footer id="footer">
+        <hr>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-9">
+                    <p>
+                        Copyright &copy; TatvaSoft All rights reserved.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <ul class="social-icons">
+                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
+                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
+                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Ends -->
+    </footer>
+    <!-- Footer Ends -->
 
     <!-- ================================================
                         JS Files 
