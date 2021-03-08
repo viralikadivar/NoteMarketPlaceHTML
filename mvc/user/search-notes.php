@@ -66,8 +66,7 @@ global $connection;
                         <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
                         <li class="nav-item">
                             <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="User">
+                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png" alt="User">
                                 <div class="dropdown-menu" aria-labelledby="user-menu">
                                     <a class="dropdown-item" href="user-profile.php">My Profile</a>
                                     <a class="dropdown-item" href="my-download.php">My Downloads</a>
@@ -87,8 +86,7 @@ global $connection;
 
 
         <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span id="open" class="navbar-toggler-icon">&#9776;</span>
                 <span id="close" class="navbar-toggler-icon">&times;</span>
             </button>
@@ -170,20 +168,40 @@ global $connection;
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select university</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectUniversity" data-toggle="dropdown"><span>Select university</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectUniversity" style="width:100%">
+                                    <?php
+                                    $queryUniversity = "SELECT UniversityName FROM NotesDetails WHERE IsActive = 1";
+                                    $universityResult = mysqli_query($connection, $queryUniversity);
+                                    while ($university = mysqli_fetch_assoc($universityResult)) {
+                                        echo "<li value='" . $university['UniversityName'] . "'>" . $university['UniversityName'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="universiy">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select course</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectCourse" data-toggle="dropdown"><span>Select course</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCourse" style="width:100%">
+                                    <?php
+                                    $queryCourse = "SELECT Course FROM NotesDetails WHERE IsActive = 1";
+                                    $courseResult = mysqli_query($connection, $queryCourse);
+                                    while ($course = mysqli_fetch_assoc($courseResult)) {
+                                        echo "<li value='" . $course['Course'] . "'>" . $course['Course'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="course">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
                                 <button class="form-control text-left" id="selectCountry" data-toggle="dropdown"> <span>Select country</span><img src="../images/form/arrow-down.png" alt="Down"></button>
-                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%" >
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%">
                                     <?php
                                     $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
                                     $countryResult = mysqli_query($connection, $queryCountry);
@@ -198,14 +216,14 @@ global $connection;
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"  id="selectBookRatings" data-toggle="dropdown"><span>Select rating</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectBookRatings" data-toggle="dropdown"><span>Select rating</span><img src="../images/form/arrow-down.png" alt="Down"></button>
                                 <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookRatings" style="width:100%">
-                                <li value="1">1 +</li>
-                                <li value="2">2 +</li>
-                                <li value="3">3 +</li>
-                                <li value="4">4 +</li>
-                                <li value="5">5</li>
-                                </ul> 
+                                    <li value="1">1 +</li>
+                                    <li value="2">2 +</li>
+                                    <li value="3">3 +</li>
+                                    <li value="4">4 +</li>
+                                    <li value="5">5</li>
+                                </ul>
                             </div>
                             <input type="hidden" name="country">
                         </div>
@@ -240,8 +258,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -284,8 +301,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -329,8 +345,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -374,8 +389,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -420,8 +434,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -466,8 +479,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -511,8 +523,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -556,8 +567,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -601,8 +611,7 @@ global $connection;
                             </div>
                             <ul>
                                 <li>
-                                    <div class="book-info-img"><img src="../images/search/university.png"
-                                            alt="University"></div><span>University of
+                                    <div class="book-info-img"><img src="../images/search/university.png" alt="University"></div><span>University of
                                         California, US</span>
                                 </li>
                                 <li>
@@ -665,26 +674,26 @@ global $connection;
     <!-- paginaation Main Ends -->
 
     <!-- Footer  -->
-<footer id="footer">
-    <hr>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9">
-                <p>
-                    Copyright &copy; TatvaSoft All rights reserved.
-                </p>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3">
-                <ul class="social-icons">
-                    <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
-                    <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
-                    <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                </ul>
+    <footer id="footer">
+        <hr>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-9">
+                    <p>
+                        Copyright &copy; TatvaSoft All rights reserved.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <ul class="social-icons">
+                        <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
+                        <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
+                        <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Ends -->
+    </footer>
+    <!-- Footer Ends -->
 
     <!-- ================================================
                         JS Files 
