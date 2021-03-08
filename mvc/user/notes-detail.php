@@ -1,3 +1,30 @@
+<?php 
+
+require "../db_connection.php";
+session_start();
+global $connection ;
+
+// $noteID = $_SESSION['noteID'] ;
+$noteID = 1 ;
+$query = " SELECT * FROM NotesDetails WHERE ID = $noteID ";
+$queryResult = mysqli_query( $connection , $query );
+$notesDetails = mysqli_fetch_assoc($queryResult);
+if($queryResult){
+
+    $categoryID = $notesDetails['Category'] ;
+    $countryQuery = " SELECT * FROM NoteCategories WHERE ID = $categoryID " ;
+    $categoryResult = mysqli_query( $connection , $countryQuery );
+    $categoryDetail = mysqli_fetch_assoc($categoryResult);
+    $categoryName = $categoryDetail['Name'];
+
+    $countryID = $notesDetails['Country'] ;
+    $countryQuery = " SELECT * FROM Countries WHERE ID = $countryID " ;
+    $countryResult = mysqli_query( $connection , $countryQuery );
+    $countryDetail = mysqli_fetch_assoc($countryResult);
+    $countryName = $countryDetail['Name'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,40 +72,39 @@
     
 <!-- Header -->
 <header id="header">
+
     <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="../index.html">
+            <a class="navbar-brand" href="../index.php">
                 <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item  active"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                    <li class="nav-item  active"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="add-notes.php">Sell Your Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="buyers-request.php">Buyer Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
                     <li class="nav-item">
                         <div class="dropdown user-image">
                             <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
                                 alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                <a class="dropdown-item" href="my-download.html">My Downloads</a>
-                                <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                <a class="dropdown-item" href="my-rejected-notes.html">My Rejected Notes</a>
-                                <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
+                                <a class="dropdown-item" href="user-profile.php">My Profile</a>
+                                <a class="dropdown-item" href="my-download.php">My Downloads</a>
+                                <a class="dropdown-item" href="my-sold-notes.php">My Sold Notes</a>
+                                <a class="dropdown-item" href="my-rejected-notes.php">My Rejected Notes</a>
+                                <a class="dropdown-item" href="change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="../index.php" id="logout">Logout</a>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
+                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.php">Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
-
 
     <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -87,6 +113,7 @@
             <span id="close" class="navbar-toggler-icon">&times;</span>
         </button>
     </nav>
+
 </header>
 <!-- Header Ends -->
 
@@ -111,17 +138,15 @@
                         <!-- book Image -->
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div id="book-img">
-                                <img src="../images/note-detail/1.jpg" alt="Book" class="img-responsive">
+                                <img src="<?php echo $notesDetails['DisplayPicture']; ?>" alt="Book" class="img-responsive">
                             </div>
                         </div>
 
                         <!-- book information -->
                         <div class="col-lg-8  col-md-8 col-sm-8 heading">
-                            <h2>Computer Science</h2>
-                            <h4>Science</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates excepturi hic vo
-                                luptas dolorem, reiciendis recusandae quis dolor nam possimus quo offic
-                                ia issimos aut mollitia. Praesentium, iste accusamus</p>
+                            <h2><?php echo $notesDetails['Title']; ?></h2>
+                            <h4><?php echo $categoryName; ?></h4>
+                            <p><?php echo $notesDetails['Description']; ?></p>
                             <!-- Button trigger modal -->
                             <button type="submit" data-toggle="modal" data-target="#exampleModalScrollable"><a
                                     href="#">download/&#36;15</a></button>
@@ -145,13 +170,13 @@
 
                         <!-- detail data -->
                         <div class="col-lg-6 col-md-6 col-sm-6">
-                            <h5>University of California</h5>
-                            <h5>United States</h5>
-                            <h5>Computer Engineering</h5>
-                            <h5>248705</h5>
-                            <h5>Mr.Richard Brown</h5>
-                            <h5>277</h5>
-                            <h5>November 25 2020</h5>
+                            <h5><?php echo $notesDetails['UniversityName']; ?></h5>
+                            <h5><?php echo $countryName; ?></h5>
+                            <h5><?php echo $notesDetails['Course']; ?></h5>
+                            <h5><?php echo $notesDetails['CourseCode']; ?></h5>
+                            <h5><?php echo $notesDetails['Professor']; ?></h5>
+                            <h5><?php echo $notesDetails['NumberofPages']; ?></h5>
+                            <h5><?php echo $notesDetails['PublishedDate']; ?></h5>
                             <h5 class="star">
                                 <img src="../images/note-detail/rating/star.png" alt="star">
                                 <img src="../images/note-detail/rating/star.png" alt="star">
@@ -181,7 +206,7 @@
                     <div class="responsive-wrapper 
                            responsive-wrapper-padding-bottom-90pct"
                         style="-webkit-overflow-scrolling: touch; overflow: auto;">
-                        <iframe src="../images/note-detail/notes-preview.pdf#toolbar=0"></iframe>
+                        <iframe src="<?php echo $notesDetails['NotesPreview'].'#toolbar=0'; ?>"></iframe>
                     </div>
                 </div>
                 <!-- book review -->
@@ -329,3 +354,11 @@
 </body>
 
 </html>
+
+<?php 
+}
+if(!$queryResult){
+    die(mysqli_error($connection));
+}
+
+?>
