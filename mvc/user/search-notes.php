@@ -1,3 +1,10 @@
+<?php
+
+require "../db_connection.php";
+global $connection;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +37,7 @@
     <link rel="stylesheet" href="../css/header-footer/footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/search-notes.css">
+    <link rel="stylesheet" href="../css/search-notes.css?version=123465">
 
 </head>
 
@@ -124,52 +131,83 @@
                 <div id="filter-wrapper">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <input type="text" class="form-control search-icon" id="filter-with-icon"
-                                placeholder="&ensp;&ensp;&ensp; Search notes here...">
+                            <input type="text" class="form-control search-icon" id="filter-with-icon" placeholder="&ensp;&ensp;&ensp; Search notes here...">
                         </div>
                     </div>
                     <div class="row">
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select type</span><img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectBookType" data-toggle="dropdown"><span>Select type</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookType" style="width:100%">
+                                    <?php
+                                    $queryType = "SELECT * FROM NoteTypes WHERE IsActive = 1";
+                                    $noteType = mysqli_query($connection, $queryType);
+                                    while ($type = mysqli_fetch_assoc($noteType)) {
+                                        echo "<li value='" . $type['Name'] . "'>" . $type['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="type">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="dropdown seach-fields">
+                                <button class="form-control text-left" id="book-category" data-toggle="dropdown"><span>Select category</span> <img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db categories" aria-labelledby="book-category" style="width:100%">
+                                    <?php
+                                    $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
+                                    $noteCategories = mysqli_query($connection, $queryCategories);
+                                    while ($categories = mysqli_fetch_assoc($noteCategories)) {
+                                        echo "<li value='" . $categories['Name'] . "'>" . $categories['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="category">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="dropdown seach-fields">
+                                <button class="form-control text-left"><span>Select university</span><img src="../images/form/arrow-down.png" alt="Down"></button>
                             </div>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select category</span> <img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left"><span>Select course</span><img src="../images/form/arrow-down.png" alt="Down"></button>
                             </div>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select university</span><img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectCountry" data-toggle="dropdown"> <span>Select country</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%" >
+                                    <?php
+                                    $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
+                                    $countryResult = mysqli_query($connection, $queryCountry);
+                                    while ($country = mysqli_fetch_assoc($countryResult)) {
+                                        echo "<li value='" . $country['Name'] . "'>" . $country['Name'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="country">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select course</span><img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left"  id="selectBookRatings" data-toggle="dropdown"><span>Select rating</span><img src="../images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookRatings" style="width:100%">
+                                <li value="1">1 +</li>
+                                <li value="2">2 +</li>
+                                <li value="3">3 +</li>
+                                <li value="4">4 +</li>
+                                <li value="5">5</li>
+                                </ul> 
                             </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <div class="dropdown seach-fields">
-                                <button class="form-control text-left"> <span>Select country</span><img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-4 col-sm-6">
-                            <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select rating</span><img
-                                        src="../images/form/arrow-down.png" alt="Down"></button>
-                            </div>
+                            <input type="hidden" name="country">
                         </div>
 
                     </div>
