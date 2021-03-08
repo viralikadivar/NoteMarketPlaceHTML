@@ -153,14 +153,34 @@ global $connection;
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select university</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectUniversity" data-toggle="dropdown"><span>Select university</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectUniversity" style="width:100%">
+                                    <?php
+                                    $queryUniversity = "SELECT UniversityName FROM NotesDetails WHERE IsActive = 1";
+                                    $universityResult = mysqli_query($connection, $queryUniversity);
+                                    while ($university = mysqli_fetch_assoc($universityResult)) {
+                                        echo "<li value='" . $university['UniversityName'] . "'>" . $university['UniversityName'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="universiy">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="dropdown seach-fields">
-                                <button class="form-control text-left"><span>Select course</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <button class="form-control text-left" id="selectCourse" data-toggle="dropdown"><span>Select course</span><img src="images/form/arrow-down.png" alt="Down"></button>
+                                <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCourse" style="width:100%">
+                                    <?php
+                                    $queryCourse = "SELECT Course FROM NotesDetails WHERE IsActive = 1";
+                                    $courseResult = mysqli_query($connection, $queryCourse);
+                                    while ($course = mysqli_fetch_assoc($courseResult)) {
+                                        echo "<li value='" . $course['Course'] . "'>" . $course['Course'] . "</li>";
+                                    }
+                                    ?>
+                                </ul>
                             </div>
+                            <input type="hidden" name="course">
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-sm-6">
