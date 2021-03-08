@@ -18,7 +18,6 @@ body {
 }
 section {
     background: #fff;
-    overflow: hidden;
 }
 
 /* ===========================================
@@ -142,6 +141,27 @@ input.search-icon {
     top: 15px;
     right: 12px;
 }
+/* ===========================================
+                   DropDown
+============================================ */
+.dropdown-from-db li {
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #050505;
+    padding-left: 10px;
+}
+.dropdown-from-db li:hover,
+.dropdown-from-db li:focus 
+{
+    cursor: pointer;
+    background-color: #6255a5;
+    color: #ffffff;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 /* Search result */
 .book-info {
     max-width: 100%;
