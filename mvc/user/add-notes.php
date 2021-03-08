@@ -440,8 +440,8 @@ global $connection;
 if (isset($_POST['save'])) {
 
 
-    $sellerID = 1;
-    $Status = 6;
+    $sellerID = $_SESSION['userEmail'] ;
+    $Status = 6 ;
     $title = $_POST['book-title'];
     $category = $_POST['category'];
     $type = $_POST['type'];
