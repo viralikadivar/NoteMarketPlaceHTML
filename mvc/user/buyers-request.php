@@ -604,20 +604,19 @@ if(isset($_POST["received"])) {
     $buyerResult = mysqli_query( $connection , $buyerQuery );
     $buyersDetail = mysqli_fetch_assoc($buyerResult);
 
-    $buyerName = $buyersDetail['FirstName'] + $buyersDetail['LastName'];
+    $buyerName = $buyersDetail['FirstName']." ".$buyersDetail['LastName'];
 
     echo $buyerName;
 
+
+
+
+    // Sending an Email
 
 
 }
 
     
 
-
-
-
-
-}
 
 ?>
