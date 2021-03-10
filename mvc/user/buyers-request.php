@@ -628,8 +628,6 @@ if (isset($_POST["received"])) {
     if ($buyersDetail) {
         $buyerName = $buyersDetail['FirstName'] . " " . $buyersDetail['LastName'];
         $buyerEmailID = $buyersDetail['EmailID'];
-    
-        echo $buyerEmailID;
 
         try {
                 //Server settings
@@ -661,7 +659,7 @@ if (isset($_POST["received"])) {
                                   'Notes Marketplace' ;
                 // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-                // $mail->send();
+                $mail->send();
                 
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
