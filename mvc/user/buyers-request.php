@@ -1,3 +1,22 @@
+<?php
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+session_start();
+
+require "../db_connection.php";
+global $connection;
+
+
+$query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
+$queryResult = mysqli_query($connection, $query);
+$supportField = mysqli_fetch_assoc($queryResult);
+$supportEmailAddress = $supportField['Value'];
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,8 +82,7 @@
                         <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
                         <li class="nav-item">
                             <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="User">
+                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png" alt="User">
                                 <div class="dropdown-menu" aria-labelledby="user-menu">
                                     <a class="dropdown-item" href="user-profile.php">My Profile</a>
                                     <a class="dropdown-item" href="my-download.php">My Downloads</a>
@@ -84,8 +102,7 @@
 
 
         <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span id="open" class="navbar-toggler-icon">&#9776;</span>
                 <span id="close" class="navbar-toggler-icon">&times;</span>
             </button>
@@ -141,14 +158,14 @@
                                         <td>27 Nov 2020,11:24:34</td>
                                         <td><img src="../images/form/eye.png" alt="View"></td>
                                         <form action="buyers-request.php" method="post">
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row1">
-                                                <button class="dropdown-item" name="received">Yes, I Received</button>
-                                            </div>
-                                        </td>
+                                            <td class="dropup dropleft">
+                                                <div data-toggle="dropdown">
+                                                    <img src="../images/form/dots.png" id="row1" alt="Detail">
+                                                </div>
+                                                <div class="dropdown-menu" aria-labelledby="row1">
+                                                    <button class="dropdown-item" name="received">Yes, I Received</button>
+                                                </div>
+                                            </td>
                                         </form>
                                     </tr>
 
@@ -591,32 +608,69 @@
 
 <?php
 
-require "../db_connection.php";
-global $connection ;
+if (isset($_POST["received"])) {
 
-if(isset($_POST["received"])) {
-
-    $sellerID = 73 ;
+    $sellerID = 73;
     $sellerName = "Pratik Bavarava";
-    $buyerID = 83 ;
+    $buyerID = 83;
 
     $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
-    $buyerResult = mysqli_query( $connection , $buyerQuery );
+    $buyerResult = mysqli_query($connection, $buyerQuery);
     $buyersDetail = mysqli_fetch_assoc($buyerResult);
 
-    $buyerName = $buyersDetail['FirstName']." ".$buyersDetail['LastName'];
-
-    echo $buyerName;
-
-
-
-
     // Sending an Email
+    require "../smtp/src/Exception.php";
+    require "../smtp/src/PHPMailer.php";
+    require "../smtp/src/SMTP.php";
 
+    $mail = new PHPMailer(true);
 
-}
-
+    if ($buyersDetail) {
+        $buyerName = $buyersDetail['FirstName'] . " " . $buyersDetail['LastName'];
+        $buyerEmailID = $buyersDetail['EmailID'];
     
+        echo $buyerEmailID;
+
+        try {
+                //Server settings
+                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+                $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+                // UserName And Password
+                $senderEmail = $supportEmailAddress;
+                $mail->Username   = $senderEmail;                     //SMTP username
+                $mail->Password   = 'vira3333';                               //SMTP password
+
+
+                // Sender And Receiver Detail 
+                $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
+                $mail->addAddress($buyerEmailID , $buyerName);  //Receiver Detail
+
+
+                //Content
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = $sellerName.' '.'Allows you to download a note';
+                $mail->Body    =  'Hello'.' '.$buyerName.','.'<br>'.
+                                  'We would like to inform you that, '.$sellerName.' Allows you to download a note.
+                                  Please login and see My Download tabs to download particular note.'.'<br>'.
+                                  'Regards,'.'<br>'.
+                                  'Notes Marketplace' ;
+                // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                // $mail->send();
+                
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+        }
+    }
+
+
+
 
 
 ?>
