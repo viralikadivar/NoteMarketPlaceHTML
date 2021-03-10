@@ -34,7 +34,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/user/data-table.css">
-    <link rel="stylesheet" href="../css/user/buyers-request.css">
+    <link rel="stylesheet" href="../css/user/buyers-request.css?version=12304">
 
 </head>
 
@@ -50,32 +50,32 @@
     <header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
             <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
+                <a class="navbar-brand" href="../index.php">
                     <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
                 </a>
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="add-notes.php">Sell Your Notes</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="buyers-request.php">Buyer Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
                         <li class="nav-item">
                             <div class="dropdown user-image">
                                 <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
                                     alt="User">
                                 <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                    <a class="dropdown-item" href="my-download.html">My Downloads</a>
-                                    <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                    <a class="dropdown-item" href="my-rejected-notes.html">My Rejected Notes</a>
-                                    <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
+                                    <a class="dropdown-item" href="user-profile.php">My Profile</a>
+                                    <a class="dropdown-item" href="my-download.php">My Downloads</a>
+                                    <a class="dropdown-item" href="my-sold-notes.php">My Sold Notes</a>
+                                    <a class="dropdown-item" href="my-rejected-notes.php">My Rejected Notes</a>
+                                    <a class="dropdown-item" href="change-password.php">Change Password</a>
+                                    <a class="dropdown-item" href="../index.php" id="logout">Logout</a>
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
+                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -140,14 +140,16 @@
                                         <td>$250</td>
                                         <td>27 Nov 2020,11:24:34</td>
                                         <td><img src="../images/form/eye.png" alt="View"></td>
+                                        <form action="buyers-request.php" method="post">
                                         <td class="dropup dropleft">
                                             <div data-toggle="dropdown">
                                                 <img src="../images/form/dots.png" id="row1" alt="Detail">
                                             </div>
                                             <div class="dropdown-menu" aria-labelledby="row1">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
+                                                <button class="dropdown-item" name="received">Yes, I Received</button>
                                             </div>
                                         </td>
+                                        </form>
                                     </tr>
 
                                     <tr>
@@ -586,3 +588,34 @@
 </body>
 
 </html>
+
+<?php
+
+require "../db_connection.php";
+global $connection ;
+
+if(isset($_POST["received"])) {
+
+    $sellerID = 73 ;
+    $sellerName = "Pratik Bavarava";
+    $buyerID = 83 ;
+
+    $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
+    $buyerResult = mysqli_query( $connection , $buyerQuery );
+    $buyersDetail = mysqli_fetch_assoc($buyerResult);\
+
+    $buyerName = $buyersDetail['FirstName'] + 
+
+
+
+}
+
+    
+
+
+
+
+
+}
+
+?>
