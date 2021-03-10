@@ -602,9 +602,11 @@ if(isset($_POST["received"])) {
 
     $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
     $buyerResult = mysqli_query( $connection , $buyerQuery );
-    $buyersDetail = mysqli_fetch_assoc($buyerResult);\
+    $buyersDetail = mysqli_fetch_assoc($buyerResult);
 
-    $buyerName = $buyersDetail['FirstName'] + 
+    $buyerName = $buyersDetail['FirstName'] + $buyersDetail['LastName'];
+
+    echo $buyerName;
 
 
 
