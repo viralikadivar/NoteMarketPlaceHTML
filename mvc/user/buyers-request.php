@@ -9,10 +9,10 @@ session_start();
 require "../db_connection.php";
 global $connection;
 
-$sellerID = 73;
-$sellerName = "Pratik Bavarava";
+$sellerID = $_SESSION['UserID'];
+$sellerName = $_SESSION['UserName'];
 
-$bookRequestsQuery = "SELECT * FROM NotesDownloads WHERE Seller = $sellerID and IsSellerHasAllowedDownload = 0 ";
+$bookRequestsQuery = " SELECT * FROM NotesDownloads WHERE Seller = $sellerID and IsSellerHasAllowedDownload = 0 ";
 $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
 
 ?>
