@@ -25,6 +25,7 @@ if (isset($_POST["submit"])) {
 
     // When get user with email id 
     $user_detail = mysqli_fetch_assoc($query_result);
+
     if (mysqli_num_rows($query_result)) {
 
         // Password get matched 
@@ -43,9 +44,13 @@ if (isset($_POST["submit"])) {
                 $userHasUserId = mysqli_query($connection, $firstLoginQuery);
                 if (mysqli_num_rows($userHasUserId) == 1) {
                     header("Location:user/search-notes.php");
+                    $_SESSION['UserID'] = $user_detail['ID'];
+                    $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
                     exit();
                 } else {
                     header("Location:user/user-profile.php");
+                    $_SESSION['UserID'] = $user_detail['ID'];
+                    $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
                     exit();
                 }
             }
@@ -57,6 +62,13 @@ if (isset($_POST["submit"])) {
             $warning_class = "";
         }
     }
+
+
+    
+    echo $_SESSION['UserID'];
+    echo "<br>";
+    echo $_SESSION['UserName'];
+
 }
 
 ?>
