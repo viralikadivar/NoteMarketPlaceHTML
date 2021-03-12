@@ -9,11 +9,12 @@ session_start();
 require "../db_connection.php";
 global $connection;
 
+$sellerID = 73;
+$sellerName = "Pratik Bavarava";
 
-$query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
-$queryResult = mysqli_query($connection, $query);
-$supportField = mysqli_fetch_assoc($queryResult);
-$supportEmailAddress = $supportField['Value'];
+$bookRequestsQuery = "SELECT * FROM NotesDownloads WHERE Seller = $sellerID and IsSellerHasAllowedDownload = 0 ";
+$bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
+
 ?>
 
 
@@ -146,18 +147,48 @@ $supportEmailAddress = $supportField['Value'];
                                         <th scope="col">&emsp13;</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <form action="buyers-request.php" method="post">
+
+                                <?php
+
+                                $count = 1 ;
+
+                                while($bookRequests = mysqli_fetch_assoc($bookRequestsResult)){
+
+                                    $buyerID = $bookRequests['Downloader'];
+
+                                    $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
+                                    $buyerResult = mysqli_query($connection, $buyerQuery);
+                                    $buyersDetail = mysqli_fetch_assoc($buyerResult);
+                                    $buyerName = $buyersDetail['FirstName'] . " " . $buyersDetail['LastName'];
+                                    $buyerEmailID = $buyersDetail['EmailID'];
+
+                                    $buyerDetailQuery = " SELECT * FROM UserProfile WHERE UserID = $buyerID ";
+                                    $buyerDetailResult = mysqli_query( $connection , $buyerDetailQuery );
+                                    $buyerDetail = mysqli_fetch_assoc($buyerDetailResult);
+                                    $contactNo = "+".$buyerDetail['PhonenNumberCountryCode']." ". $buyerDetail['PhoneNumber'];
+
+                                    $paidOrFree = "";
+                                    if($bookRequests['IsPaid']){
+                                        $paidOrFree = "Paid";
+                                    }
+                                    if(!$bookRequests['IsPaid']){
+                                        $paidOrFree = "Free";
+                                    }
+                                    
+
+                                    echo '<tr>
+                                            <td>'.$count.'</td>
+                                            <td>'.$bookRequests['NoteTitle'].'</td>
+                                            <td>'.$bookRequests['NoteCategory'].'</td>
+                                            <td>'.$buyerEmailID.'</td>n
+                                            <td>'.$contactNo.'</td>
+                                            <td>'.$paidOrFree.'</td>
+                                            <td>'.$bookRequests['PurchasedPrice'].'</td>
+                                            <td>'.$bookRequests['CreatedDate'].'</td>
+                                            <td><img src="../images/form/eye.png" alt="View"></td>
+                                            <form action="buyers-request.php" method="post">
                                             <td class="dropup dropleft">
                                                 <div data-toggle="dropdown">
                                                     <img src="../images/form/dots.png" id="row1" alt="Detail">
@@ -166,388 +197,18 @@ $supportEmailAddress = $supportField['Value'];
                                                     <button class="dropdown-item" name="received">Yes, I Received</button>
                                                 </div>
                                             </td>
-                                        </form>
-                                    </tr>
+                                         </form>
+                                    </tr>';
 
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row2">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    $count++;
 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row3">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                } 
 
-                                    <tr>
-                                        <td>4</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$158</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row4">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                ?>
 
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row5">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
 
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$555</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row6" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row6">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row7" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row7">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row8" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row8">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>9</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row9" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row9">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$115</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row10" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row10">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row11" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row11">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>12</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row12" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row12">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>13</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row13" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row13">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>14</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$158</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row14" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row14">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>15</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row15" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row15">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>16</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$555</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row16" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row16">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>17</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row17" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row17">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>18</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row18" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row18">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>19</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row19" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row19">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>20</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>+91 9874563527</td>
-                                        <td>Free</td>
-                                        <td>$115</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row20" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row20">
-                                                <a class="dropdown-item" href="#">Yes, I Received</a>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </tbody>
+
                             </table>
                         </div>
 
@@ -610,13 +271,24 @@ $supportEmailAddress = $supportField['Value'];
 
 if (isset($_POST["received"])) {
 
-    $sellerID = 73;
-    $sellerName = "Pratik Bavarava";
-    $buyerID = 83;
+    global $bookRequests ;
 
-    $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
-    $buyerResult = mysqli_query($connection, $buyerQuery);
-    $buyersDetail = mysqli_fetch_assoc($buyerResult);
+    $downloader = $bookRequests['Downloader'];
+    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 WHERE Downloader = $downloader ";
+    $updateDownloadResult = mysqli_query( $connection , $updateDownloadQuery );
+
+    if($updateDownloadResult){
+        echo "Allowed To Download";
+    } else {
+        echo "Not Allowed To Download";
+    }
+
+    // Get Support Email Address from systemConfiguration Table 
+    $query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
+    $queryResult = mysqli_query($connection, $query);
+    $supportField = mysqli_fetch_assoc($queryResult);
+    $supportEmailAddress = $supportField['Value'];
+
 
     // Sending an Email
     require "../smtp/src/Exception.php";
@@ -625,50 +297,41 @@ if (isset($_POST["received"])) {
 
     $mail = new PHPMailer(true);
 
-    if ($buyersDetail) {
-        $buyerName = $buyersDetail['FirstName'] . " " . $buyersDetail['LastName'];
-        $buyerEmailID = $buyersDetail['EmailID'];
-
         try {
-                //Server settings
-                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+            //Server settings
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
-                // UserName And Password
-                $senderEmail = $supportEmailAddress;
-                $mail->Username   = $senderEmail;                     //SMTP username
-                $mail->Password   = 'vira3333';                               //SMTP password
-
-
-                // Sender And Receiver Detail 
-                $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
-                $mail->addAddress($buyerEmailID , $buyerName);  //Receiver Detail
+            // UserName And Password
+            $senderEmail = $supportEmailAddress;
+            $mail->Username   = $senderEmail;                     //SMTP username
+            $mail->Password   = 'vira3333';                               //SMTP password
 
 
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = $sellerName.' '.'Allows you to download a note';
-                $mail->Body    =  'Hello'.' '.$buyerName.','.'<br>'.
-                                  'We would like to inform you that, '.$sellerName.' Allows you to download a note.
-                                  Please login and see My Download tabs to download particular note.'.'<br>'.
-                                  'Regards,'.'<br>'.
-                                  'Notes Marketplace' ;
-                // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            // Sender And Receiver Detail 
+            $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
+            $mail->addAddress($buyerEmailID, $buyerName);  //Receiver Detail
 
-                $mail->send();
-                
-            } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = $sellerName . ' ' . 'Allows you to download a note';
+            $mail->Body    =  'Hello' . ' ' . $buyerName . ',' . '<br>' .
+                'We would like to inform you that, ' . $sellerName . ' Allows you to download a note.
+                                  Please login and see My Download tabs to download particular note.' . '<br>' .
+                'Regards,' . '<br>' .
+                'Notes Marketplace';
+            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            // $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-    }
-
-
-
-
+    
+}
 
 ?>
