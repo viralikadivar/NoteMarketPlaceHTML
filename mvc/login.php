@@ -64,11 +64,6 @@ if (isset($_POST["submit"])) {
     }
 
 
-    
-    echo $_SESSION['UserID'];
-    echo "<br>";
-    echo $_SESSION['UserName'];
-
 }
 
 ?>
