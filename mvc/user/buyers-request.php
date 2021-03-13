@@ -13,10 +13,9 @@ $sellerID = $_SESSION['UserID'];
 $sellerName = $_SESSION['UserName'];
 
 $bookRequestsQuery = " SELECT * FROM NotesDownloads WHERE Seller = $sellerID and IsSellerHasAllowedDownload = 0 ";
-$bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
+$bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +53,7 @@ $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/user/data-table.css">
-    <link rel="stylesheet" href="../css/user/buyers-request.css?version=12304">
+    <link rel="stylesheet" href="../css/user/buyers-request.css?version=12534">
 
 </head>
 
@@ -130,6 +129,7 @@ $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
                     <div class="table-responsive">
                         <div class="table-responsive">
                             <table class="table dashboard-table-long">
+
                                 <thead>
                                     <tr>
                                         <th scope="col">Sr No.</th>
@@ -152,60 +152,59 @@ $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
 
                                 <?php
 
-                                $count = 1 ;
+                                    $count = 1;
 
-                                while($bookRequests = mysqli_fetch_assoc($bookRequestsResult)){
+                                    while ($bookRequests = mysqli_fetch_assoc($bookRequestsResult)) {
 
-                                    $buyerID = $bookRequests['Downloader'];
+                                        $buyerID = $bookRequests['Downloader'];
 
-                                    $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
-                                    $buyerResult = mysqli_query($connection, $buyerQuery);
-                                    $buyersDetail = mysqli_fetch_assoc($buyerResult);
-                                    $buyerName = $buyersDetail['FirstName'] . " " . $buyersDetail['LastName'];
-                                    $buyerEmailID = $buyersDetail['EmailID'];
+                                        $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
+                                        $buyerResult = mysqli_query($connection, $buyerQuery);
+                                        $buyersDetail = mysqli_fetch_assoc($buyerResult);
+                                        $buyerEmailID = $buyersDetail['EmailID'];
 
-                                    $buyerDetailQuery = " SELECT * FROM UserProfile WHERE UserID = $buyerID ";
-                                    $buyerDetailResult = mysqli_query( $connection , $buyerDetailQuery );
-                                    $buyerDetail = mysqli_fetch_assoc($buyerDetailResult);
-                                    $contactNo = "+".$buyerDetail['PhonenNumberCountryCode']." ". $buyerDetail['PhoneNumber'];
+                                        $buyerDetailQuery = " SELECT * FROM UserProfile WHERE UserID = $buyerID ";
+                                        $buyerDetailResult = mysqli_query($connection, $buyerDetailQuery);
+                                        $buyerDetail = mysqli_fetch_assoc($buyerDetailResult);
+                                        $contactNo = "+" . $buyerDetail['PhonenNumberCountryCode'] . " " . $buyerDetail['PhoneNumber'];
 
-                                    $paidOrFree = "";
-                                    if($bookRequests['IsPaid']){
-                                        $paidOrFree = "Paid";
-                                    }
-                                    if(!$bookRequests['IsPaid']){
-                                        $paidOrFree = "Free";
-                                    }
-                                    
+                                        $paidOrFree = "";
+                                        if ($bookRequests['IsPaid']) {
+                                            $paidOrFree = "Paid";
+                                        }
+                                        if (!$bookRequests['IsPaid']) {
+                                            $paidOrFree = "Free";
+                                        }
 
-                                    echo '<tr>
-                                            <td>'.$count.'</td>
-                                            <td>'.$bookRequests['NoteTitle'].'</td>
-                                            <td>'.$bookRequests['NoteCategory'].'</td>
-                                            <td>'.$buyerEmailID.'</td>n
-                                            <td>'.$contactNo.'</td>
-                                            <td>'.$paidOrFree.'</td>
-                                            <td>'.$bookRequests['PurchasedPrice'].'</td>
-                                            <td>'.$bookRequests['CreatedDate'].'</td>
+
+                                        echo '<tr class="table-row">
+                                            <td>' . $count . '</td>
+                                            <td class="note-title">' . $bookRequests['NoteTitle'] . '</td>
+                                            <td>' . $bookRequests['NoteCategory'] . '</td>
+                                            <td class="buyer-email">' . $buyerEmailID . '</td>n
+                                            <td>' . $contactNo . '</td>
+                                            <td>' . $paidOrFree . '</td>
+                                            <td>' . $bookRequests['PurchasedPrice'] . '</td>
+                                            <td>' . $bookRequests['CreatedDate'] . '</td>
                                             <td><img src="../images/form/eye.png" alt="View"></td>
                                             <form action="buyers-request.php" method="post">
                                             <td class="dropup dropleft">
                                                 <div data-toggle="dropdown">
-                                                    <img src="../images/form/dots.png" id="row1" alt="Detail">
+                                                    <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
                                                 </div>
-                                                <div class="dropdown-menu" aria-labelledby="row1">
+                                                <div class="dropdown-menu" aria-labelledby="row' . $count . '">
                                                     <button class="dropdown-item" name="received">Yes, I Received</button>
                                                 </div>
                                             </td>
+                                            <input type="hidden" name = "user-email">
+                                            <input type="hidden" name = "note-title">
                                          </form>
                                     </tr>';
 
-                                    $count++;
-
-                                } 
-
-                                ?>
-
+                                        $count++;
+                                    }            
+                                    
+                                    ?>
 
                                 </tbody>
 
@@ -261,6 +260,7 @@ $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
     <!-- custom js  -->
     <script src="../js/user/data-table.js"></script>
     <script src="../js/header/header.js"></script>
+    <script src="../js/user/buyers-request.js?version=126351"></script>
 
 
 </body>
@@ -271,31 +271,33 @@ $bookRequestsResult = mysqli_query( $connection , $bookRequestsQuery );
 
 if (isset($_POST["received"])) {
 
-    global $bookRequests ;
+    $userEmail = $_POST['user-email'];
+    $bookName = $_POST['note-title'];
 
-    $downloader = $bookRequests['Downloader'];
-    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 WHERE Downloader = $downloader ";
-    $updateDownloadResult = mysqli_query( $connection , $updateDownloadQuery );
+    $buyerMailQuery = " SELECT * FROM Users WHERE EmailID = '$userEmail' ";
+    $buyerMailResult = mysqli_query($connection, $buyerMailQuery);
+    $buyersMailDetail = mysqli_fetch_assoc($buyerMailResult);
+    $buyerName = $buyersMailDetail['FirstName'] . " " . $buyersMailDetail['LastName'];
+    $ID = $buyersMailDetail['ID'];
 
-    if($updateDownloadResult){
-        echo "Allowed To Download";
-    } else {
-        echo "Not Allowed To Download";
-    }
+    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 WHERE NoteTitle = '$bookName' and Downloader = $ID ";
+    $updateDownloadResult = mysqli_query($connection, $updateDownloadQuery);
 
-    // Get Support Email Address from systemConfiguration Table 
-    $query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
-    $queryResult = mysqli_query($connection, $query);
-    $supportField = mysqli_fetch_assoc($queryResult);
-    $supportEmailAddress = $supportField['Value'];
+    if ($updateDownloadResult) {
+
+        // Get Support Email Address from systemConfiguration Table 
+        $query = "SELECT Value FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
+        $queryResult = mysqli_query($connection, $query);
+        $supportField = mysqli_fetch_assoc($queryResult);
+        $supportEmailAddress = $supportField['Value'];
 
 
-    // Sending an Email
-    require "../smtp/src/Exception.php";
-    require "../smtp/src/PHPMailer.php";
-    require "../smtp/src/SMTP.php";
+        // Sending an Email
+        require "../smtp/src/Exception.php";
+        require "../smtp/src/PHPMailer.php";
+        require "../smtp/src/SMTP.php";
 
-    $mail = new PHPMailer(true);
+        $mail = new PHPMailer(true);
 
         try {
             //Server settings
@@ -327,11 +329,17 @@ if (isset($_POST["received"])) {
                 'Notes Marketplace';
             // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-            // $mail->send();
+            $mail->send();
+
+            header('Refresh: ' . 0 );
+
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-    
+
+    }
+
+
 }
 
 ?>
