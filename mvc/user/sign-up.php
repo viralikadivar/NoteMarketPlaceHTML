@@ -16,6 +16,9 @@
         $currentDate = date("d-m-Y H:i:s");
 
         $firstName = $_POST['first-name'];
+
+        $_SESSION['userName'] =  $firstName ; 
+
         $lastName = $_POST['last-name'];
         $email = $_POST['email'];
         $_SESSION['userSignUpEmailId'] = $email ;
