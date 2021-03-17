@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 session_start();
 
+
 require "../db_connection.php";
 global $connection;
 
@@ -62,7 +63,7 @@ try {
     $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
     $mail->Body    =  'Hello '.$userName.','.'<br>'.
                     'Thank you for signing up with us. Please click on below link to verify your email address and to do login.'.'<br>'.
-'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/user/activation.php?token='.$token.'<br>'.
+'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/activation.php?token='.$token.'<br>'.
 'Regards,'.'<br>'.
 'Notes Marketplace';
     // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
@@ -141,7 +142,7 @@ try {
                 </tr>
                 <tr>
                     <th>
-                        <h2>Dear Smith,</h2>
+                        <h2>Dear <?php echo $_SESSION['userName']; ?>,</h2>
                     </th>
                 </tr>
                 <tr>
