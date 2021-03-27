@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 require "db_connection.php";
 global $connection;
 session_start();
@@ -44,6 +44,13 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
 }
 
 $noteID = $_SESSION['noteID'];
+
+$getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $noteID";
+$getAttachmentPathResult = mysqli_query($connection,$getAttachmentPathQuery);
+$attachments = array();
+while($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)){
+    array_push( $attachments , $attachmentDetails['FilePath'] );
+}
 
 $query = " SELECT * FROM NotesDetails WHERE ID = $noteID ";
 $queryResult = mysqli_query($connection, $query);
@@ -96,11 +103,10 @@ if ($queryResult) {
         $spamReports = mysqli_num_rows($totalSpamResult);
     }
 
-    $isAlreadyDownladedQuery = "SELECT * FROM";
-
+}
 ?>
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
     <head>
 
@@ -180,9 +186,12 @@ if ($queryResult) {
                                 <h4><?php echo $categoryName; ?></h4>
                                 <p><?php echo $notesDetails['Description']; ?></p>
                                 <!-- Button trigger modal -->
-                                <form action="notes-detail.php" method = "post">
-                                <button type="button" name="downloadTheBook" data-toggle="modal" data-target="#exampleModalScrollable"><a href="notes-detail.php?download=1">download/&#36;<?php echo $priceDollar;?></a></button>
+                                <form action="notes-detail.php" method="post">
+                                <button type="submit" name="downloadTheBook"><a href="#">download/&#36;<?php echo $priceDollar;?></a></button>
+                                <!-- <button type="submit" name="downloadTheBook" data-toggle="modal" data-target="#exampleModalScrollable"><a href="#">download/&#36;<?php echo $priceDollar;?></a></button> -->
+
                                 </form>
+                                
                             </div>
 
                         </div>
@@ -243,10 +252,42 @@ if ($queryResult) {
                             <iframe src="<?php echo $notesPreview; ?>"></iframe>
                         </div>
                     </div>
+
                     <!-- book review -->
                     <div class="col-lg-7 col-md-12 col-sm-12 heading">
                         <h3>Customer Review</h3>
                         <div class="customer-wrapper">
+
+                        <?php
+
+                            $getCustomerReviewQuery = "SELECT * FROM NotesReviews WHERE NoteID = $noteID LIMIT 3";
+                            $getCustomerReviewResult = mysqli_query($connection , $getCustomerReviewQuery);
+                            while( $customerReview = mysqli_fetch_assoc($getCustomerReviewResult)){
+                                $reviewedBy = $customerReview['ReviewedByID'];
+                                $comment = $customerReview['Comments'];
+                                $ratings = $customerReview['Ratings'];
+                                $star = "";
+                                for($s = 1 ; $s <= $ratings ; $s++){
+                                    $star = $star.'<img src="images/note-detail/rating/star.png" alt="star">';
+                                }
+                                for($sw = 1 ; $sw <= (5-$ratings) ; $sw++ ){
+                                    $star = $star.'<img src="images/note-detail/rating/star-white.png" alt="star">';
+                                }
+                                echo '<div class="row customer-review">
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <img class="img-responsive" src="images/note-detail/reviewer-1.png" alt="Customer">
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-10">
+                                    <h5>'.$reviewedBy.'</h5>
+                                    '.$star.'
+                                    <p>'.$comment.'</p>
+                                </div>
+                            </div>
+
+                            <hr>';
+                            }
+
+                        ?>
                             <!-- Customer 01 -->
                             <div class="row customer-review">
                                 <div class="col-lg-2 col-md-2 col-sm-2">
@@ -266,40 +307,6 @@ if ($queryResult) {
 
                             <hr>
 
-                            <!-- Customer 02 -->
-                            <div class="row customer-review">
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <img src="images/note-detail/reviewer-2.png" alt="Customer" class="img-responsive">
-                                </div>
-                                <div class="col-lg-10 col-md-10 col-sm-10">
-                                    <h5>Alice Ortiaz</h5>
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star-white.png" alt="star">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis dignissimos nostrum
-                                        et debitis quod. Consequuntu</p>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <!-- Customer 03 -->
-                            <div class="row customer-review">
-                                <div class="col-lg-2 col-md-2 col-sm-2">
-                                    <img src="images/note-detail/reviewer-3.png" alt="Customer" class="img-responsive">
-                                </div>
-                                <div class="col-lg-10 col-md-10 col-sm-10">
-                                    <h5>Sara Passmore</h5>
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star.png" alt="star">
-                                    <img src="images/note-detail/rating/star-white.png" alt="star">
-                                    <p>Lorem ipsum dolor sit amet consec isicing elit. Facilis nostrum.</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -323,8 +330,9 @@ if ($queryResult) {
                     </div>
                     <div class="modal-body">
 
+                            
                         <?php
-                        echo $modelBodyDetail;
+                            echo $modelBodyDetail;
                         ?>
 
                     </div>
@@ -356,7 +364,7 @@ if ($queryResult) {
 
         <!-- ================================================
                         JS Files 
-    ================================================= -->
+        ================================================= -->
 
         <!-- jQuery -->
         <script src="js/jquery.min.js"></script>
@@ -371,17 +379,46 @@ if ($queryResult) {
         </script>
     </body>
 
-    </html>
+</html>
 
 <?php
-}
+
 if (!$queryResult) {
     die(mysqli_error($connection));
 }
+
 if(isset($_POST['downloadTheBook'])){
-    echo "GEt FDOen";
+    // $modelShow = 'data-toggle="modal" data-target="#exampleModalScrollable"';
+    $seller = $notesDetails['SellerID'];
+    $downloader = $userID;
+    $isSellerHasAllowedDownloaded = 1;
+    $attachmentPath = implode( ',' ,$attachments);
+    $isAttachmentDownloaded = 0;
+    $attachmentDownloadedDate =  "";
+    $isPaidOrNot = $notesDetails['IsPaid'];
+    $isPaid = 0;
+    if($isPaidOrNot == 4){
+        $isPaid = 1;
+        $isSellerHasAllowedDownloaded = 0;
+    } else {
+        $isPaid = 0;
+        $isAttachmentDownloaded = 1;
+    }
+    $purchasedPrice = $notesDetails['SellingPrice']; 
+    $noteTitle = $notesDetails['Title'];
+    $noteCategory = $notesDetails['Category'];
+    $createdBy = $userID;
+    $modifiedBy = $userID;
+
+    $addDownloadRequest = "INSERT INTO NotesDownloads(NoteID ,Seller ,Downloader ,IsSellerHasAllowedDownload,AttachmentPath,IsAttachmentDownloaded,AttachmentDownloadedDate,IsPaid,PurchasedPrice,NoteTitle,NoteCategory,CreatedBy,ModifiedBy)
+    VALUES($noteID, $seller,$downloader,$isSellerHasAllowedDownloaded,'$attachmentPath',$isAttachmentDownloaded ,'$attachmentDownloadedDate',$isPaid,$purchasedPrice,'$noteTitle',$noteCategory,$createdBy,$modifiedBy)";
+
+    $downloadRequest = mysqli_query($connection,$addDownloadRequest);
+
+    if(!$downloadRequest){
+        die(mysqli_error($connection));
+    }
+
 }
-if(isset($_GET['download'])){
-    echo $_GET['download'];
-}
+ob_get_flush();
 ?>
