@@ -18,7 +18,7 @@ section {
 .heading {
   height: 100%;
   width: 100%;
-  padding-top: 15px;
+  /* padding-top: 15px; */
 }
 .heading h2 {
     color: #6255a5;
