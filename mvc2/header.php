@@ -4,37 +4,37 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     $userRole = $_SESSION['userRoleID'];
     $profilePic = $_SESSION['UserProfilePic'];
     $profilePic = str_replace('../' , '' , $profilePic);
-    $profilePicPath = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/".$profilePic;
+    $profilePicPath = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/".$profilePic;
 
     if ($userRole = 3) {
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/index.php">
-                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/images/logo/logo-dark.png" alt="logo">
+            <a class="navbar-brand" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/index.php">
+                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/search-notes.php">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/user-dashboard.php">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/buyers-request.php">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/faq.php">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/contact-us.php">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/search-notes.php">Search Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/user-dashboard.php">Sell Your Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/buyers-request.php">Buyer Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/faq.php">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/contact-us.php">Contact Us</a></li>
                     <li class="nav-item">
                         <div class="dropdown user-image">
                         <img id="user-menu" data-toggle="dropdown" src="'.$profilePicPath.'" alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item active" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/user-profile.php">My Profile</a>
-                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/my-download.php">My Downloads</a>
-                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/my-sold-notes.php">My Sold Notes</a>
-                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/my-rejected-notes.php">My Rejected Notes</a>
-                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/index.php" id="logout">Logout</a>
+                                <a class="dropdown-item active" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/user-profile.php">My Profile</a>
+                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/my-download.php">My Downloads</a>
+                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/my-sold-notes.php">My Sold Notes</a>
+                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/my-rejected-notes.php">My Rejected Notes</a>
+                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/index.php" id="logout">Logout</a>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/header.php?logout=true">Logout</a></li>
+                    <li class="nav-item loginNavTab"><a class="nav-link" href="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/header.php?logout=true">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -52,7 +52,7 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
             <a class="navbar-brand" href="../index.php">
-                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/images/logo/logo-dark.png" alt="logo">
+                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -114,7 +114,7 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
             <a class="navbar-brand" href="index.php">
-                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/images/logo/logo-dark.png" alt="logo">
+                <img class="img-responsive" src="http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -146,7 +146,7 @@ function logout()
 {
     session_start();
     session_destroy();
-    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/login.php");
+    header("Location:index.php");
 }
 
 // To Call Logout Function 
