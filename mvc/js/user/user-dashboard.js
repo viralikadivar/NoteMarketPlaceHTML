@@ -17,7 +17,6 @@ var table = $(".dashboard-table-1").DataTable({
     ]
 });
 
-
 var table2 = $(".dashboard-table-2").DataTable({
     "dom": '<"top"f>t<"bottom"p><"clear">',
     "pagingType": "simple_numbers",
@@ -30,9 +29,6 @@ var table2 = $(".dashboard-table-2").DataTable({
         { "bSortable": false, "aTargets": ["_all"] } //disable ordering events and takeout the icon
     ]
 });
-
-
-
 
 // for search field 
 var input = $('#DataTables_Table_0_filter label input');
@@ -48,8 +44,6 @@ $("#DataTables_Table_1_filter label").append(input2);
 input2.attr("id", "search-row-2");
 $("#DataTables_Table_1_filter label").append('<button class="btn" id="table-btn-2" type="submit">Search</button>');
 $("#DataTables_Table_1_filter label input").attr("placeholder", "Search");
-
-
 
 $(function () {
 
@@ -88,4 +82,30 @@ $(document).on('draw.dt', function () {
     $("#DataTables_Table_0_next").html('&#12297;');
     $("#DataTables_Table_1_previous").html('&#12296;');
     $("#DataTables_Table_1_next").html('&#12297;');
+});
+
+$(function() {
+
+    // View Note Detail 
+    $('.view').click(function() {
+        let noteID =  $(this).parent().children('.noteID').attr("value");
+        $('input[name="noteID"]').val(noteID);
+        $('button[name="noteDetail"]').trigger('click');
+        
+    }); 
+    
+    // Edit Note 
+    $('.edit').click(function() {
+        let noteID =  $(this).parent().children('.noteID').attr("value");
+        $('input[name="noteID"]').val(noteID);
+        $('button[name="editNote"]').trigger('click');
+    }); 
+
+    // Delete Note 
+    $('.delete').click(function() {
+        let noteID =  $(this).parent().children('.noteID').attr("value");
+        $('input[name="noteID"]').val(noteID);
+        $('button[name="deleteNoteModel"]').trigger('click');
+    }); 
+
 });
