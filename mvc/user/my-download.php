@@ -1,3 +1,20 @@
+<?php
+//Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+ob_start();
+require "../db_connection.php";
+global $connection;
+
+session_start();
+$userEmail = $_SESSION['userEmail'];
+$userID = $_SESSION['UserID'];
+
+$myDownloadQuery = "SELECT * FROM NotesDownloads WHERE Downloader = $userID AND IsSellerHasAllowedDownload = 1";
+$myDownloadResult = mysqli_query($connection, $myDownloadQuery);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +37,7 @@
 
     <!-- ================================================
                         CSS Files 
-    ================================================= -->
+        ================================================= -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
@@ -46,52 +63,11 @@
     </div>
     <!-- Preloader Ends -->
 
-  <!-- Header -->
-  <header id="header">
-    <nav class="navbar white-navbar navbar-expand-lg">
-        <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="../index.html">
-                <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-            </a>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                    <li class="nav-item">
-                        <div class="dropdown user-image">
-                            <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                alt="User">
-                            <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                <a class="dropdown-item active" href="my-download.html">My Downloads</a>
-                                <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                <a class="dropdown-item" href="my-rejected-notes.html">My Rejected Notes</a>
-                                <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-
-    <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span id="open" class="navbar-toggler-icon">&#9776;</span>
-            <span id="close" class="navbar-toggler-icon">&times;</span>
-        </button>
-    </nav>
-</header>
-<!-- Header Ends -->
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
+    <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
@@ -106,506 +82,161 @@
                 </div>
             </div>
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
+            <form action="my-download.php" method="post">
+
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="table-responsive">
-                            <table class="table dashboard-table-long">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sr No.</th>
-                                        <th scope="col">NOTE TITLE</th>
-                                        <th scope="col">CATEGORY</th>
-                                        <th scope="col">BUYER</th>
-                                        <th scope="col">SELL TYPE</th>
-                                        <th scope="col">PRICE</th>
-                                        <!-- <th scope="col">Publisher</th>
+                            <div class="table-responsive">
+
+                                <table class="table dashboard-table-long">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sr No.</th>
+                                            <th scope="col">NOTE TITLE</th>
+                                            <th scope="col">CATEGORY</th>
+                                            <th scope="col">SELLER</th>
+                                            <th scope="col">SELL TYPE</th>
+                                            <th scope="col">PRICE</th>
+                                            <!-- <th scope="col">Publisher</th>
                                         <th scope="col">Published Date</th> -->
-                                        <th scope="col">DOWNLOADED DATE/TIME</th>
-                                        <th scope="col">&emsp13;</th>
-                                        <th scope="col">&emsp13;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row1">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            <th scope="col">DOWNLOADED DATE/TIME</th>
+                                            <th scope="col">&emsp13;</th>
+                                            <th scope="col">&emsp13;</th>
+                                        </tr>
+                                    </thead>
 
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row2">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <tbody>
+                                        <?php
+                                        $count = 1;
+                                        while ($myDownloads = mysqli_fetch_assoc($myDownloadResult)) {
 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row3">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            $priceDollar = 0;
+                                            $freeOrPaid = "";
+                                            if ($myDownloads['IsPaid'] == 1) {
+                                                $freeOrPaid = "Paid";
+                                                $priceINR = (int)$myDownloads['PurchasedPrice'] ;
+                                                $priceINR = bcdiv($priceINR, 1, 2);
+                                                $dollarRate = 72.67;
+                                                $priceDollar = bcdiv($priceINR, $dollarRate, 2);
+                                            } else {
+                                                $freeOrPaid = "Free";
+                                            }
 
-                                    <tr>
-                                        <td>4</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$158</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row4">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row5">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$555</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row6" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row6">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row7" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row7">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row8" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row8">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>9</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row9" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row9">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$115</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row10" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row10">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row11" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row11">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>12</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row12" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row12">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>13</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row13" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row13">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>14</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$158</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row14" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row14">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>15</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row15" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row15">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>16</td>
-                                        <td>Data Science</td>
-                                        <td>Science</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$555</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row16" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row16">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>17</td>
-                                        <td>Accounts</td>
-                                        <td>Commerce</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row17" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row17">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>18</td>
-                                        <td>Social Studies</td>
-                                        <td>Social</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$0</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row18" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row18">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>19</td>
-                                        <td>AI</td>
-                                        <td>IT</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Paid</td>
-                                        <td>$250</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row19" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row19">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>20</td>
-                                        <td>Lorem Ipsum</td>
-                                        <td>Lorem</td>
-                                        <td>testting123gmail.com</td>
-                                        <td>Free</td>
-                                        <td>$115</td>
-                                        <td>27 Nov 2020,11:24:34</td>
-                                        <td><img src="../images/form/eye.png" alt="View"></td>
-                                        <td class="dropup dropleft">
-                                            <div data-toggle="dropdown">
-                                                <img src="../images/form/dots.png" id="row20" alt="Detail">
-                                            </div>
-                                            <div class="dropdown-menu" aria-labelledby="row20">
-                                                <a class="dropdown-item" href="#">Download Note</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#remark">Add Reviews/Feedback</a>
-                                                <a class="dropdown-item" href="#">Report as Inappropriate</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            $sellerID = $myDownloads['Seller'];
+                                            $getSellerDetail = "SELECT * FROM Users WHERE ID = $sellerID ";
+                                            $getSellerResult = mysqli_query($connection, $getSellerDetail);
+                                            $sellerDetail = mysqli_fetch_assoc($getSellerResult);
+                                            $sellerEmail = $sellerDetail['EmailID'];
 
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="remark" tabindex="-1" role="dialog"
-                                aria-labelledby="remarkLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header heading">
-                                            <h4 class="modal-title" id="remarkLabel">Add Review</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><img src="../images/form/close.png"
-                                                        alt="close"></span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="rating">
-                                                <img src="../images/form/rating/star.png" alt="Star">
-                                                <img src="../images/form/rating/star.png" alt="Star">
-                                                <img src="../images/form/rating/star.png" alt="Star">
-                                                <img src="../images/form/rating/star.png" alt="Star">
-                                                <img src="../images/form/rating/star-white.png" alt="Star">
+                                            $downloadedDate = $myDownloads['ModifiedDate'];
+                                            $dateTime = strtotime($downloadedDate);
+                                            $downloadedDate = date("d M Y , H:i:s", $dateTime);
+
+                                            
+
+                                            echo '  <tr class="table-row">
+                                                    <td>' . $count . '</td>
+                                                    <td class="title view">' . $myDownloads['NoteTitle'] . '</td>
+                                                    <td>' . $myDownloads['NoteCategory'] . '</td>
+                                                    <td class="sellerEmail">' . $sellerEmail . '</td>
+                                                    <td>' . $freeOrPaid . '</td>
+                                                    <td>$' . $priceDollar . '</td>
+                                                    <td>' . $downloadedDate . '</td>
+                                                    <td class="view"><img src="../images/form/eye.png" alt="View"></td>
+                                                    <td class="dropup dropleft">
+                                                        <div data-toggle="dropdown">
+                                                            <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                            <button class="dropdown-item downloadNote" type="submit" name="download">Download Note</button>
+                                                            <button class="dropdown-item giveRatings" type="button" name="review" data-toggle="modal" data-target="#remark">Add Reviews/Feedback</button>
+                                                            <button class="dropdown-item reportSpam" type="button" name="report" data-toggle="modal" data-target="#spam">Report as Inappropriate</button>
+                                                        </div>
+                                                    </td>
+                                                    <input type="hidden" class="downloadID" value="' . $myDownloads['ID'] . '">
+                                                    <input type="hidden" class="noteID" value="' . $myDownloads['NoteID'] . '">
+ 
+
+                                                    <input type="hidden" name="downloadID">
+                                                    <input type="hidden" name="noteID">
+                                                    <input type="hidden" name="noteTitle">
+                                                    <input type="hidden" name="sellerEmail">
+
+                                                    <button type="submit" name="noteDetail" style="visibility:hidden"></buttton>
+                                                
+
+                                                </tr>';
+
+                                            $count++;
+                                        }
+
+                                        ?>
+                                    </tbody>
+                                </table>
+
+                                <!-- Modal For Review -->
+                                <div class="modal fade" id="remark" tabindex="-1" role="dialog" aria-labelledby="remarkLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header heading">
+                                                <h4 class="modal-title" id="remarkLabel">Add Review</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                                </button>
                                             </div>
-                                            <textarea placeholder="Write remarks" name="comments"
-                                                id="description"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="submit">Submit</button>
+                                            <div class="modal-body">
+                                                <div class="rating">
+                                                    <img src="../images/form/rating/star-white.png" id="star1" alt="Star">
+                                                    <img src="../images/form/rating/star-white.png" id="star2" alt="Star">
+                                                    <img src="../images/form/rating/star-white.png" id="star3" alt="Star">
+                                                    <img src="../images/form/rating/star-white.png" id="star4" alt="Star">
+                                                    <img src="../images/form/rating/star-white.png" id="star5" alt="Star">
+                                                </div>
+                                                <textarea placeholder="Write remarks" name="comments" id="description"></textarea>
+                                                <input type="hidden" name="rating">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="submit" class="submit">Submit</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Modal For Spam Report -->
+                                <div class="modal fade" id="spam" tabindex="-1" role="dialog" aria-labelledby="spamLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header heading">
+                                                <h4 class="modal-title" id="spamLabel">Add Review</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="rating">
+                                                    <p>Are you sure you want to mark this report as spam, you cannot update it later?</p>
+                                                </div>
+                                                <textarea placeholder="Write remarks" name="issue" id="description"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" name="report" style="color:#ffffff ; background-color:#6255a5">Submit</button>
+                                                <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:red">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
                         </div>
 
                     </div>
-
                 </div>
-            </div>
 
+            </form>
 
         </div>
 
@@ -650,7 +281,115 @@
     <!-- custom js  -->
     <script src="../js/user/data-table.js"></script>
     <script src="../js/header/header.js"></script>
+    <script src="../js/user/my-downloads.js?version=1105204"></script>
 
 </body>
 
 </html>
+<?php
+if (isset($_POST['submit'])) {
+    $rating = $_POST['rating'];
+    $comments = $_POST['comments'];
+    $ratingDownloadID = $_POST['downloadID'];
+    $ratingNoteID = (int)$_POST['noteID'];
+
+    $addRatingQuery = "INSERT INTO NotesReviews(NoteID ,ReviewedByID , AgainstDownloadsID ,Ratings,Comments,CreatedBy,ModifiedBy) VALUES($ratingNoteID,$userID,$ratingDownloadID,$rating,'$comments',$userID,$userID)";
+    $addRating = mysqli_query($connection, $addRatingQuery);
+    if ($addRating) {
+        $getNoteRatingQuery = "SELECT * FROM NotesReviews WHERE NoteID = $ratingNoteID ";
+        $getNoteRatingResult = mysqli_query($connection ,$getNoteRatingQuery);
+        $totalRatingCount = 0 ;
+
+        while($totalRating = mysqli_fetch_assoc($getNoteRatingResult)){
+            $totalRatingCount = $totalRatingCount + (int)$totalRating['Ratings'];
+        }
+
+        $totalRatingsGiven = mysqli_num_rows($getNoteRatingResult);
+        $avgBookRating = bcdiv($totalRatingCount,$totalRatingsGiven, 2);
+
+        $updateRatingQuery = "UPDATE NotesDetails SET Ratings = $avgBookRating WHERE ID = $ratingNoteID ";
+        $isRatingUpaded = mysqli_query($connection , $updateRatingQuery);
+        
+echo $avgBookRating;
+        if(!$isRatingUpaded){
+            die(mysqli_error($connection));
+        }
+
+    } else {
+        die(mysqli_error($connection));
+    }
+}
+if (isset($_POST['report'])) {
+    $issue = $_POST['issue'];
+    $reportDownloadID = $_POST['downloadID'];
+    $reportNoteID = (int)$_POST['noteID'];
+    $noteTitle = $_POST['noteTitle'];
+    $sellerEmailID = $_POST['sellerEmail'];
+
+    $addReportQuery = "INSERT INTO ReportedIssues(NoteID ,ReportedByID , AgainstDownloadID ,Remarks,CreatedBy,ModifiedBy) VALUES($reportNoteID,$userID,$reportDownloadID ,'$issue',$userID,$userID)";
+    $addReport = mysqli_query($connection, $addReportQuery);
+
+    if ($addReport) {
+
+        $query = "SELECT * FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
+        $queryResult = mysqli_query($connection, $query);
+        $supportField = mysqli_fetch_assoc($queryResult);
+        $senderEmail = $supportField['Value'];
+
+        $queryReceive = "SELECT * FROM systemConfiguration WHERE KeyFields = 'EmailAddressesForNotify' ";
+        $queryResultReceive = mysqli_query($connection, $queryReceive);
+        $supportFieldReceive = mysqli_fetch_assoc($queryResultReceive);
+        $receiverEmail = $supportFieldReceive['Value'];
+
+        // For Sending Confirmation Mail 
+        require "../smtp/src/Exception.php";
+        require "../smtp/src/PHPMailer.php";
+        require "../smtp/src/SMTP.php";
+        $mail = new PHPMailer(true);
+        
+        try {
+            //Server settings
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+            // UserName And Password
+            $mail->Username   = $senderEmail;                     //SMTP username
+            $mail->Password   = 'vira3333';                               //SMTP password
+
+            // Sender And Receiver Detail 
+            $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
+            $mail->addAddress($receiverEmail, 'Notes MarkePlace Reported Issue');  //Receiver Detail
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = $userEmail.' '.'Reported an issue for'.' '.$noteTitle;
+            $mail->Body    =  'Hello Admins,' . '<br>' .
+                'We want to inform you that,'.' '.$userEmail.' '.
+                'Reported an issue for'.' '.$sellerEmailID.'’s Note with title'.' '.$noteTitle.' '.
+                '. Please look at the notes and take required actions.' . '<br>' .
+                'Regards,' . '<br>' .
+                'Notes Marketplace';
+            // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    } else {
+        die(mysqli_error($connection));
+    }
+    
+}
+if(isset($_POST['noteDetail'])){
+
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+    
+    header('Location:../notes-detail.php');
+}
+ob_end_flush();
+?>
