@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,10 +29,10 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="css/header-footer/header.css">
+    <link rel="stylesheet" href="css/header-footer/user-header.css">
     <link rel="stylesheet" href="css/header-footer/footer.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/faq.css">
+    <link rel="stylesheet" href="css/user/faq.css">
 
 </head>
 
@@ -42,33 +45,9 @@
     <!-- Preloader Ends -->
 
         <!-- Header -->
-        <header id="header">
-            <nav class="navbar white-navbar navbar-expand-lg">
-                <div class="container navbar-wrapper">
-                    <a class="navbar-brand" href="index.html">
-                        <img class="img-responsive" src="images/logo/logo-dark.png" alt="logo">
-                    </a>
-    
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="login.html">Sell Your Notes</a></li>
-                            <li class="nav-item active"><a class="nav-link" href="faq.html">FAQ</a></li>
-                            <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                            <li class="nav-item loginNavTab"><a class="nav-link" href="login.html">Login</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-    
-            <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                    <span id="close" class="navbar-toggler-icon">&times;</span>
-                </button>
-            </nav>
-        </header>
+        <?php
+            require "header.php";
+        ?>
         <!-- Header Ends -->
 
 
