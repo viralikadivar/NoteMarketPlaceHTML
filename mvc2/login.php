@@ -43,13 +43,13 @@ if (isset($_POST["submit"])) {
                     $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
-                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/admin/admin-profile.php");
+                    header("Location:admin/admin-profile.php");
                     
                     exit();
                 } else {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
-                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/admin/admin-dashboard.php");
+                    header("Location:admin/admin-dashboard.php");
                     exit();
                 }
 
@@ -63,13 +63,13 @@ if (isset($_POST["submit"])) {
                     $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
-                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/search-notes.php");
+                    header("Location:http:search-notes.php");
                     
                     exit();
                 } else {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
-                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/user-profile.php");  
+                    header("Location:user/user-profile.php");  
                     exit();
                 }
             }
