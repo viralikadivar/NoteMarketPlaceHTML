@@ -1,0 +1,710 @@
+/*=============================================================
+                       Costom CSS Styles
+font-family: "Open sans" , sans-serif;
+    font-weight: 300;
+    font-weight: 400;
+    font-weight: 600;
+    font-weight: 700;
+
+color : #6255a5  OR rbg(98,85,165)
+==============================================================*/
+
+/* =========================================
+                Html, Body
+============================================ */
+html,
+body {
+    height: 100%;
+}
+section {
+    background: #fff;
+    overflow: hidden;
+}
+
+
+
+/* ===========================================
+                Heading
+============================================ */
+.heading h2 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    margin-top: 45px ;
+}
+.heading h4 {
+    color: #333333;
+    font-family: "Open sans" , sans-serif;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 50px;
+}
+
+
+
+/* ===========================================
+                   Search Banner
+============================================ */
+#add-notes-banner{
+    background: none;
+    height: 200px;
+}
+#add-notes-bg-image {
+    position: fixed; 
+    z-index: -1;
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    top: 60px;
+}
+#add-notes-overlay {
+    background-color: rgba(57, 47, 105, 0.6);
+    width: 100%;
+    height: 200px;
+    position: fixed;
+    top: 60px;
+    z-index: -1;
+}
+
+/*Heading */
+#add-notes-heading {
+    height: 260px;
+    padding-top:140px;
+}
+#add-notes-heading h2 {
+    color: #ffffff;
+    font-family: "Open sans" , sans-serif;
+    font-weight: 600;
+    font-size: 35px;
+    line-height: 42px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Label for feilds */
+label {
+    font-family: "Open sans" , sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333; 
+    margin-top: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Input Fields */
+#first-name,
+#last-name,
+#email,
+#dob,
+#gender,
+#add-1,
+#add-2,
+#city,
+#state,
+#zipcode,
+#country,
+#university,
+#college,
+#phone-number,
+.select-field{
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 45px;
+    width: 100%;
+}
+/* placeholder of all inpit fields */
+#first-name::placeholder,
+#last-name::placeholder,
+#email::placeholder,
+#dob::placeholder,
+#gender::placeholder,
+#add-1::placeholder,
+#add-2::placeholder,
+#city::placeholder,
+#state::placeholder,
+#zipcode::placeholder,
+#country::placeholder,
+#university::placeholder,
+#college::placeholder,
+#phone-number::placeholder
+#description::placeholder{
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+   
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("../../images/form/date.png");
+}
+
+/* On Focus and hover Input Fields  */
+#first-name:hover,
+#last-name:hover,
+#email:hover,
+#dob:hover,
+#gender:hover,
+.profile-picture:hover,
+#add-1:hover,
+#add-2:hover,
+#city:hover,
+#state:hover,
+#zipcode:hover,
+#country:hover,
+#university:hover,
+#college:hover,
+#phone-number:hover,
+.select-field:hover,
+#first-name:focus,
+#last-name:focus,
+#email:focus,
+#dob:focus,
+#gender:focus,
+.profile-picture:focus,
+#add-1:focus,
+#add-2:focus,
+#city:focus,
+#state:focus,
+#zipcode:focus,
+#country:focus,
+#university:focus,
+#college:focus,
+#phone-number:focus,
+.select-field:focus{
+    background: #ffffff;
+    outline: none;
+    box-shadow: 0px 0px 15px -5px #6255a5;
+    border: transparent;
+}
+
+/* for taking input from user - photo and file */
+.profile-picture {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 100px;
+}
+.profile-picture label { 
+    text-align: center;
+    /* margin-left: 210px; */
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;  
+}
+
+/* Dropdown list items */
+.dropdown ul li:hover  {
+    color: #ffffff;
+    background-color: #6255a5;
+}
+
+/* select note type */
+button.select-field {
+    padding-left: 13px;
+    background-color: #ffffff;
+    text-align: left;
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+}
+button.select-field img {
+    float: right;
+    padding-top: 5px;
+    padding-right: 8px;
+}
+.dropdown-menu{
+    cursor: pointer;
+    min-width: 100%;
+}
+
+
+/*  Submit Button */
+button.submit {
+    background-color: #6255a5;
+    width: 160px;
+    height: 50px;
+    border-radius: 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: transparent;
+    font-family: "Open sans" , sans-serif;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 22px;
+    font-weight: 600;
+}
+button.submit:hover ,
+button.submit:focus {
+    color: #6255a5; 
+    background: #ffffff;
+    outline: none;
+    box-shadow: none;
+    border: 1px solid #6255a5 ;
+}
+
+
+/* form validation  */
+small#firstNameValidation ,
+small#lastNameValidation ,
+small#phoneNumberValidation,
+small#addr1Validation,
+small#addr2Validation,
+small#cityValidation,
+small#stateValidation,
+small#zipCodeValidation,
+small#countryValidation{
+    display: none;
+}
+
+.wrong-info input#first-name,
+.wrong-info input#last-name,
+.wrong-info button#phone-code,
+.wrong-info input#phone-number,
+.wrong-info input#add-1,
+.wrong-info input#add-2,
+.wrong-info input#city,
+.wrong-info input#state,
+.wrong-info input#zipcode,
+.wrong-info input#country{
+    border: 1px solid #ff5e5e;
+    box-shadow: 0px 0px 15px -5px #ff5e5e;
+}
+
+.wrong-info small#firstNameValidation,
+.wrong-info small#lastNameValidation,
+.wrong-info small#phoneNumberValidation,
+.wrong-info small#addr1Validation,
+.wrong-info small#addr2Validation,
+.wrong-info small#cityValidation,
+.wrong-info small#stateValidation,
+.wrong-info small#zipCodeValidation,
+.wrong-info small#countryValidation{
+    color: #ff5e5e;
+    display : inline;
+}
+
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {  
+    #add-notes-banner{
+        height: 200px;
+    }
+    #add-notes-bg-image {
+        height: 200px;
+        top: 50px;
+    }
+    #add-notes-overlay {
+        height: 200px;
+        top: 50px;
+    }
+    #add-notes-heading {
+        height: 250px;
+        padding-top:128px;
+    }
+    label {
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+       
+}
+
+
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and  (max-width: 767px) { 
+    .heading h2 {
+        font-size: 30px;
+        line-height: 38px;
+        margin-top: 20px ;
+    }
+    .heading h4 {
+        font-size: 21px;
+        line-height: 26px;
+        margin-bottom: 50px;
+    }    
+    #add-notes-banner{
+        height: 150px;
+    }
+    #add-notes-bg-image {
+        height: 150px;
+        width: 100%;
+        top: 52px;
+    }
+    #add-notes-overlay {
+        width: 100%;
+        height: 150px;
+        top: 52px;
+    }
+    
+    /*Heading */
+    #add-notes-heading {
+        height: 200px;
+        padding-top:105px;
+    }
+    #add-notes-heading h2 {
+        font-size: 32px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 14px;
+        line-height: 20px;
+        margin-top: 10px;
+        margin-bottom: 7px;
+        width: 100%;
+    }
+    
+    /* Input Fields */
+    #first-name,
+    #last-name,
+    #email,
+    #dob,
+    #gender,
+    #add-1,
+    #add-2,
+    #city,
+    #state,
+    #zipcode,
+    #country,
+    #university,
+    #college,
+    #phone-number,
+    .select-field{
+        height: 40px;
+        width: 100%;
+    }
+    /* placeholder of all inpit fields */
+    #first-name::placeholder,
+    #last-name::placeholder,
+    #email::placeholder,
+    #dob::placeholder,
+    #gender::placeholder,
+    #add-1::placeholder,
+    #add-2::placeholder,
+    #city::placeholder,
+    #state::placeholder,
+    #zipcode::placeholder,
+    #country::placeholder,
+    #university::placeholder,
+    #college::placeholder,
+    #phone-number::placeholder
+    #description::placeholder{
+        font-size: 14px;
+        line-height: 20px;
+    }
+    /* for taking input from user - photo and file */
+    .profile-picture {
+        height: 100px;
+    }
+    .profile-picture label { 
+        margin-top: 20px;
+        font-size: 14px;
+        line-height: 20px; 
+    }
+    .profile-picture label img {
+        height: 40px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 13px;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        float: right;
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    
+    /*  Submit Button */
+    button.submit {
+        width: 140px;
+        height: 40px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 22px;
+    }
+ }
+
+@media (min-width: 375px) and  (max-width: 575px){
+    .heading h2 {
+        font-size: 25px;
+        line-height: 28px;
+        margin-top: 10px ;
+        margin-bottom: 0;
+    }
+    .heading h4 {
+        font-size: 21px;
+        line-height: 26px;
+        margin-bottom: 50px;
+    }    
+    #add-notes-banner{
+        height: 120px;
+    }
+    #add-notes-bg-image {
+        height: 120px;
+        width: 100%;
+        top: 48px;
+    }
+    #add-notes-overlay {
+        width: 100%;
+        height: 120px;
+        top: 48px;
+    }
+    
+    /*Heading */
+    #add-notes-heading {
+        height: 170px;
+        padding-top:85px;
+    }
+    #add-notes-heading h2 {
+        font-size: 28px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 12px;
+        line-height: 20px;
+        margin-top: 5px;
+        margin-bottom: 0px;
+        width: 100%;
+    }
+    
+    /* Input Fields */
+    #first-name,
+    #last-name,
+    #email,
+    #dob,
+    #gender,
+    #add-1,
+    #add-2,
+    #city,
+    #state,
+    #zipcode,
+    #country,
+    #university,
+    #college,
+    #phone-number,
+    .select-field{
+        height: 35px;
+        width: 340px;
+    }
+    /* placeholder of all inpit fields */
+    #first-name::placeholder,
+    #last-name::placeholder,
+    #email::placeholder,
+    #dob::placeholder,
+    #gender::placeholder,
+    #add-1::placeholder,
+    #add-2::placeholder,
+    #city::placeholder,
+    #state::placeholder,
+    #zipcode::placeholder,
+    #country::placeholder,
+    #university::placeholder,
+    #college::placeholder,
+    #phone-number::placeholder
+    #description::placeholder{
+        font-size: 11px;
+        line-height: 20px;
+    }
+    /* for taking input from user - photo and file */
+    .profile-picture {
+        height: 90px;
+        width: 341px;
+    }
+    .profile-picture label { 
+        margin-top: 15px;
+        font-size: 14px;
+        line-height: 20px; 
+    }
+    .profile-picture label img {
+        height: 35px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 13px;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        float: right;
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    
+    #phone-code {
+        width: 80px;
+    }
+    #phone-number {
+        margin-top: -35px;
+        margin-left: 110px;
+        width: 245px;
+    }
+    /*  Submit Button */
+    button.submit {
+        width: 120px;
+        height: 35px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 22px;
+    }
+}
+
+
+
+@media (min-width: 320px) and  (max-width: 374px){
+    .heading h2 {
+        font-size: 22px;
+        line-height: 28px;
+        margin-top: 10px ;
+        margin-bottom: 0;
+    }
+    .heading h4 {
+        font-size: 21px;
+        line-height: 26px;
+        margin-bottom: 50px;
+    }    
+    #add-notes-banner{
+        height: 100px;
+    }
+    #add-notes-bg-image {
+        height: 100px;
+        width: 100%;
+        top: 48px;
+    }
+    #add-notes-overlay {
+        width: 100%;
+        height: 100px;
+        top: 48px;
+    }
+    
+    /*Heading */
+    #add-notes-heading {
+        height: 145px;
+        padding-top:75px;
+    }
+    #add-notes-heading h2 {
+        font-size: 24px;
+        line-height: 42px;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Label for feilds */
+    label {
+        font-size: 11px;
+        line-height: 20px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        width: 100%;
+    }
+    
+    /* Input Fields */
+    #first-name,
+    #last-name,
+    #email,
+    #dob,
+    #gender,
+    #add-1,
+    #add-2,
+    #city,
+    #state,
+    #zipcode,
+    #country,
+    #university,
+    #college,
+    #phone-number,
+    .select-field{
+        height: 30px;
+        width: 290px;
+        margin-bottom: 0;
+    }
+    /* placeholder of all inpit fields */
+    #first-name::placeholder,
+    #last-name::placeholder,
+    #email::placeholder,
+    #dob::placeholder,
+    #gender::placeholder,
+    #add-1::placeholder,
+    #add-2::placeholder,
+    #city::placeholder,
+    #state::placeholder,
+    #zipcode::placeholder,
+    #country::placeholder,
+    #university::placeholder,
+    #college::placeholder,
+    #phone-number::placeholder
+    #description::placeholder{
+        font-size: 9px;
+        line-height: 10px;
+    }
+    /* for taking input from user - photo and file */
+    .profile-picture {
+        height: 70px;
+        width: 290px;
+    }
+    .profile-picture label { 
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 20px; 
+    }
+    .profile-picture label img {
+        height: 30px;
+    }
+    
+    /* select note type */
+    button.select-field {
+        padding-left: 13px;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    button.select-field img {
+        float: right;
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    
+    #phone-code {
+        width: 70px;
+    }
+    #phone-code img {
+        height: 14px;
+        /* margin-top: -20px; */
+        margin-right: -7px;
+    }
+    #phone-number {
+        margin-top: -30px;
+        margin-left: 95px;
+        width: 209px;
+    }
+    /*  Submit Button */
+    button.submit {
+        width: 100px;
+        height: 30px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: 14px;
+        line-height: 22px;
+    }
+}
