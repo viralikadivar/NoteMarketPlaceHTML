@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/header-footer/header.css">
+    <link rel="stylesheet" href="css/header-footer/user-header.css">
     <link rel="stylesheet" href="css/header-footer/footer.css">
     <link rel="stylesheet" href="css/style.css">
 
@@ -50,11 +50,11 @@
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.html">Sell Your Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="login.html">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login.php">Sell Your Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
+                        <li class="nav-item loginNavTab"><a class="nav-link" href="login.php">Login</a></li>
                     </ul>
                 </div>
             </div>
