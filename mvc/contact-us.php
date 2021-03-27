@@ -3,15 +3,30 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-session_start();
 
+session_start();
 require "db_connection.php";
 global $connection;
+
+if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
+    
+    $emailUser = $_SESSION['userEmail'];
+
+    $userQuery = "SELECT * FROM Users WHERE EmailID = '$emailUser' ";
+    $userqueryResult = mysqli_query($connection, $userQuery);
+    $userInfo = mysqli_fetch_assoc($userqueryResult);
+    $userName = $userInfo['FirstName'] . " " . $userInfo['LastName'];
+} else {
+    $emailUser = "Enter Emailid";
+    $userName = "Enter Your Fullname";
+}
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <!-- important meta tags -->
@@ -39,9 +54,9 @@ global $connection;
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/header-footer/header.css">
+    <link rel="stylesheet" href="css/header-footer/user-header.css">
     <link rel="stylesheet" href="css/header-footer/footer.css">
-    <link rel="stylesheet" href="css/contact-us.css">
+    <link rel="stylesheet" href="css/user/contact-us.css">
 
 
 </head>
@@ -49,32 +64,9 @@ global $connection;
 <body>
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="index.html">
-                    <img class="img-responsive" src="images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.html">Sell Your Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="login.html">Login</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    require "header.php";
+    ?>
     <!-- Header Ends -->
 
 
@@ -117,22 +109,22 @@ global $connection;
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <!-- Full Name -->
+                        <!-- Last Name -->
                         <div class="form-group">
-                            <label for="fullName">Full Name *</label>
-                            <input type="text" name="full-name" class="form-control" id="fullName" placeholder="Enter Your Full Name" required>
+                            <label for="fullName" required>Full Name *</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="<?php echo $userName; ?>">
                         </div>
 
                         <!-- Email Address -->
                         <div class="form-group">
-                            <label for="inputEmail">Email Address *</label>
-                            <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Enter your email address" required>
+                            <label for="inputEmail" required>Email Address *</label>
+                            <input type="email" class="form-control" id="inputEmail" placeholder="<?php echo $emailUser; ?>">
                         </div>
 
                         <!-- Enter Password -->
                         <div class="form-group">
                             <label for="subject" required>Subject *</label>
-                            <input type="text" name="subject" class="form-control" id="subject" placeholder="Enter your subject" required>
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Enter your subject">
                         </div>
 
                     </div>
@@ -145,7 +137,7 @@ global $connection;
                                 </div>
                             </div>
 
-                            <textarea placeholder="Comments..." name="comments" id="comments-questions" required></textarea>
+                            <textarea placeholder="Comments..." name="comments" id="comments-questions"></textarea>
                         </div>
 
                     </div>
@@ -190,16 +182,16 @@ global $connection;
     <script src="js/jquery.min.js"></script>
 
     <!-- Bootstrap -->
+    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
     <script src="js/header/header.js"></script>
 
 </body>
 
+</html>
 
 <?php
-
-// $emailUser = $_SESSION['userEmail'];
 
 $query = "SELECT * FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
 $queryResult = mysqli_query($connection, $query);
@@ -211,10 +203,7 @@ $queryResultReceive = mysqli_query($connection, $queryReceive);
 $supportFieldReceive = mysqli_fetch_assoc($queryResultReceive);
 $receiverEmail = $supportFieldReceive['Value'];
 
-// $userQuery = "SELECT * FROM Users WHERE EmailID = '$emailUser' ";
-// $userqueryResult = mysqli_query($connection, $userQuery);
-// $userInfo = mysqli_fetch_assoc($userqueryResult);
-// $userName = $userInfo['FirstName']." ".$userInfo['LastName'];
+
 
 if (isset($_POST['submit'])) {
     // For Sending Confirmation Mail 
@@ -223,10 +212,9 @@ if (isset($_POST['submit'])) {
     require "smtp/src/SMTP.php";
     $mail = new PHPMailer(true);
 
-    $fullName = $_POST['full-name'];
-    $userEmailAddress = $_POST['email'];
     $subject = $_POST['subject'];
     $comments = $_POST['comments'];
+    global $userName;
 
     try {
         //Server settings
@@ -243,28 +231,22 @@ if (isset($_POST['submit'])) {
 
         // Sender And Receiver Detail 
         $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
-        $mail->addAddress($receiverEmail , 'Notes MarkePlace Comments and Questions');  //Receiver Detail
+        $mail->addAddress($receiverEmail, 'Notes MarkePlace Comments and Questions');  //Receiver Detail
 
 
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = $fullName.' '.'- Query';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->Body    =  'Hello,'.'<br>'.
-                           $comments.'<br>'.
-                           'Regards,'.'<br>'.
-                           $fullName ;
+        $mail->Subject = $userName . ' ' . '- Query';
+        $mail->Body    =  'Hello,' . '<br>' .
+            $comments . '<br>' .
+            'Regards,' . '<br>' .
+            $userName;
         // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
-
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
-
-    
 }
 
 ?>
-
-</html>
