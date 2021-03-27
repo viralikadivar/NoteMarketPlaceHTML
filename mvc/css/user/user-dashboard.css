@@ -21,7 +21,6 @@ section {
     overflow: hidden;
 }
 
-
 /* ===========================================
                 Heading
 ============================================ */
@@ -88,6 +87,11 @@ div.earning:first-child {
     border: 1px solid #d1d1d1;
 }
 
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
 /* link to add notes  */
 
 a.btn {
@@ -104,6 +108,25 @@ a.btn {
  }
  a.btn:hover {
     color: #ffffff;
+ }
+.delete-note {
+    color: #ffffff;
+    border-color: transparent;
+    border-radius: 3px;
+     font-family: "Open sans" , sans-serif;
+     font-size: 15px;
+     font-weight: 700;
+     line-height: 22px;
+     height: 37px;
+     text-transform: uppercase;
+     padding: 7px 25px;
+ }
+ .delete-note:nth-child(1){
+    background-color: #6255a5;
+ }
+
+ .delete-note:nth-child(2){
+    background-color: rgb(243, 2, 2);
  }
 
 
