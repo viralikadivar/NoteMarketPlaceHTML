@@ -1,8 +1,61 @@
 <?php
-
+ob_start();
 require "../db_connection.php";
 global $connection;
 
+session_start();
+$sellerID =  $_SESSION['UserID'];
+
+$isNoteSet = isset($_SESSION['noteID']);
+$isPreviewNeeded = "required";
+$isAttachmentNeeded = "required";
+
+if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
+
+    $isPreviewNeeded = "";
+    $isAttachmentNeeded = "";
+
+    $editNoteID = $_SESSION['noteID'];
+
+    $getNoteIDQuery = "SELECT * FROM NotesDetails WHERE ID = $editNoteID ";
+    $getNoteDetailsResult = mysqli_query($connection, $getNoteIDQuery);
+    $noteDetails = mysqli_fetch_assoc($getNoteDetailsResult);
+
+    $editNoteTitle           = $noteDetails['Title'];
+    $editNoteCategoryID      = $noteDetails['Category'];
+    $editNoteDisplayPicture  = $noteDetails['DisplayPicture'];
+    $editNoteTypeID          = $noteDetails['NoteType'];
+    $editNoteNumberofPages   = $noteDetails['NumberofPages'];
+    $editNoteDescription     = $noteDetails['Description'];
+    $editNoteUniversityName  = $noteDetails['UniversityName'];
+    $editNoteCountryID       = $noteDetails['Country'];
+    $editNoteCourse          = $noteDetails['Course'];
+    $editNoteCourseCode      = $noteDetails['CourseCode'];
+    $editNoteProfessor       = $noteDetails['Professor'];
+    $editNoteIsPaid          = $noteDetails['IsPaid'];
+    $editNoteSellingPrice    = $noteDetails['SellingPrice'];
+    $editNoteNotesPreview    = $noteDetails['NotesPreview'];
+
+
+    $getCountryName = mysqli_query($connection, "SELECT * FROM Countries WHERE ID = $editNoteCountryID ");
+    $getCountryNameResult = mysqli_fetch_assoc($getCountryName);
+    $editNoteCountry = $getCountryNameResult['Name'];
+
+    $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE ID = $editNoteTypeID ");
+    $getTypeResult = mysqli_fetch_assoc($getType);
+    $editNoteType = $getTypeResult['Name'];
+
+    $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE ID =  $editNoteCategoryID ");
+    $getCategoryResult = mysqli_fetch_assoc($getCategory);
+    $editNoteCategory = $getCategoryResult['Name'];
+
+
+    // Paid Or Free 
+    $paid = "";
+    if ($editNoteIsPaid == 4) {
+        $paid = "checked";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +80,7 @@ global $connection;
 
     <!-- ================================================
                         CSS Files 
-    ================================================= -->
+        ================================================= -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
@@ -50,48 +103,9 @@ global $connection;
     <!-- Preloader Ends -->
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png" alt="User">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                    <a class="dropdown-item" href="my-download.html">My Downloads</a>
-                                    <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                    <a class="dropdown-item" href="my-rejected-notes.html">My Rejected Notes</a>
-                                    <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    require "../header.php";
+    ?>
     <!-- Header Ends -->
 
     <br><br><br>
@@ -134,7 +148,9 @@ global $connection;
                         <!-- Title of Book -->
                         <div class="form-group">
                             <label for="book-title">Title *</label>
-                            <input type="text" name="book-title" class="form-control" id="book-title" placeholder="Enter Your Note Title" required>
+                            <input type="text" name="book-title" class="form-control" id="book-title" placeholder="Enter Your Note Title" value="<?php if ($isNoteSet) {
+                                                                                                                                                        echo $editNoteTitle;
+                                                                                                                                                    } ?>" required>
                         </div>
 
                         <!-- Upload Picture -->
@@ -152,8 +168,9 @@ global $connection;
                             <div class="dropdown">
                                 <label for="selectBookType">Type</label>
                                 <br>
-                                <button type="button" id="selectBookType" class="select-field" data-toggle="dropdown">
-                                </button>
+                                <button type="button" id="selectBookType" class="select-field" data-toggle="dropdown"><?php if ($isNoteSet) {
+                                                                                                                            echo $editNoteType;
+                                                                                                                        } ?></button>
                                 <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookType" style="width:100%">
                                     <?php
 
@@ -180,8 +197,9 @@ global $connection;
                         <div class="form-group">
                             <div class="dropdown">
                                 <label for="book-category">Category *</label>
-                                <button type="button" id="book-category" class="select-field" data-toggle="dropdown" required>
-                                </button>
+                                <button type="button" id="book-category" class="select-field" data-toggle="dropdown" required><?php if ($isNoteSet) {
+                                                                                                                                    echo $editNoteCategory;
+                                                                                                                                } ?></button>
                                 <ul class="dropdown-menu dropdown-from-db categories" aria-labelledby="book-category" style="width:100%">
                                     <?php
 
@@ -205,14 +223,16 @@ global $connection;
                             <div class="take-note-detail">
                                 <label for="file"><img src="../images/form/upload-note.png" alt="Uplaod"><br>
                                     Upload your notes</label>
-                                <input type="file" name="note-file[]" id="file" style="visibility: hidden;" accept="application/pdf" multiple required>
+                                <input type="file" name="note-file[]" id="file" style="visibility: hidden;" accept="application/pdf" multiple <?php echo $isAttachmentNeeded;?>>
                             </div>
                         </div>
 
                         <!-- Number Of Pages -->
                         <div class="form-group">
                             <label for="note-page">Number of Pages</label>
-                            <input type="text" name="number-of-pages" class="form-control" id="note-page" placeholder="Enter number of note pages">
+                            <input type="text" name="number-of-pages" class="form-control" id="note-page" placeholder="Enter number of note pages" value="<?php if ($isNoteSet) {
+                                                                                                                                                                echo $editNoteNumberofPages;
+                                                                                                                                                            } ?>">
                         </div>
                     </div>
                 </div>
@@ -227,7 +247,7 @@ global $connection;
                                     <label for="description">Description</label>
                                 </div>
                             </div>
-                            <textarea name="book-description" placeholder="Enter your description" name="comments" id="description" required></textarea>
+                            <textarea name="book-description" placeholder="Enter your description" id="description" required><?php echo $editNoteDescription; ?></textarea>
                         </div>
 
                     </div>
@@ -249,8 +269,9 @@ global $connection;
                             <div class="dropdown">
                                 <label for="selectCountry" required>Country</label>
                                 <br>
-                                <button type="button" id="selectCountry" class="select-field" data-toggle="dropdown">
-                                </button>
+                                <button type="button" id="selectCountry" class="select-field" data-toggle="dropdown"><?php if ($isNoteSet) {
+                                                                                                                            echo $editNoteCountry;
+                                                                                                                        } ?></button>
                                 <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%">
                                     <?php
 
@@ -274,7 +295,9 @@ global $connection;
                         <!-- Title of Institute  -->
                         <div class="form-group">
                             <label for="institution-name" required>Institution Name</label>
-                            <input type="text" name="institute-name" class="form-control" id="institution-name" placeholder="Enter Your Institution name">
+                            <input type="text" name="institute-name" class="form-control" id="institution-name" placeholder="Enter Your Institution name" value="<?php if ($isNoteSet) {
+                                                                                                                                                                        echo $editNoteUniversityName;
+                                                                                                                                                                    } ?>">
                         </div>
                     </div>
                 </div>
@@ -290,10 +313,11 @@ global $connection;
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <!-- Course Name -->
                         <div class="form-group">
                             <label for="course-name" required>Course Name</label>
-                            <input type="text" name="course-name" class="form-control" id="course-name" placeholder="Enter Your course name">
+                            <input type="text" name="course-name" class="form-control" id="course-name" placeholder="Enter Your course name" value="<?php if ($isNoteSet) {
+                                                                                                                                                        echo $editNoteCourse;
+                                                                                                                                                    } ?>">
                         </div>
 
                     </div>
@@ -303,7 +327,9 @@ global $connection;
                         <!-- Course code -->
                         <div class="form-group">
                             <label for="course-code" required>Course Code</label>
-                            <input type="text" name="course-code" class="form-control" id="course-code" placeholder="Enter Your course code">
+                            <input type="text" name="course-code" class="form-control" id="course-code" placeholder="Enter Your course code" value="<?php if ($isNoteSet) {
+                                                                                                                                                        echo $editNoteCourseCode;
+                                                                                                                                                    } ?>">
                         </div>
 
                     </div>
@@ -313,7 +339,9 @@ global $connection;
                         <!-- professor/Lecturer -->
                         <div class="form-group">
                             <label for="professor-name" required>Professor/Lecturer</label>
-                            <input type="text" name="pofessor-name" class="form-control" id="professor-name" placeholder="Enter Your professor name">
+                            <input type="text" name="pofessor-name" class="form-control" id="professor-name" placeholder="Enter Your professor name" value="<?php if ($isNoteSet) {
+                                                                                                                                                                echo $editNoteProfessor;
+                                                                                                                                                            } ?>">
                         </div>
 
                     </div>
@@ -346,7 +374,9 @@ global $connection;
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="free-paid" id="paid" value="Paid">
+                                    <input class="form-check-input" type="radio" name="free-paid" id="paid" value="Paid" <?php if ($isNoteSet) {
+                                                                                                                                echo $paid;
+                                                                                                                            } ?>>
                                     <label class="form-check-label" for="paid">
                                         Paid
                                     </label>
@@ -359,7 +389,9 @@ global $connection;
                                 <!-- Sell Price -->
                                 <div class="form-group">
                                     <label for="sell-price" required>Sell Price *</label>
-                                    <input type="text" name="sell-price" class="form-control" id="sell-price" placeholder="Enter Your price" required>
+                                    <input type="text" name="sell-price" class="form-control" id="sell-price" placeholder="Enter Your price" value="<?php if ($isNoteSet) {
+                                                                                                                                                        echo $editNoteSellingPrice;
+                                                                                                                                                    } ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -372,7 +404,7 @@ global $connection;
                             <div class="take-note-detail">
                                 <label for="preview"><img src="../images/form/upload-file.png" alt="Uplaod"><br>
                                     Upload a photo</label>
-                                <input type="file" name='notes-preview' id="preview" style="visibility: hidden;" accept="application/pdf" required>
+                                <input type="file" name='notes-preview' id="preview" style="visibility: hidden;" accept="application/pdf" <?php echo $isPreviewNeeded ;?>>
                             </div>
                         </div>
 
@@ -429,7 +461,7 @@ global $connection;
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/add-notes.js?version=12"></script>
+    <script src="../js/user/add-notes.js?version=12552016"></script>
 
 </body>
 
@@ -439,9 +471,7 @@ global $connection;
 
 if (isset($_POST['save'])) {
 
-
-    $sellerID = $_SESSION['userEmail'] ;
-    $Status = 6 ;
+    $Status = 6;
     $title = $_POST['book-title'];
     $category = $_POST['category'];
     $type = $_POST['type'];
@@ -476,8 +506,51 @@ if (isset($_POST['save'])) {
     $highestNoteID = $rowNote[0];
     $currentNoteID = (int)$highestNoteID + 1;
 
+    if($isNoteSet) {
+        if($_POST['country'] != ""){
+            $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
+            $getCountryResult = mysqli_fetch_assoc($getCountry);
+            $countryID = (int)$getCountryResult['ID'];
+        } else {
+            $countryID = (int)$editNoteCountryID;
+        }
+    
+        if($_POST['type'] != ""){    
+            $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
+            $getTypeResult = mysqli_fetch_assoc($getType);
+            $typeID = (int)$getTypeResult['ID'];
+        } else {
+            $typeID = (int)$editNoteTypeID;
+        }
+    
+        if($_POST['category'] != "") {
+            $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
+            $getCategoryResult = mysqli_fetch_assoc($getCategory);
+            $categoryID = (int)$getCategoryResult['ID'];
+        } else {
+            $categoryID = (int)$editNoteCategoryID ;
+        }
+
+        $queryUpdateNotes = "UPDATE NotesDetails SET  Status = $Status , Title = '$title' , Category = $categoryID , NoteType = $typeID ,
+         NumberofPages = $noOfPages , Description = '$description' , UniversityName = '$institutionName' , Country = $countryID  ,
+          Course = '$courseName' , CourseCode = '$courseCode' , Professor = '$professor' , IsPaid =  $isPaid , 
+          SellingPrice = $sellPrice WHERE ID = $editNoteID ";
+
+        $updateNotesResult = mysqli_query($connection, $queryUpdateNotes);
+
+        if (!$updateNotesResult) {
+            die(mysqli_error($connection));
+        } else {
+            unset($_SESSION['noteID']);
+            header("Location:user-dashboard.php");
+            exit();
+        }
+
+
+    }
+
     // $queryAddNotes = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages , Description ,  Country , Course , CourseCode , Professor , IsPaid , SellingPrice  ) VALUES( $sellerID ,  6 , '$title' , $categoryID   , $typeID  ,  $noOfPages , '$description' , $countryID  , '$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
-    $queryAddNotes = "INSERT INTO NotesDetails( ID , SellerID , Status , Title , Category , NoteType , NumberofPages , Description , UniversityName , Country , Course , CourseCode , Professor , IsPaid , SellingPrice ) VALUES ( $currentNoteID , $sellerID , $Status , '$title' , $categoryID , $typeID , $noOfPages , '$description' , '$institutionName' , $countryID ,'$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice )";
+    $queryAddNotes = "INSERT INTO NotesDetails( ID , SellerID , Status , Title , Category , NoteType , NumberofPages , Description , UniversityName , Country , Course , CourseCode , Professor , IsPaid , SellingPrice , CreatedBy	, ModifiedBy ) VALUES ( $currentNoteID , $sellerID , $Status , '$title' , $categoryID , $typeID , $noOfPages , '$description' , '$institutionName' , $countryID ,'$courseName' , '$courseCode' , '$professor' , $isPaid , $sellPrice ,$sellerID,$sellerID )";
 
     $queryAddNotesResult = mysqli_query($connection,  $queryAddNotes);
 
@@ -549,7 +622,65 @@ if (isset($_POST['save'])) {
     if (!$queryAddNotesResult) {
         die(mysqli_error($connection));
     }
-
 }
 
+if (isset($_POST['publish'])) {
+
+    $Status = 7;
+    $title = $_POST['book-title'];
+    $category = $_POST['category'];
+    $type = $_POST['type'];
+    $noOfPages = (int)$_POST['number-of-pages'];
+    $description = $_POST['book-description'];
+    $counrty = $_POST['country'];
+    $institutionName = $_POST['institute-name'];
+    $courseName = $_POST['course-name'];
+    $courseCode = $_POST['course-code'];
+    $professor = $_POST['pofessor-name'];
+    $sellFor = $_POST['free-paid'];
+    $sellPrice = (int)$_POST['sell-price'];
+
+    $sellFor = mysqli_query($connection, "SELECT * FROM ReferenceData WHERE Value = '$sellFor' ");
+    $sellForResult = mysqli_fetch_assoc($sellFor);
+    $isPaid = (int)$sellForResult['ID'];
+
+    if($_POST['country'] != ""){
+        $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
+        $getCountryResult = mysqli_fetch_assoc($getCountry);
+        $countryID = (int)$getCountryResult['ID'];
+    } else {
+        $countryID = (int)$editNoteCountryID;
+    }
+
+    if($_POST['type'] != ""){    
+        $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
+        $getTypeResult = mysqli_fetch_assoc($getType);
+        $typeID = (int)$getTypeResult['ID'];
+    } else {
+        $typeID = (int)$editNoteTypeID;
+    }
+
+    if($_POST['category'] != "") {
+        $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
+        $getCategoryResult = mysqli_fetch_assoc($getCategory);
+        $categoryID = (int)$getCategoryResult['ID'];
+    } else {
+        $categoryID = (int)$editNoteCategoryID ;
+    }
+
+    $queryUpdateNotes = "UPDATE NotesDetails SET  Status = $Status , Title = '$title' , Category = $categoryID , NoteType = $typeID ,
+         NumberofPages = $noOfPages , Description = '$description' , UniversityName = '$institutionName' , Country = $countryID  ,
+          Course = '$courseName' , CourseCode = '$courseCode' , Professor = '$professor' , IsPaid =  $isPaid , 
+          SellingPrice = $sellPrice WHERE ID = $editNoteID ";
+
+    $updateNotesResult = mysqli_query($connection, $queryUpdateNotes);
+
+    if (!$updateNotesResult) {
+        die(mysqli_error($connection));
+    } else {
+        unset($_SESSION['noteID']);
+        header("Location:user-dashboard.php");
+    }
+}
+ob_end_flush();
 ?>
