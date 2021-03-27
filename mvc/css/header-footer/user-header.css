@@ -38,10 +38,11 @@
     padding: 10px 0;
 }
 .navbar-brand {
-    padding: 0px 15px;
+    padding: 0px 0px;
 }
 .navbar-brand img {
     height: 35px;
+    padding:0;
 }
 ul.navbar-nav>li.nav-item>a.nav-link {
     font-family: "Open sans", sans-serif;
@@ -116,6 +117,7 @@ ul.navbar-nav>li.loginNavTab>a.nav-link{
     color: #6255a5;
     background-color: #fff;
     padding: 5px 15px;
+    margin-right: 0;
 }
 ul.navbar-nav>li.loginNavTab>a.nav-link:hover,
 ul.navbar-nav>li.loginNavTab>a.nav-link:focus {
