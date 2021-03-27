@@ -1,6 +1,4 @@
-<?php require "db_connection.php" ?>
-<?php
-
+<?php require "db_connection.php";
 session_start();
 $password_class = "";
 $warning_class = "text-hide";
@@ -33,24 +31,45 @@ if (isset($_POST["submit"])) {
 
             $password_class = "";
             $warning_class = "text-hide";
-
+            $_SESSION['userRoleID'] =  $user_detail['RoleID'];
 
             if ($user_detail['RoleID'] == 1 || $user_detail['RoleID'] == 2) {
-                header("Location:admin/admin-dashboard.php");
-                exit();
-            } else {
                 $userID = $user_detail['ID'];
+                
                 $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
                 $userHasUserId = mysqli_query($connection, $firstLoginQuery);
                 if (mysqli_num_rows($userHasUserId) == 1) {
-                    header("Location:user/search-notes.php");
+                    $usreProfile = mysqli_fetch_assoc($userHasUserId);
+                    $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/admin/admin-profile.php");
+                    
                     exit();
                 } else {
-                    header("Location:user/user-profile.php");
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/admin/admin-dashboard.php");
+                    exit();
+                }
+
+            } else {
+                $userID = $user_detail['ID'];
+                
+                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
+                $userHasUserId = mysqli_query($connection, $firstLoginQuery);
+                if (mysqli_num_rows($userHasUserId) == 1) {
+                    $usreProfile = mysqli_fetch_assoc($userHasUserId);
+                    $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
+                    $_SESSION['UserID'] = $user_detail['ID'];
+                    $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/search-notes.php");
+                    
+                    exit();
+                } else {
+                    $_SESSION['UserID'] = $user_detail['ID'];
+                    $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    header("Location:http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/user-profile.php");  
                     exit();
                 }
             }
@@ -65,6 +84,8 @@ if (isset($_POST["submit"])) {
 
 
 }
+
+
 
 ?>
 <!DOCTYPE html>
