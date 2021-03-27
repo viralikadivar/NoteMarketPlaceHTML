@@ -60,7 +60,6 @@ try {
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
     $mail->Subject = 'Note Marketplace - Email Verification';
-    $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
     $mail->Body    =  'Hello '.$userName.','.'<br>'.
                     'Thank you for signing up with us. Please click on below link to verify your email address and to do login.'.'<br>'.
 'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc/user/activation.php?token='.$token.'<br>'.
