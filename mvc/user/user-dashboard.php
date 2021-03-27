@@ -1,3 +1,13 @@
+<?php
+session_start();
+ob_start();
+require "../db_connection.php";
+global $connection;
+
+$userEmail = $_SESSION['userEmail'];
+$userID = $_SESSION['UserID'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +17,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 ,user-scalable=no">
-
 
     <!-- Title of the website-->
     <title>Notes MarketPlace</title>
@@ -33,7 +42,7 @@
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/user-dashboard.css">
+    <link rel="stylesheet" href="../css/user/user-dashboard.css?version=1254520">
 
 </head>
 
@@ -45,347 +54,340 @@
     </div>
     <!-- Preloader Ends -->
 
-   <!-- Header -->
-   <header id="header">
-    <nav class="navbar white-navbar navbar-expand-lg">
-        <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="../index.html">
-                <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-            </a>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                    <li class="nav-item">
-                        <div class="dropdown user-image">
-                            <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                alt="User">
-                            <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                <a class="dropdown-item" href="my-download.html">My Downloads</a>
-                                <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                <a class="dropdown-item" href="my-rejected-notes.html">My Rejected Notes</a>
-                                <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-
-    <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span id="open" class="navbar-toggler-icon">&#9776;</span>
-            <span id="close" class="navbar-toggler-icon">&times;</span>
-        </button>
-    </nav>
-</header>
-<!-- Header Ends -->
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
+    <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
 
     <section id="dashboard">
-        <div class="container">
+        <form action="user-dashboard.php" method="post">
+            <div class="container">
 
-            <!-- main heading  -->
-            <div class="row dashboard-field">
-                <div class="col-lg-6 col-md-6 col-sm-6 heading">
-                    <h2>Dashboard</h2>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 text-right add-notes">
-                    <a href="add-notes.php" class="btn" role="button">Add Note</a>
-                </div>
-            </div>
-
-            <!-- main field  -->
-            <div class="row text-center">
-                <div class="col-lg-6 col-md-12 col-sm-12 dashboard-numbers">
-
-                    <div class="row">
-                        <!-- my earning -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 text-left earning heading">
-                            <img src="../images/dashboard/my-earning.png" alt="Sell">
-                            <h3 style="font-weight: 600;">My Earning</h3>
-                        </div>
-
-                        <!-- number of sold -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 earning heading">
-                            <h3>100</h3>
-                            <p>Number of Notes Sold</p>
-                        </div>
-
-                        <!-- money Earned  -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 earning heading">
-                            <h3>$10,00,000</h3>
-                            <p>Money Earned</p>
-                        </div>
+                <!-- main heading  -->
+                <div class="row dashboard-field">
+                    <div class="col-lg-6 col-md-6 col-sm-6 heading">
+                        <h2>Dashboard</h2>
                     </div>
-
+                    <div class="col-lg-6 col-md-6 col-sm-6 text-right add-notes">
+                        <a href="add-notes.php" class="btn" role="button">Add Note</a>
+                    </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-sm-12 dashboard-count">
 
-                    <dviv class="row">
+                <!-- main field  -->
+                <div class="row text-center">
+                    <div class="col-lg-6 col-md-12 col-sm-12 dashboard-numbers">
 
-                        <!-- my downloads  -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 heading">
-                            <div class="my-notes">
-                                <h3>38</h3>
-                                <p>My Downloads</p>
+                        <div class="row">
+                            <!-- my earning -->
+                            <div class="col-lg-4 col-md-4 col-sm-4 text-left earning heading">
+                                <img src="../images/dashboard/my-earning.png" alt="Sell">
+                                <h3 style="font-weight: 600;">My Earning</h3>
+                            </div>
+
+                            <!-- number of sold -->
+                            <?php
+
+                            $mySoldQuery = "SELECT DISTINCT NoteID FROM NotesDownloads WHERE Seller = $userID AND IsSellerHasAllowedDownload = 1";
+                            $mySoldResult = mysqli_query($connection, $mySoldQuery);
+                            $mySoldNotes = 0;
+                            if ($mySoldResult) {
+                                $mySoldNotes = mysqli_num_rows($mySoldResult);
+                            }
+
+                            ?>
+                            <div class="col-lg-4 col-md-4 col-sm-4 earning heading">
+                                <a href="my-sold-notes.php">
+                                    <h3><?php echo $mySoldNotes ?></h3>
+                                </a>
+                                <p>Number of Notes Sold</p>
+                            </div>
+
+                            <!-- money Earned  -->
+                            <?php
+
+                            $moneyEarnedQuery = "SELECT * FROM NotesDownloads WHERE Seller = $userID AND IsSellerHasAllowedDownload = 1";
+                            $moneyEarnedResult = mysqli_query($connection, $moneyEarnedQuery);
+                            $moneyEarnedINR = 0;
+                            $moneyEarnedDollar = 0;
+                            while ($moneyEarnedDetail = mysqli_fetch_assoc($moneyEarnedResult)) {
+                                $moneyEarnedINR = $moneyEarnedINR + $moneyEarnedDetail['PurchasedPrice'];
+                            }
+                            $priceINR = (int)$moneyEarnedINR;
+                            $priceINR = bcdiv($priceINR, 1, 2);
+                            $dollarRate = 72.67;
+                            $moneyEarnedDollar = bcdiv($priceINR, $dollarRate, 2);
+
+                            ?>
+                            <div class="col-lg-4 col-md-4 col-sm-4 earning heading">
+                                <a href="my-sold-notes.php">
+                                    <h3>$<?php echo $moneyEarnedDollar; ?></h3>
+                                </a>
+                                <p>Money Earned</p>
                             </div>
                         </div>
 
-                        <!-- my rejected Notes -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 heading">
-                            <div class="my-notes">
-                                <h3>12</h3>
-                                <p>My Rejected Notes</p>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 dashboard-count">
+
+                        <div class="row">
+
+                            <!-- my downloads  -->
+                            <?php
+                            $myDownloadQuery = "SELECT * FROM NotesDownloads WHERE Downloader = $userID AND IsSellerHasAllowedDownload = 1";
+                            $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
+                            $myDownloadNo = 0;
+                            if ($myDownloadResult) {
+                                $myDownloadNo = mysqli_num_rows($myDownloadResult);
+                            }
+
+                            ?>
+                            <div class="col-lg-4 col-md-4 col-sm-4 heading">
+                                <div class="my-notes">
+                                    <a href="my-download.php">
+                                        <h3><?php echo $myDownloadNo; ?></h3>
+                                    </a>
+                                    <p>My Downloads</p>
+                                </div>
                             </div>
+
+                            <!-- my rejected Notes -->
+                            <?php
+                            $rejectedNotesQuery = "SELECT * FROM NotesDetails WHERE SellerID = $userID AND Status = 10 ";
+                            $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
+                            $rejectedBookNo = 0;
+                            if ($rejecteddNotesResult) {
+                                $rejectedBookNo = mysqli_num_rows($rejecteddNotesResult);
+                            }
+                            ?>
+                            <div class="col-lg-4 col-md-4 col-sm-4 heading">
+                                <div class="my-notes">
+                                    <a href="my-rejected-notes.php">
+                                        <h3><?php echo $rejectedBookNo; ?></h3>
+                                    </a>
+                                    <p>My Rejected Notes</p>
+                                </div>
+                            </div>
+
+                            <!-- Buyers request  -->
+                            <?php
+                            $bookRequestsQuery = " SELECT * FROM NotesDownloads WHERE Seller = $userID and IsSellerHasAllowedDownload = 0 ";
+                            $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
+                            $totalBuyerRequest  = 0;
+                            if ($bookRequestsResult) {
+                                $totalBuyerRequest = mysqli_num_rows($bookRequestsResult);
+                            }
+                            ?>
+                            <div class="col-lg-4 col-md-4 col-sm-4 heading">
+                                <div class="my-notes">
+                                    <a href="buyers-request.php">
+                                        <h3><?php echo $totalBuyerRequest; ?></h3>
+                                    </a>
+                                    <p>Buyer Request</p>
+                                </div>
+                            </div>
+
+                            </dviv>
+
                         </div>
 
-                        <!-- Buyers request  -->
-                        <div class="col-lg-4 col-md-4 col-sm-4 heading">
-                            <div class="my-notes">
-                                <h3>102</h3>
-                                <p>Buyer Request</p>
+
+
+                    </div>
+                </div>
+
+                <!-- inprogress notes  -->
+                <div class="row table-data">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 heading p-0">
+                        <h4>In Progress Notes</h4>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12  p-0">
+                        <!-- inprogress table -->
+                        <div class="table-responsive">
+                            <table class="table dashboard-table-1">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Added Date</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php
+
+                                    $getInProgressBookQuery = "SELECT * FROM NotesDetails WHERE SellerID = $userID AND (Status = 6 OR  Status = 7 OR Status = 8)";
+                                    $getInProgressBookResult = mysqli_query($connection, $getInProgressBookQuery);
+
+                                    while ($inProgressBook = mysqli_fetch_assoc($getInProgressBookResult)) {
+
+                                        $inProgressID = $inProgressBook['ID'];
+
+                                        $addedDate = $inProgressBook['CreatedDate'];
+                                        $addedDate = strtotime($addedDate);
+                                        $addedDate = date('d-m-Y', $addedDate);
+
+                                        $inProgressTitle = $inProgressBook['Title'];
+
+                                        $categoryID = $inProgressBook['Category'];
+                                        $queryCategories = "SELECT * FROM NoteCategories WHERE ID = $categoryID ";
+                                        $noteCategoriesResult = mysqli_query($connection, $queryCategories);
+                                        $noteCategories = mysqli_fetch_assoc($noteCategoriesResult);
+                                        $category = $noteCategories['Name'];
+
+                                        $bookStatusID = $inProgressBook['Status'];
+                                        $bookStatusQuery = "SELECT * FROM ReferenceData WHERE RefCategory = 'Notes Status' AND ID = $bookStatusID ";
+                                        $bookStatusResult = mysqli_query($connection, $bookStatusQuery);
+                                        $bookStatusDetail = mysqli_fetch_assoc($bookStatusResult);
+                                        $bookStatus = $bookStatusDetail['Value'];
+
+                                        $bookAction = "";
+                                        if ($bookStatus == 'Draft') {
+                                            $bookAction = '<img class="edit" src="../images/form/edit.png" alt="edit"> &emsp14;
+                                                           <img class="delete" src="../images/form/delete.png" alt="delete">';
+                                        } else {
+                                            $bookAction = '<img class="view" src="../images/form/eye.png" alt="view">';
+                                        }
+
+                                        echo '<tr>
+                                                <td>' . $addedDate . '</td>
+                                                <td>' . $inProgressTitle . '</td>
+                                                <td>' . $category . '</td>
+                                                <td>' . $bookStatus . '</td>
+                                                <td>
+                                                    ' . $bookAction . '
+                                                    <input type="hidden" class="noteID" value="' . $inProgressID . '" style="display:none">
+                                                    <input type="hidden" name="noteID" style="display:none">
+                                                    <button type="submit" name="editNote" style="display:none"></buttton>
+                                                    <button type="button" name="deleteNoteModel" data-toggle="modal" data-target="#deleteNoteWarning" style="display:none"></buttton>
+                                                </td>
+                                                
+                                            </tr>';
+                                    }
+
+                                    ?>
+
+                                </tbody>
+                            </table>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteNoteWarning" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteNoteModalLabel" style="color:#6255a5;">Delete Note</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure, you want to delete this note?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="delete-note" data-dismiss="modal">NO</button>
+                                            <button type="submit" name="deleteNote" class="delete-note">YES</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
-
-                    </dviv>
-
-                </div>
-
-
-
-            </div>
-
-            <!-- inprogress notes  -->
-            <div class="row table-data">
-
-                <div class="col-lg-12 col-md-12 col-sm-12 heading p-0">
-                    <h4>In Progress Notes</h4>
-                </div>
-
-                <div class="col-lg-12 col-md-12 col-sm-12  p-0">
-                    <!-- inprogress table -->
-                    <div class="table-responsive">
-                        <table class="table dashboard-table-1">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Added Date</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr>
-                                    <td>09-10-2020</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>Draft</td>
-                                    <td>
-                                        <img src="../images/form/edit.png" alt="edit"> &emsp14;
-                                        <img src="../images/form/delete.png" alt="delete">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10-10-2020</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>In Review</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>11-10-2020</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>Submitted</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>12-10-2020</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>Submitted</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>13-10-2020</td>
-                                    <td>Lorem ipsum dolor sit ametreuersure</td>
-                                    <td>Lorem</td>
-                                    <td>Draft</td>
-                                    <td>
-                                        <img src="../images/form/edit.png" alt="edit"> &emsp14;
-                                        <img src="../images/form/delete.png" alt="delete">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>14-10-2020</td>
-                                    <td>Data Mining</td>
-                                    <td>Science</td>
-                                    <td>Draft</td>
-                                    <td>
-                                        <img src="../images/form/edit.png" alt="edit"> &emsp14;
-                                        <img src="../images/form/delete.png" alt="delete">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>15-10-2020</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>In Review</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>16-10-2020</td>
-                                    <td>Social Science</td>
-                                    <td>Social</td>
-                                    <td>Submitted</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>17-10-2020</td>
-                                    <td>C++</td>
-                                    <td>IT</td>
-                                    <td>Submitted</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>18-10-2020</td>
-                                    <td>Web Development</td>
-                                    <td>IT</td>
-                                    <td>Draft</td>
-                                    <td>
-                                        <img src="../images/form/edit.png" alt="edit"> &emsp14;
-                                        <img src="../images/form/delete.png" alt="delete">
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- published notes  -->
-            <div class="row table-data">
+                <!-- published notes  -->
+                <div class="row table-data">
 
-                <div class="col-lg-12 col-md-12 col-sm-12  heading p-0">
-                    <h4>Published Notes</h4>
-                </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12  heading p-0">
+                        <h4>Published Notes</h4>
+                    </div>
 
-                <div class="col-lg-12 col-md-12 col-sm-12  p-0">
-                    <!-- published table  -->
-                    <div class="table-responsive">
-                        <table class="table dashboard-table-2">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Added Date</th>
-                                    <th scope="col">Title</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Sell Type</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                    <div class="col-lg-12 col-md-12 col-sm-12  p-0">
 
-                                <tr>
-                                    <td>09-10-2020</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>Paid</td>
-                                    <td>$575</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
+                        <!-- published table  -->
+                        <div class="table-responsive">
+                            <table class="table dashboard-table-2">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Added Date</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Sell Type</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                                <tr>
-                                    <td>10-10-2020</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>Free</td>
-                                    <td>$0</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
+                                    $getPublishedBookQuery = "SELECT * FROM NotesDetails WHERE SellerID = $userID AND Status = 9 ";
+                                    $getPublishedBookResult = mysqli_query($connection, $getPublishedBookQuery);
 
-                                <tr>
-                                    <td>11-10-2020</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>Free</td>
-                                    <td>$0</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
+                                    while ($publishedBook = mysqli_fetch_assoc($getPublishedBookResult)) {
 
-                                <tr>
-                                    <td>12-10-2020</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>Paid</td>
-                                    <td>$3542</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
+                                        $publishedNoteID = $publishedBook['ID'];
 
-                                <tr>
-                                    <td>13-10-2020</td>
-                                    <td>Lorem ipsum dolor sit ametreuersure</td>
-                                    <td>Lorem</td>
-                                    <td>Free</td>
-                                    <td>$0</td>
-                                    <td>
-                                        <img src="../images/form/eye.png" alt="view">
-                                    </td>
-                                </tr>
+                                        $publishedDate = $publishedBook['PublishedDate'];
+                                        $publishedDate = strtotime($publishedDate);
+                                        $publishedDate = date('d-m-Y', $publishedDate);
 
-                            </tbody>
-                        </table>
+                                        $publishedNoteTitle = $publishedBook['Title'];
+
+                                        $categoryID = $publishedBook['Category'];
+                                        $queryCategories = "SELECT * FROM NoteCategories WHERE ID = $categoryID ";
+                                        $noteCategoriesResult = mysqli_query($connection, $queryCategories);
+                                        $noteCategories = mysqli_fetch_assoc($noteCategoriesResult);
+                                        $category = $noteCategories['Name'];
+
+                                        $isPaid  = $publishedBook['IsPaid'];
+                                        $priceDollar =  0;
+
+                                        $paidOrFree = "Free";
+                                        if ($isPaid == 4) {
+                                            $paidOrFree = "Paid";
+                                            $priceINR = (int)$publishedBook['SellingPrice'];
+                                            $priceINR = bcdiv($priceINR, 1, 2);
+                                            $dollarRate = 72.67;
+                                            $priceDollar = bcdiv($priceINR, $dollarRate, 2);
+                                        }
+
+
+
+                                        echo '<tr>
+                                                <td>' . $publishedDate . '</td>
+                                                <td>' . $publishedNoteTitle . '</td>
+                                                <td>' . $category . '</td>
+                                                <td>' . $paidOrFree . '</td>
+                                                <td>$' . $priceDollar . '</td>
+                                                
+                                                <td>
+                                                    <img class="view" src="../images/form/eye.png" alt="view">
+                                                    <input type="hidden" class="noteID" value="' . $publishedNoteID . '" style="display:none">
+                                                    <input type="hidden" name="noteID" style="display:none">
+                                                    <button type="submit" name="noteDetail" style="display:none"></buttton>
+                                                </td>
+
+                                            </tr>';
+                                    }
+
+                                    ?>
+
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
+            </div>
+        </form>
     </section>
 
     <!-- Footer  -->
@@ -429,3 +431,37 @@
 </body>
 
 </html>
+<?php
+
+// view Note Details 
+if (isset($_POST['noteDetail'])) {
+    $noteID = $_POST['noteID'];
+    $_SESSION['noteID'] = $noteID;
+    header("Location:../notes-detail.php");
+}
+
+// Edit Notes 
+if (isset($_POST['editNote'])) {
+    $noteID = $_POST['noteID'];
+    $_SESSION['noteID'] = $noteID;
+    header("Location:add-notes.php");
+}
+
+// Delete notes 
+if (isset($_POST['deleteNote'])) {
+    $noteID = $_POST['noteID'];
+
+    // Delete Note From NotesAttachments 
+    $deleteNoteAtttachmentsQuery = "DELETE FROM NotesAttachments WHERE NoteID = $noteID ";
+    $deleteNoteAtttachmentsResult = mysqli_query($connection, $deleteNoteAtttachmentsQuery);
+
+    if ($deleteNoteAtttachmentsResult) {
+        // Delete note From NotesDetails 
+        $deleteNoteDetailsQuery = "DELETE FROM NotesDetails WHERE ID = $noteID ";
+        $deleteNoteDetailsResult = mysqli_query($connection, $deleteNoteDetailsQuery);
+        header("refresh: 1");
+    }
+}
+
+ob_end_flush();
+?>
