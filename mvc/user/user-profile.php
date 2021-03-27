@@ -1,3 +1,20 @@
+<?php
+require "../db_connection.php";
+session_start();
+$userEmail =  $_SESSION['userEmail'] ;
+
+$selectUserQuery = "SELECT * FROM Users WHERE EmailID = '$userEmail'";
+$selectUserResult = mysqli_query($connection, $selectUserQuery);
+$userDetail = mysqli_fetch_assoc($selectUserResult);
+$userID = $userDetail['ID'];
+
+$selectUserProfileQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
+$selectUserProfileResult = mysqli_query( $connection , $selectUserProfileQuery );
+if($selectUserProfileResult){
+    $userProfileDetail = mysqli_fetch_assoc($selectUserProfileResult);
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,57 +47,16 @@
     <link rel="stylesheet" href="../css/header-footer/footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/user-profile.css">
+    <link rel="stylesheet" href="../css/user/user-profile.css?version=1211500">
 
 </head>
 
 <body>
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.php">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="add-notes.php">Sell Your Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="buyers-request.php">Buyer Requests</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="User">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item active" href="user-profile.php">My Profile</a>
-                                    <a class="dropdown-item" href="my-download.php">My Downloads</a>
-                                    <a class="dropdown-item" href="my-sold-notes.php">My Sold Notes</a>
-                                    <a class="dropdown-item" href="my-rejected-notes.php">My Rejected Notes</a>
-                                    <a class="dropdown-item" href="change-password.php">Change Password</a>
-                                    <a class="dropdown-item" href="../index.php" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php 
+        require "header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- Preloader -->
@@ -111,7 +87,9 @@
 
     <section id="add-notes-form">
         <div class="container">
-            <form>
+
+            <form action="user-profile.php" method="post" enctype="multipart/form-data">
+
                 <!-- Basic Profile details Heading -->
                 <div class="row">
                     <div class="col-lg-12 heading">
@@ -126,7 +104,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="first-name" required>First Name *</label>
-                            <input type="text" class="form-control" id="first-name" placeholder="Enter Your first name">
+                            <input type="text" name="firstName" class="form-control" id="first-name" placeholder="Enter Your first name">
+                            <small id="firstNameValidation" class="form-text"></small>
                         </div>
                     </div>
 
@@ -134,7 +113,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="last-name" required>Last Name *</label>
-                            <input type="text" class="form-control" id="last-name" placeholder="Enter Your last name">
+                            <input type="text" name="lastName" class="form-control" id="last-name" placeholder="Enter Your last name">
+                            <small id="lastNameValidation" class="form-text"></small>
                         </div>
                     </div>
 
@@ -142,7 +122,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email" required>Email *</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter Your email address">
+                            <input type="email" class="form-control" name="email" id="email" value="<?php echo $userEmail; ?>">
                         </div>
                     </div>
 
@@ -150,7 +130,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="dob" required>Date Of Birth </label>
-                            <input type="date" class="form-control" id="dob" placeholder="Enter Your date of birth">
+                            <input type="date" name="dateOfBirth" class="form-control" id="dob" placeholder="Enter Your date of birth">
                         </div>
                     </div>
 
@@ -162,12 +142,21 @@
                                 <button type="button" id="gender" class="select-field" data-toggle="dropdown">
                                     Select your gender<img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="gender">
-                                    <li class="dropdown-item">Male</li>
-                                    <li class="dropdown-item">Female</li>
-                                    <li class="dropdown-item">Other</li>
-                                    </li>
+                                <ul class="dropdown-menu gender" aria-labelledby="gender">
+                                    <?php
+
+                                    $genderQuery = "SELECT * FROM ReferenceData WHERE RefCategory = 'Gender' and IsActive = 1 ";
+                                    $genderResult = mysqli_query($connection, $genderQuery);
+
+                                    while ($gender = mysqli_fetch_assoc($genderResult)) {
+                                        echo '<li class="dropdown-item" value="' . $gender['Value'] . '">' . $gender['Value'] . '</li>';
+                                    }
+
+                                    ?>
+
+                                </ul>
                             </div>
+                            <input type="hidden" name="gender">
                         </div>
                     </div>
 
@@ -178,35 +167,50 @@
 
                             <label for="phone-code" required>Phone Number</label>
                             <div class="row">
+
                                 <div class="col-lg-3 col-md-3 col-sm-3">
                                     <div class="dropdown">
-                                        <button type="button" id="phone-code" class="select-field"
-                                            data-toggle="dropdown">
+                                        <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
                                             +91<img src="../images/form/arrow-down.png" alt="Down">
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="phone-code">
-                                            <li class="dropdown-item">+91</li>
-                                            <li class="dropdown-item">+1</li>
-                                            <li class="dropdown-item">+92</li>
+                                        <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
+                                            <?php
+
+                                            $phoneCodeQuery = "SELECT * FROM Countries WHERE IsActive = 1 ORDER BY CountryCode ";
+                                            $phoneCodeResult = mysqli_query($connection, $phoneCodeQuery);
+
+                                            while ($phoneCode = mysqli_fetch_assoc($phoneCodeResult)) {
+                                                echo '<li class="dropdown-item" value="+' . $phoneCode['CountryCode'] . '">+' . $phoneCode['CountryCode'] . '</li>';
+                                            }
+
+                                            ?>
                                         </ul>
                                     </div>
+                                    <input type="hidden" name="phoneCode" id="phoneCode">
                                 </div>
+
                                 <div class="col-lg-9 col-md-9 col-sm-9 pl-0">
-                                    <input type="text" class="form-control" id="Phone-number"
-                                        placeholder="Enter your phone number">
+                                    <input type="text" name="phoneNumber" class="form-control" id="phone-number" placeholder="Enter your phone number">
                                 </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <small id="phoneNumberValidation" class="form-text"></small>
+                                </div>
+
+
+
                             </div>
                         </div>
                     </div>
+
                     <!-- Upload Picture -->
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="photo" required>Profile Picture</label>
-                            <div class="take-note-detail">
+                            <div class="profile-picture">
                                 <label for="photo"><img src="../images/form/upload-file.png" alt="Uplaod"><br>
                                     Upload a picture</label>
-                                <input type="file" id="photo" style="visibility: hidden;"
-                                    accept="image/png, image/jpeg">
+                                <input type="file" name="profile-picture" id="photo" style="visibility: hidden;" accept="image/png , image/jpeg">
                             </div>
                         </div>
                     </div>
@@ -222,11 +226,13 @@
 
                 <!-- Address detail Fields-->
                 <div class="row">
+
                     <!-- Address Line 1 -->
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="add-1" required>Address Line 1 *</label>
-                            <input type="text" class="form-control" id="add-1" placeholder="Enter Your address">
+                            <input type="text" name="addrLine1" class="form-control" id="add-1" placeholder="Enter Your address">
+                            <small id="addr1Validation" class="form-text">Address should not be empty</small>
                         </div>
                     </div>
 
@@ -234,7 +240,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="add-2" required>Address Line 2</label>
-                            <input type="text" class="form-control" id="add-2" placeholder="Enter Your address">
+                            <input type="text" name="addrLine2" class="form-control" id="add-2" placeholder="Enter Your address">
+                            <small id="addr2Validation" class="form-text">Address should not be empty</small>
                         </div>
                     </div>
 
@@ -242,7 +249,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="city" required>City *</label>
-                            <input type="text" class="form-control" id="city" placeholder="Enter Your city">
+                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter Your city">
+                            <small id="cityValidation" class="form-text">Please enter your city name</small>
                         </div>
                     </div>
 
@@ -250,7 +258,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="state" required>State *</label>
-                            <input type="text" class="form-control" id="state" placeholder="Enter Your state">
+                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter Your state">
+                            <small id="stateValidation" class="form-text">Please enter your state name</small>
                         </div>
                     </div>
 
@@ -258,7 +267,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="zipcode" required>ZipCode *</label>
-                            <input type="text" class="form-control" id="zipcode" placeholder="Enter Your zipcode">
+                            <input type="text" name="zipCode" class="form-control" id="zipcode" placeholder="Enter Your zipcode">
+                            <small id="zipCodeValidation" class="form-text">ZipCode should not be empty</small>
                         </div>
                     </div>
 
@@ -266,7 +276,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="country" required>Country *</label>
-                            <input type="text" class="form-control" id="country" placeholder="Enter Your country">
+                            <input type="text" name="country" class="form-control" id="country" placeholder="Enter Your country">
+                            <small id="countryValidation" class="form-text">Please enter your country name</small>
                         </div>
                     </div>
 
@@ -286,7 +297,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="university" required>University</label>
-                            <input type="text" class="form-control" id="university" placeholder="Enter Your university">
+                            <input type="text" name="university" class="form-control" id="university" placeholder="Enter Your university">
                         </div>
                     </div>
 
@@ -294,7 +305,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="college" required>College</label>
-                            <input type="text" class="form-control" id="college" placeholder="Enter Your college">
+                            <input type="text" name="college" class="form-control" id="college" placeholder="Enter Your college">
                         </div>
                     </div>
 
@@ -303,11 +314,12 @@
                 <!-- submit button -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <button class="submit" type="submit"><span class="text-center">Submit</span></button>
+                        <button class="submit" name="submit" id="submit" type="submit"><span class="text-center">Submit</span></button>
                     </div>
                 </div>
 
             </form>
+
         </div>
 
     </section>
@@ -346,7 +358,118 @@
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
+    <script src="../js/user/user-profile.js?version=12050255"></script>
 
 </body>
 
 </html>
+
+<?php
+
+if (isset($_POST['submit'])) {
+
+    // Basic Profile Details 
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $email = $userEmail;
+    $dateOfBirth = $_POST['dateOfBirth'];
+    $gender = $_POST['gender'];
+    $phoneCode = (int)$_POST['phoneCode'];
+    $phoneNumber = $_POST['phoneNumber'];
+
+    // Address Details 
+    $addrLine1 = $_POST['addrLine1'];
+    $addrLine2 = $_POST['addrLine2'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zipCode = $_POST['zipCode'];
+    $country = $_POST['country'];
+
+    // University and College Information 
+    $university = $_POST['university'];
+    $college = $_POST['college'];
+
+    // Get Current TimeStamp 
+    $dateTime = new DateTime();
+    $timeStamp = $dateTime->getTimestamp();
+
+    // Update Users FirstName and LastName in Users Table 
+    $updateUsersQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName' WHERE ID = $userID";
+    $updateUsersResult = mysqli_query($connection, $updateUsersQuery);
+
+    // If user already present in table 
+    $getUserProfileQuery  = "SELECT * FROM UserProfile WHERE UserID = $userID ";
+    $getUserProfileResult = mysqli_query($connection, $getUserProfileQuery);
+
+    if (mysqli_num_rows($getUserProfileResult) != 0) {
+
+        $userProfile = mysqli_fetch_assoc($getUserProfileResult);
+        $userProfilePic = $userProfile['ProfilePicture'];
+
+        unlink($userProfilePic);
+
+        if (file_exists($_FILES['profile-picture']['tmp_name'])) {
+
+            $profilePic = $_FILES['profile-picture']['tmp_name'];
+            $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
+            $profilePicUploaded = move_uploaded_file($profilePic, $profilePicPath);
+
+            if ($profilePicUploaded) {
+                $path = $profilePicPath;
+            }
+        } else {
+
+            $defaultProfilePic = $userProfilePic;
+            $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
+            $profilePicUploaded = copy($defaultProfilePic, $profilePicPath);
+
+            if ($profilePicUploaded) {
+                $path = $profilePicPath;
+            }
+        }
+    }
+
+    // Set Profile Picture of User 
+
+    else if (file_exists($_FILES['profile-picture']['tmp_name']) && mysqli_num_rows($getUserProfileResult) == 0) {
+        $profilePic = $_FILES['profile-picture']['tmp_name'];
+        $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
+        $profilePicUploaded = move_uploaded_file($profilePic, $profilePicPath);
+        if ($profilePicUploaded) {
+            $path = $profilePicPath;
+        }
+    } else {
+        $defaultProfilePic = "../members/default/defaultDP.jpg";
+        $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
+        $profilePicUploaded = copy($defaultProfilePic, $profilePicPath);
+        if ($profilePicUploaded) {
+            $path = $profilePicPath;
+        }
+    }
+
+    global $path; 
+    // Get GenderID
+    $getGenderID = "SELECT * FROM ReferenceData WHERE RefCategory = 'Gender' and Value = '$gender'";
+    $getGenderIDResult = mysqli_query($connection, $getGenderID);
+    $getGenderDetail = mysqli_fetch_assoc($getGenderIDResult);
+    $genderID = $getGenderDetail['ID'];
+
+
+    // inserting data into UserProfile Table if User data is not present in UserProfil Data
+    if (mysqli_num_rows($getUserProfileResult) == 0) {
+
+        $addProfileQuery = "INSERT INTO UserProfile( UserID , DOB , Gender , SecondaryEmailAddress , PhonenNumberCountryCode , PhoneNumber , ProfilePicture , AddressLine1 , AddressLine2 , City , State , ZipCode , Country , University , College) VALUES( $userID ,  '$dateOfBirth' , $genderID , '$email' , '$phoneCode' , '$phoneNumber' , '$path' , '$addrLine1' , '$addrLine2' , '$city' , '$state' ,'$zipCode' , '$country' , '$university' , '$college' )";
+        $addProfileResult = mysqli_query($connection, $addProfileQuery);
+        if (!$addProfileResult) {
+            die(mysqli_error($connection));
+        }
+    } else if(mysqli_num_rows($getUserProfileResult) != 0){
+        $updateUserProfileQuery = "UPDATE UserProfile SET DOB = '$dateOfBirth' , Gender = $genderID , SecondaryEmailAddress = '$email' , PhonenNumberCountryCode = '$phoneCode' , PhoneNumber = '$phoneNumber' , ProfilePicture = '$path' , AddressLine1 = '$addrLine1' , AddressLine2 = '$addrLine2' , City = '$city' , State = '$state' , ZipCode = '$zipCode' , Country = '$country' , University = '$university' , College = '$college' WHERE UserID = $userID ";
+        $updateUserProfileResult = mysqli_query( $connection , $updateUserProfileQuery);
+        if ( !$updateUserProfileResult ) {
+            die(mysqli_error($connection));
+        }
+    }
+}
+
+?>
