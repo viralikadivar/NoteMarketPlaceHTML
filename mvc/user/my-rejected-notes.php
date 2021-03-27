@@ -1,3 +1,17 @@
+<?php
+ob_start();
+require "../db_connection.php";
+global $connection;
+
+session_start();
+$userEmail = $_SESSION['userEmail'];
+$userID = $_SESSION['UserID'];
+
+$rejectedNotesQuery = "SELECT * FROM NotesDetails WHERE SellerID = $userID AND Status = 10 ";
+$rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,52 +60,11 @@
     </div>
     <!-- Preloader Ends -->
 
-   <!-- Header -->
-   <header id="header">
-    <nav class="navbar white-navbar navbar-expand-lg">
-        <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="../index.html">
-                <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-            </a>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="search-notes.html">Search Notes</a></li>
-                    <li class="nav-item "><a class="nav-link" href="add-notes.html">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="buyers-request.html">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
-                    <li class="nav-item">
-                        <div class="dropdown user-image">
-                            <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                alt="User">
-                            <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="user-profile.html">My Profile</a>
-                                <a class="dropdown-item" href="my-download.html">My Downloads</a>
-                                <a class="dropdown-item" href="my-sold-notes.html">My Sold Notes</a>
-                                <a class="dropdown-item  active" href="my-rejected-notes.html">My Rejected Notes</a>
-                                <a class="dropdown-item" href="change-password.html">Change Password</a>
-                                <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-
-
-    <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span id="open" class="navbar-toggler-icon">&#9776;</span>
-            <span id="close" class="navbar-toggler-icon">&times;</span>
-        </button>
-    </nav>
-</header>
-<!-- Header Ends -->
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
+    <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
@@ -106,388 +79,74 @@
                 </div>
             </div>
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table dashboard-table-long">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">NOTE TITLE</th>
-                                    <th scope="col">CATEGORY</th>
-                                    <th scope="col">REMARKS</th>
-                                    <th scope="col">CLONE</th>
-                                    <th>&emsp13;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
+            <form action="my-rejected-notes.php" method="post">
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Note</a>
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table dashboard-table-long">
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">NOTE TITLE</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">REMARKS</th>
+                                        <th scope="col">CLONE</th>
+                                        <th>&emsp13;</th>
+                                    </tr>
+                                </thead>
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
+                                <tbody>
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Note</a>
+                                    <?php
+                                    $count = 1;
+                                    while ($rejectedNotes = mysqli_fetch_assoc($rejecteddNotesResult)) {
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                        $categoryID = $rejectedNotes['Category'];
+                                        $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE ID =  $categoryID ");
+                                        $getCategoryResult = mysqli_fetch_assoc($getCategory);
+                                        $category = $getCategoryResult['Name'];
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
+                                        echo '  <tr class="table-row">
+                                                    <td>' . $count . '</td>
+                                                    <td class="view">' . $rejectedNotes['Title'] . '</td>
+                                                    <td>' . $category . '</td>
+                                                    <td>' . $rejectedNotes['AdminRemarks'] . '</td>
+                                                    <td class="clone">Clone</td>
+                                                    <td class="dropup dropleft">
+                                                    <div data-toggle="dropdown">
+                                                    <img src="../images/form/dots.png" id="row1" alt="Detail">
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="row1">
+                                                    <a class="dropdown-item" href="#">Download Note</a>
+                                                    </div>
+                                                    </td>
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Note</a>
+                                                    <input type="hidden" class="noteID" value="' . $rejectedNotes['ID'] . '">
+                                                    <input type="hidden" name="noteID">
+                                                    <button type="submit" name="noteDetail" style="visibility:hidden"></buttton>
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                                    <button type="submit" name="noteCloning" style="visibility:hidden"></buttton>
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Note</a>
+                                            </tr>';
 
-                                        </div>
-                                    </td>
-                                </tr>
+                                        $count++;
+                                    }
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Lorem Ipsum</td>
-                                    <td>Lorem</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
+                                    ?>
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Note</a>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                        </div>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td>6</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row6" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row6">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row7" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row7">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row8" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row8">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row9" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row9">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Lorem Ipsum</td>
-                                    <td>Lorem</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row10" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row10">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>11</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>12</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>13</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>14</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>15</td>
-                                    <td>Lorem Ipsum</td>
-                                    <td>Lorem</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>16</td>
-                                    <td>Data Science</td>
-                                    <td>Science</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row6" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row6">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>17</td>
-                                    <td>Accounts</td>
-                                    <td>Commerce</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row7" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row7">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>18</td>
-                                    <td>Social Studies</td>
-                                    <td>Social</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row8" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row8">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>19</td>
-                                    <td>AI</td>
-                                    <td>IT</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row9" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row9">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>20</td>
-                                    <td>Lorem Ipsum</td>
-                                    <td>Lorem</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>Clone</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row10" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row10">
-                                            <a class="dropdown-item" href="#">Download Note</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
-
-
                 </div>
-            </div>
 
+            </form>
 
         </div>
 
@@ -532,8 +191,91 @@
     <!-- custom js  -->
     <script src="../js/user/data-table.js"></script>
     <script src="../js/header/header.js"></script>
+    <script src="../js/user/my-downloads.js?version=54504"></script>
 
 
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['noteDetail'])) {
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+    header('Location:../notes-detail.php');
+}
+
+if (isset($_POST['noteCloning'])) {
+
+    $cloningNoteID = (int)$_POST['noteID'];
+
+    $cloneNoteQuery = "INSERT INTO NotesDetails( SellerID , Status , Title , Category , NoteType , NumberofPages 
+    , Description , UniversityName , Country , Course , CourseCode , Professor , IsPaid , SellingPrice , CreatedBy	,
+     ModifiedBy) SELECT SellerID , Status , Title , Category , NoteType , NumberofPages , Description , UniversityName 
+     , Country , Course , CourseCode , Professor , IsPaid , SellingPrice , CreatedBy	, ModifiedBy FROM NotesDetails
+      WHERE ID = $cloningNoteID ";
+
+    $cloneNoteResult = mysqli_query($connection, $cloneNoteQuery);
+
+    if ($cloneNoteResult) {
+
+        $dateTime  = new DateTime();
+        $timeStamp = $dateTime->getTimestamp();
+
+        $addedNote = mysqli_insert_id($connection);
+
+        $pathToCreateNoteFolder = "../members/" . $userID  . "/" . $addedNote . "/";
+        mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
+        $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
+        mkdir($FolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
+
+        $getPreviewPath = "SELECT DisplayPicture , NotesPreview FROM NotesDetails WHERE ID = $cloningNoteID ";
+        $getPreviewResult = mysqli_query($connection, $getPreviewPath);
+        $previewDetail =  mysqli_fetch_assoc($getPreviewResult);
+        $previewPath = $previewDetail['NotesPreview'];
+        $dpPath = $previewDetail['DisplayPicture'];
+
+        $newPreviewPath = $pathToCreateNoteFolder . 'Preview_' . $timeStamp;
+        $newDpPath = $pathToCreateNoteFolder . 'DP_' . $timeStamp;
+
+        $isPreviewCopied =  copy($previewPath, $newPreviewPath);
+        $isDpCopied = copy($dpPath, $newDpPath);
+
+        if ($isPreviewCopied && $isDpCopied) {
+            $updatePreviewPathQuery = "UPDATE NotesDetails SET NotesPreview = '$newPreviewPath' , DisplayPicture = '$newDpPath', Status = 6 WHERE ID = $addedNote ";
+            $updatePreviewPathResult = mysqli_query($connection, $updatePreviewPathQuery);
+            if (!$updatePreviewPathResult) {
+                die(mysqli_error($connection));
+            }
+        }
+
+        $getNotesAttachQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $cloningNoteID ";
+        $getNotesAttachResult = mysqli_query($connection, $getNotesAttachQuery);
+
+        while ($notesAttachments = mysqli_fetch_assoc($getNotesAttachResult)) {
+
+            $result = mysqli_query($connection, "SELECT MAX(ID) FROM NotesAttachments ");
+            $row = mysqli_fetch_row($result);
+            $highest_id = $row[0];
+            $currentID = (int)$highest_id + 1;
+
+            $noteAttachPath = $notesAttachments['FilePath'];
+            $fileName = $notesAttachments['FileName'];
+
+            $noteNewAttachPath = $FolderNotesAttachments . $currentID . '_' . $timeStamp;
+
+            $isAttachCopied =  copy($noteAttachPath, $noteNewAttachPath);
+            if ($isAttachCopied) {
+
+                $updateAttachPathResult = mysqli_query($connection, "INSERT INTO NotesAttachments( ID , NoteID , FileName , FilePath ,CreatedBy ,ModifiedBy ) VALUES( $currentID , $addedNote , '$fileName' , '$noteNewAttachPath',$userID,$userID )");
+                if (!$updateAttachPathResult) {
+                    die(mysqli_error($connection));
+                }
+            }
+        }
+    } else {
+        die(mysqli_error($connection));
+    }
+}
+ob_end_flush();
+?>
