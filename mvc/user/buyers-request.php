@@ -66,48 +66,9 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
     <!-- Preloader Ends -->
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.php">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="add-notes.php">Sell Your Notes</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="buyers-request.php">Buyer Requests</a></li>
-                        <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="user-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png" alt="User">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="user-profile.php">My Profile</a>
-                                    <a class="dropdown-item" href="my-download.php">My Downloads</a>
-                                    <a class="dropdown-item" href="my-sold-notes.php">My Sold Notes</a>
-                                    <a class="dropdown-item" href="my-rejected-notes.php">My Rejected Notes</a>
-                                    <a class="dropdown-item" href="change-password.php">Change Password</a>
-                                    <a class="dropdown-item" href="../index.php" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    require "../header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
@@ -150,7 +111,7 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
 
                                 <tbody>
 
-                                <?php
+                                    <?php
 
                                     $count = 1;
 
@@ -169,13 +130,21 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
                                         $contactNo = "+" . $buyerDetail['PhonenNumberCountryCode'] . " " . $buyerDetail['PhoneNumber'];
 
                                         $paidOrFree = "";
+                                        $priceDollar = 0;
                                         if ($bookRequests['IsPaid']) {
                                             $paidOrFree = "Paid";
+                                            $priceINR = (int)$bookRequests['PurchasedPrice'];
+                                            $priceINR = bcdiv($priceINR, 1, 2);
+                                            $dollarRate = 72.67;
+                                            $priceDollar = bcdiv($priceINR, $dollarRate, 2);
                                         }
                                         if (!$bookRequests['IsPaid']) {
                                             $paidOrFree = "Free";
                                         }
 
+                                        $downloadedDate = $bookRequests['CreatedDate'];
+                                        $dateTime = strtotime($downloadedDate);
+                                        $downloadedDate = date("d M Y , H:i:s", $dateTime);
 
                                         echo '<tr class="table-row">
                                             <td>' . $count . '</td>
@@ -184,8 +153,8 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
                                             <td class="buyer-email">' . $buyerEmailID . '</td>n
                                             <td>' . $contactNo . '</td>
                                             <td>' . $paidOrFree . '</td>
-                                            <td>' . $bookRequests['PurchasedPrice'] . '</td>
-                                            <td>' . $bookRequests['CreatedDate'] . '</td>
+                                            <td>$' . $priceDollar . '</td>
+                                            <td>' .  $downloadedDate. '</td>
                                             <td><img src="../images/form/eye.png" alt="View"></td>
                                             <form action="buyers-request.php" method="post">
                                             <td class="dropup dropleft">
@@ -202,8 +171,8 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
                                     </tr>';
 
                                         $count++;
-                                    }            
-                                    
+                                    }
+
                                     ?>
 
                                 </tbody>
@@ -268,11 +237,14 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
 </html>
 
 <?php
+date_default_timezone_set('Asia/Kolkata');
+$downloadedDate = date("Y-m-d H:i:s");
 
 if (isset($_POST["received"])) {
 
     $userEmail = $_POST['user-email'];
     $bookName = $_POST['note-title'];
+
 
     $buyerMailQuery = " SELECT * FROM Users WHERE EmailID = '$userEmail' ";
     $buyerMailResult = mysqli_query($connection, $buyerMailQuery);
@@ -280,7 +252,8 @@ if (isset($_POST["received"])) {
     $buyerName = $buyersMailDetail['FirstName'] . " " . $buyersMailDetail['LastName'];
     $ID = $buyersMailDetail['ID'];
 
-    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 WHERE NoteTitle = '$bookName' and Downloader = $ID ";
+
+    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 , AttachmentDownloadedDate = '$downloadedDate' WHERE NoteTitle = '$bookName' and Downloader = $ID ";
     $updateDownloadResult = mysqli_query($connection, $updateDownloadQuery);
 
     if ($updateDownloadResult) {
@@ -331,15 +304,11 @@ if (isset($_POST["received"])) {
 
             $mail->send();
 
-            header('Refresh: ' . 0 );
-
+            header('Refresh: ' . 0);
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-
     }
-
-
 }
 
 ?>
