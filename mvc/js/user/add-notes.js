@@ -1,14 +1,19 @@
 $(function () {
+  if($("#selectCountry").html() == ""){
   $("#selectCountry").html(
     'Select your Country<img src="../images/form/arrow-down.png" alt="Down">'
   );
+  }
+  if($("#book-category").html() == ""){
   $("#book-category").html(
     'Select your Category<img src="../images/form/arrow-down.png" alt="Down">'
   );
+  }
+  if($("#selectBookType").html() == ""){
   $("#selectBookType").html(
     'Select your Note Type<img src="../images/form/arrow-down.png" alt="Down">'
   );
-
+  }
   //Listen for a click on any of the dropdown items
   $(".countries li").click(function () {
     //Get the value
