@@ -1,3 +1,7 @@
-$('button[name="downloadTheBook"]').click(function() {
-    $('#showButton').trigger('click');
+$('#showModel').click(function() {
+
+    $("#exampleModalScrollable").one("hidden.bs.modal", function () {
+        $('button[name="downloadTheBook"]').trigger('click');
+    });
+
 });
