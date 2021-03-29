@@ -41,6 +41,15 @@ $(function () {
     '<span>Select rating</span><img src="images/form/arrow-down.png" alt="Down">'
   );
 
+  // Selecting Fields
+  var searchBookName = "";
+  var bookTye = "";
+  var bookCategory = "";
+  var bookUniversity = "";
+  var bookCourse = "";
+  var bookCountry = "";
+  var bookRating = "";
+
   // Select Book Type
   $(".types li").click(function () {
     let name = $(this).html();
@@ -54,12 +63,20 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#selectBookType").html(name);
 
-    var bookTye = $("input[name='type']").val();
+    bookTye = $("input[name='type']").val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
-      data: { type: bookTye },
+      data: {
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
+      },
       success: function (data) {
         $("#search-result").html(data);
       },
@@ -79,12 +96,20 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#book-category").html(name);
 
-    var bookCategory = $("input[name='category']").val();
+    bookCategory = $("input[name='category']").val();
+
+
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
+        searchName: searchBookName,
+        type: bookTye,
         category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
       },
       success: function (data) {
         $("#search-result").html(data);
@@ -105,13 +130,19 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#selectUniversity").html(name);
 
-    var bookUniversity = $("input[name='universiy']").val();
+    bookUniversity = $("input[name='universiy']").val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
         university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
       },
       success: function (data) {
         $("#search-result").html(data);
@@ -132,12 +163,18 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#selectCourse").html(name);
 
-    var bookCourse = $("input[name='course']").val();
+    bookCourse = $("input[name='course']").val();
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
         course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
       },
       success: function (data) {
         $("#search-result").html(data);
@@ -158,13 +195,19 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#selectCountry").html(name);
 
-    var bookCountry = $("input[name='country']").val();
+    bookCountry = $("input[name='country']").val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
         country: bookCountry,
+        rating: bookRating,
       },
       success: function (data) {
         $("#search-result").html(data);
@@ -185,12 +228,18 @@ $(function () {
       '</span><img src="images/form/arrow-down.png" alt="Down">';
     $("#selectBookRatings").html(name);
 
-    var bookRating = $("input[name='rating']").val();
+    bookRating = $("input[name='rating']").val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
         rating: bookRating,
       },
       success: function (data) {
@@ -199,17 +248,19 @@ $(function () {
     });
   });
 
+  // Search By Book Name
   $("#filter-with-icon").on("keyup", function () {
-    var searchBookName = $(this).val();
+    searchBookName = $(this).val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
-      data: { searchName: searchBookName },
+      data: {
+        searchName: searchBookName
+      },
       success: function (data) {
         $("#search-result").html(data);
       },
     });
   });
 });
-
