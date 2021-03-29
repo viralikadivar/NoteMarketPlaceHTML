@@ -409,12 +409,18 @@ if (isset($_POST['downloadTheBook'])) {
         }
         $purchasedPrice = $notesDetails['SellingPrice'];
         $noteTitle = $notesDetails['Title'];
-        $noteCategory = $notesDetails['Category'];
+        $noteCategoryID = (int)$notesDetails['Category'];
+
+        $queryCategoriesQuery = "SELECT * FROM NoteCategories WHERE ID = $noteCategoryID ";
+        $noteCategoriesResult = mysqli_query($connection, $queryCategoriesQuery);
+        $noteCategories = mysqli_fetch_assoc($noteCategoriesResult);
+        $noteCategory = $noteCategories['Name'];
+
         $createdBy = $userID;
         $modifiedBy = $userID;
 
         $addDownloadRequest = "INSERT INTO NotesDownloads(NoteID ,Seller ,Downloader ,IsSellerHasAllowedDownload,AttachmentPath,IsAttachmentDownloaded,AttachmentDownloadedDate,IsPaid,PurchasedPrice,NoteTitle,NoteCategory,CreatedBy,ModifiedBy)
-        VALUES($noteID, $seller,$downloader,$isSellerHasAllowedDownloaded,'$attachmentPath',$isAttachmentDownloaded ,'$attachmentDownloadedDate',$isPaid,$purchasedPrice,'$noteTitle',$noteCategory,$createdBy,$modifiedBy)";
+        VALUES($noteID, $seller,$downloader,$isSellerHasAllowedDownloaded,'$attachmentPath',$isAttachmentDownloaded ,'$attachmentDownloadedDate',$isPaid,$purchasedPrice,'$noteTitle','$noteCategory',$createdBy,$modifiedBy)";
 
         $downloadRequest = mysqli_query($connection, $addDownloadRequest);
 
