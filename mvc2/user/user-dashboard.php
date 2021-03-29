@@ -37,12 +37,12 @@ $userID = $_SESSION['UserID'];
     <!-- Header footer CSS -->
     <link rel="stylesheet" href="../css/header-footer/user-header.css">
     <link rel="stylesheet" href="../css/header-footer/footer.css">
-
+ 
     <!-- datatable -->
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/user-dashboard.css?version=1254520">
+    <link rel="stylesheet" href="../css/user/user-dashboard.css?version=1865420">
 
 </head>
 
@@ -426,7 +426,7 @@ $userID = $_SESSION['UserID'];
     <!-- data table  -->
     <script src="../js/data-table/jquery.dataTables.js"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/user-dashboard.js"></script>
+    <script src="../js/user/user-dashboard.js?version=4562163"></script>
 
 </body>
 
