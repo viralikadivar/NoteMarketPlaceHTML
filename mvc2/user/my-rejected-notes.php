@@ -47,7 +47,7 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/data-table.css">
+    <link rel="stylesheet" href="../css/user/data-table.css?version=4562163">
     <link rel="stylesheet" href="../css/user/buyers-request.css">
 
 </head>
@@ -110,32 +110,31 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
                                         $category = $getCategoryResult['Name'];
 
                                         echo '  <tr class="table-row">
-                                                    <td>' . $count . '</td>
-                                                    <td class="view">' . $rejectedNotes['Title'] . '</td>
-                                                    <td>' . $category . '</td>
-                                                    <td>' . $rejectedNotes['AdminRemarks'] . '</td>
-                                                    <td class="clone">Clone</td>
-                                                    <td class="dropup dropleft">
-                                                    <div data-toggle="dropdown">
-                                                    <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                                    </div>
-                                                    <div class="dropdown-menu" aria-labelledby="row1">
-                                                    <a class="dropdown-item" href="#">Download Note</a>
-                                                    </div>
-                                                    </td>
+                                                        <td>' . $count . '</td>
+                                                        <td class="view">' . $rejectedNotes['Title'] . '</td>
+                                                        <td>' . $category . '</td>
+                                                        <td>' . $rejectedNotes['AdminRemarks'] . '</td>
+                                                        <td class="clone">Clone</td>
+                                                        <td class="dropup dropleft">
+                                                        <div data-toggle="dropdown">
+                                                        <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                        <button class="dropdown-item downloadNote" type="submit" name="download" >Download Note</button>
+                                                        </div>
+                                                        </td>
 
-                                                    <input type="hidden" class="noteID" value="' . $rejectedNotes['ID'] . '">
-                                                    <input type="hidden" name="noteID">
-                                                    <button type="submit" name="noteDetail" style="visibility:hidden"></buttton>
+                                                        <input type="hidden" class="noteID" value="' . $rejectedNotes['ID'] . '">
+                                                        <input type="hidden" name="noteID">
+                                                        <button type="submit" name="noteDetail" style="visibility:hidden"></button>
 
-                                                    <button type="submit" name="noteCloning" style="visibility:hidden"></buttton>
+                                                        <button type="submit" name="noteCloning" style="visibility:hidden"></button>
 
 
-                                            </tr>';
+                                                </tr>';
 
                                         $count++;
                                     }
-
                                     ?>
 
                                 </tbody>
@@ -189,9 +188,9 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/user/data-table.js"></script>
+    <script src="../js/user/data-table.js?version=4562163"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/my-downloads.js?version=54504"></script>
+    <script src="../js/user/my-downloads.js?version=545104"></script>
 
 
 </body>
@@ -277,5 +276,37 @@ if (isset($_POST['noteCloning'])) {
         die(mysqli_error($connection));
     }
 }
+
+if (isset($_POST['download'])) {
+    $downloadNoteID = $_POST['noteID'];
+
+    $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
+    $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+    $attachments = array();
+    while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+        array_push($attachments, $attachmentDetails['FilePath']);
+    }
+
+    if (count($attachments) == 1) {
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        readfile($attachments[0]);
+    } else {
+        $zipname = 'notes.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($attachments as $file) {
+            $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename=' . $zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
+}
+
 ob_end_flush();
 ?>
