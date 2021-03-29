@@ -13,7 +13,7 @@ var table = $(".dashboard-table").DataTable({
         "zeroRecords": "No Record Found"
     },
     "aoColumnDefs": [
-        { "bSortable": false, "aTargets": ["_all"] } //disable ordering events and takeout the icon
+        { "bSortable": true, "aTargets": ["_all"] } //disable ordering events and takeout the icon
     ]
 });
  
@@ -26,7 +26,7 @@ var tableLong = $(".dashboard-table-long").DataTable({
         "zeroRecords": "No Record Found"
     },
     "aoColumnDefs": [
-        { "bSortable": false, "aTargets": ["_all"] } //disable ordering events and takeout the icon
+        { "bSortable": true, "aTargets": ["_all"] } //disable ordering events and takeout the icon
     ]
 });
 
