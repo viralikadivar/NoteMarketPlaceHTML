@@ -50,7 +50,7 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/user/data-table.css">
+    <link rel="stylesheet" href="../css/user/data-table.css?version=4562163">
     <link rel="stylesheet" href="../css/user/buyers-request.css">
 
 </head>
@@ -166,7 +166,7 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
                                                     <input type="hidden" name="sellerEmail">
 
                                                     <button type="submit" name="noteDetail" style="visibility:hidden"></buttton>
-                                                
+
 
                                                 </tr>';
 
@@ -279,9 +279,9 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/user/data-table.js"></script>
+    <script src="../js/user/data-table.js?version=4562163"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/my-downloads.js?version=1105204"></script>
+    <script src="../js/user/my-downloads.js?version=11004"></script>
 
 </body>
 
@@ -310,7 +310,6 @@ if (isset($_POST['submit'])) {
         $updateRatingQuery = "UPDATE NotesDetails SET Ratings = $avgBookRating WHERE ID = $ratingNoteID ";
         $isRatingUpaded = mysqli_query($connection , $updateRatingQuery);
         
-echo $avgBookRating;
         if(!$isRatingUpaded){
             die(mysqli_error($connection));
         }
@@ -390,6 +389,37 @@ if(isset($_POST['noteDetail'])){
     $_SESSION['noteID'] = $noteDetailID;
     
     header('Location:../notes-detail.php');
+}
+
+if (isset($_POST['download'])) {
+    $downloadNoteID = $_POST['noteID'];
+
+    $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
+    $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+    $attachments = array();
+    while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+        array_push($attachments, $attachmentDetails['FilePath']);
+    }
+
+    if (count($attachments) == 1) {
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        readfile($attachments[0]);
+    } else {
+        $zipname = 'notes.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($attachments as $file) {
+            $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename=' . $zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
 }
 ob_end_flush();
 ?>
