@@ -63,6 +63,12 @@ $(function () {
     $("input[name='noteID']").val(noteID);
     $("button[name='noteCloning']").trigger('click');
 
+  });
+
+  $(".downloadNote").click(function(){
+
+    let noteID = $(this).parents('.table-row').children('.noteID').attr("value");
+    $("input[name='noteID']").val(noteID);
 
   });
 
