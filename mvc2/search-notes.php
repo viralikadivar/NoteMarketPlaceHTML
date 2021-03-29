@@ -219,6 +219,7 @@ session_start();
                         </div>
                     </div>
                 </div>
+
         </section>
         <!-- Search Fields Ends -->
 
@@ -258,91 +259,96 @@ session_start();
 
                     <?php
 
-                    $showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 LIMIT ' . $thisPAgeResult . ',' . $noOFResultPerPage;
-                    $showBookResult = mysqli_query($connection, $showBooksQuery);
-                    
-                    while ($bookDetails = mysqli_fetch_assoc($showBookResult)) {
+                        $showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 LIMIT ' . $thisPAgeResult . ',' . $noOFResultPerPage;
+                        $showBookResult = mysqli_query($connection, $showBooksQuery);
+                        
+                        while ($bookDetails = mysqli_fetch_assoc($showBookResult)) {
 
-                        $bookID = $bookDetails['ID'];
-                        $bookTitle = $bookDetails['Title'];
-                        $bookUniversity = $bookDetails['UniversityName'];
-                        $bookRatings = $bookDetails['Ratings'];
-                        $bookPages = $bookDetails['NumberofPages'];
-                        $imageSRC = $bookDetails['DisplayPicture'];
-                        $countryID = $bookDetails['Country'];
-                        $totalRatings = 0;
-                        $spamReports = 0;
+                            $bookID = $bookDetails['ID'];
+                            $bookTitle = $bookDetails['Title'];
+                            $bookUniversity = $bookDetails['UniversityName'];
+                            $bookRatings = $bookDetails['Ratings'];
+                            $bookPages = $bookDetails['NumberofPages'];
+                            $imageSRC = $bookDetails['DisplayPicture'];
+                            $countryID = $bookDetails['Country'];
+                            $totalRatings = 0;
+                            $spamReports = 0;
 
-                        $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE ID = $countryID ");
-                        $getCountryResult = mysqli_fetch_assoc($getCountry);
-                        $country = $getCountryResult['Name'];
+                            $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE ID = $countryID ");
+                            $getCountryResult = mysqli_fetch_assoc($getCountry);
+                            $country = $getCountryResult['Name'];
 
-                        $imageSRC = str_replace('../', '', $imageSRC);
+                            $imageSRC = str_replace('../', '', $imageSRC);
 
-                        $publishedDate = $bookDetails['PublishedDate'];
-                        $dateTime = strtotime($publishedDate);
-                        $publishedDate = date("D, M d Y", $dateTime);
+                            $publishedDate = $bookDetails['PublishedDate'];
+                            $dateTime = strtotime($publishedDate);
+                            $publishedDate = date("D, M d Y", $dateTime);
 
-                        $totalRatingResult = mysqli_query($connection, "SELECT * FROM NotesReviews WHERE NoteID = $bookID ");
-                        if ($totalRatingResult) {
-                            $totalRatings = mysqli_num_rows($totalRatingResult);
+                            $totalRatingResult = mysqli_query($connection, "SELECT * FROM NotesReviews WHERE NoteID = $bookID ");
+                            if ($totalRatingResult) {
+                                $totalRatings = mysqli_num_rows($totalRatingResult);
+                            } else {
+                                $totalRatings = "not found";
+                            }
+
+                            $totalSpamResult = mysqli_query($connection, "SELECT * FROM ReportedIssues WHERE NoteID = $bookID ");
+                            if ($totalSpamResult) {
+                                $spamReports = mysqli_num_rows($totalSpamResult);
+                            }
+
+                            echo '<div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="book-info">
+                                        <img src="' . $imageSRC . '" class="img-responsive book-img" alt="Book">
+
+                                        <div class="book-short-info">
+
+                                            <div class="book-heading">
+                                                <a class="link-to-note-preview">
+                                                    <h5>' . $bookTitle . '</h5>
+                                                </a>
+
+                                                <input type="hidden" name="noteID" value="' . $bookID . '">
+                                                <input type="hidden" name="getNoteID">
+                                                <button type="submit" name="getNoteDetail" style="visibility:hidden">
+
+                                            </div>
+
+                                            <ul>
+                                                <li>
+                                                    <div class="book-info-img"><img src="images/search/university.png" alt="University">
+                                                    </div><span>' . $bookUniversity . ', ' . $country . '</span>
+                                                </li>
+                                                <li>
+                                                    <div class="book-info-img"><img src="images/search/pages.png" alt="Book"></div>
+                                                    <span>' . $bookPages . ' Pages</span>
+                                                </li>
+                                                <li>
+                                                    <div class="book-info-img"><img src="images/search/calendar.png" alt="calendar">
+                                                    </div><span>' . $publishedDate . '</span>
+                                                </li>
+                                                <li>
+                                                    <div class="book-info-img"><img src="images/search/flag.png" alt="Report"></div>
+                                                    <span>' . $spamReports . ' Users marked this as
+                                                        inapropriate</span>
+                                                </li>
+                                            </ul>
+
+                                            <div class="row star">
+                                                <div class="col-lg-5 col-md-5 col-sm-5">
+                                                    <img src="images/search/star.png" alt="Star">
+                                                    <img src="images/search/star.png" alt="Star">
+                                                    <img src="images/search/star.png" alt="Star">
+                                                    <img src="images/search/star.png" alt="Star">
+                                                    <img src="images/search/star.png" alt="Star">
+                                                </div>
+                                                <div class="col-lg-7 col-md-7 col-sm-7">' . $totalRatings . ' reviews</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>';
                         }
 
-                        $totalSpamResult = mysqli_query($connection, "SELECT * FROM ReportedIssues WHERE NoteID = $bookID ");
-                        if ($totalSpamResult) {
-                            $spamReports = mysqli_num_rows($totalSpamResult);
-                        }
-
-                        echo '<div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="book-info">
-                        <img src="' . $imageSRC . '" class="img-responsive book-img" alt="Book">
-
-                        <div class="book-short-info">
-
-                            <div class="book-heading">
-                                <a class="link-to-note-preview">
-                                    <h5>' . $bookTitle . '</h5>
-                                </a>
-
-                                <input type="hidden" name="noteID" value="' . $bookID . '">
-                                <input type="hidden" name="getNoteID">
-                                <button type="submit" name="getNoteDetail" style="visibility:hidden">
-
-                            </div>
-
-                            <ul>
-                                <li>
-                                    <div class="book-info-img"><img src="images/search/university.png" alt="University">
-                                    </div><span>' . $bookUniversity . ', ' . $country . '</span>
-                                </li>
-                                <li>
-                                    <div class="book-info-img"><img src="images/search/pages.png" alt="Book"></div>
-                                    <span>' . $bookPages . ' Pages</span>
-                                </li>
-                                <li>
-                                    <div class="book-info-img"><img src="images/search/calendar.png" alt="calendar">
-                                    </div><span>' . $publishedDate . '</span>
-                                </li>
-                                <li>
-                                    <div class="book-info-img"><img src="images/search/flag.png" alt="Report"></div>
-                                    <span>' . $spamReports . ' Users marked this as
-                                        inapropriate</span>
-                                </li>
-                            </ul>
-                            <div class="row star">
-                                <div class="col-lg-5 col-md-5 col-sm-5">
-                                    <img src="images/search/star.png" alt="Star">
-                                    <img src="images/search/star.png" alt="Star">
-                                    <img src="images/search/star.png" alt="Star">
-                                    <img src="images/search/star.png" alt="Star">
-                                    <img src="images/search/star.png" alt="Star">
-                                </div>
-                                <div class="col-lg-7 col-md-7 col-sm-7">' . $totalRatings . ' reviews</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>';
-                    }
                     ?>
 
                 </div>
@@ -415,7 +421,7 @@ session_start();
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
     <script src="js/header/header.js"></script>
-    <script src="js/search-notes.js?version=1451142"></script>
+    <script src="js/search-notes.js?version=1454562"></script>
 
 </body>
 
