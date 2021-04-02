@@ -1,10 +1,9 @@
 <?php
-
+session_start();
 require "../db_connection.php";
 global $connection;
 
-// $userEmail = $_SESSION['userEmail'] ;
-$userEmail = "pratikbavarava@gmail.com";
+$userEmail = $_SESSION['userEmail'] ;
 $validationClass = "validation";
 $oldPassword = "";
 
