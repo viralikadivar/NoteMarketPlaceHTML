@@ -12,7 +12,7 @@ if (isset($_POST["submit"])) {
     $password  = $_POST["password"];
 
 
-    $query = "SELECT * FROM Users WHERE EmailId = '$email'";
+    $query = "SELECT * FROM Users WHERE EmailId = '$email' AND 	IsActive = 1 ";
     $query_result = mysqli_query($connection, $query);
 
     // NO User with Given email id
@@ -36,19 +36,21 @@ if (isset($_POST["submit"])) {
             if ($user_detail['RoleID'] == 1 || $user_detail['RoleID'] == 2) {
                 $userID = $user_detail['ID'];
                 
-                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
+                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID  AND 	IsActive = 1";
                 $userHasUserId = mysqli_query($connection, $firstLoginQuery);
                 if (mysqli_num_rows($userHasUserId) == 1) {
                     $usreProfile = mysqli_fetch_assoc($userHasUserId);
                     $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    $_SESSION['logged_in'] = true ;
                     header("Location:admin/admin-profile.php");
                     
                     exit();
                 } else {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    $_SESSION['logged_in'] = true ;
                     header("Location:admin/admin-dashboard.php");
                     exit();
                 }
@@ -56,19 +58,21 @@ if (isset($_POST["submit"])) {
             } else {
                 $userID = $user_detail['ID'];
                 
-                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
+                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID  AND 	IsActive = 1 ";
                 $userHasUserId = mysqli_query($connection, $firstLoginQuery);
                 if (mysqli_num_rows($userHasUserId) == 1) {
                     $usreProfile = mysqli_fetch_assoc($userHasUserId);
                     $_SESSION['UserProfilePic'] = $usreProfile['ProfilePicture']; 
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    $_SESSION['logged_in'] = true ;
                     header("Location:http:search-notes.php");
                     
                     exit();
                 } else {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'].' '.$user_detail['LastName'] ;
+                    $_SESSION['logged_in'] = true ;
                     header("Location:user/user-profile.php");  
                     exit();
                 }
@@ -84,8 +88,6 @@ if (isset($_POST["submit"])) {
 
 
 }
-
-
 
 ?>
 <!DOCTYPE html>
