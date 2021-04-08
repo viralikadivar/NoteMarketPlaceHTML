@@ -15,7 +15,7 @@ if ($verified)
     $result = mysqli_query($connection, $sql);
     if ($result)
         {
-            mkdir("../members/.$id.", 0700);
+            mkdir("../members/".$id, 0700);
             header("location:../login.php");
         }
       else
