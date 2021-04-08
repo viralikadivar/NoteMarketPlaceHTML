@@ -26,7 +26,7 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                         <div class="dropdown user-image">
                         <img id="user-menu" data-toggle="dropdown" src="'.$fileURL.$profilePicPath.'" alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item active" href="'.$fileURL.'user-profile.php">My Profile</a>
+                                <a class="dropdown-item active" href="'.$fileURL.'user/user-profile.php">My Profile</a>
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-download.php">My Downloads</a>
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-sold-notes.php">My Sold Notes</a>
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-rejected-notes.php">My Rejected Notes</a>
