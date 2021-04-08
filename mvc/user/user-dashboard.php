@@ -35,7 +35,7 @@ $userID = $_SESSION['UserID'];
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="../css/header-footer/user-header.css">
+    <link rel="stylesheet" href="../css/header-footer/user-header.css?version=317077">
     <link rel="stylesheet" href="../css/header-footer/footer.css">
 
     <!-- datatable -->
