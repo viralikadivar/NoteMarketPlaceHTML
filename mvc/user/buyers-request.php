@@ -304,7 +304,6 @@ if (isset($_POST["received"])) {
 
             $mail->send();
 
-            header('Refresh: ' . 0);
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
