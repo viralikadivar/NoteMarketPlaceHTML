@@ -11,7 +11,7 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="'.$fileURL.'index.php">
                 <img class="img-responsive" src="'.$fileURL.'images/logo/logo-dark.png" alt="logo">
             </a>
 
