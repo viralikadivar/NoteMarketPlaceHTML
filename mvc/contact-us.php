@@ -17,8 +17,8 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
     $userInfo = mysqli_fetch_assoc($userqueryResult);
     $userName = $userInfo['FirstName'] . " " . $userInfo['LastName'];
 } else {
-    $emailUser = "Enter Emailid";
-    $userName = "Enter Your Fullname";
+    $emailUser = "Enter Email id";
+    $userName = "Enter Your Full name";
 }
 
 
