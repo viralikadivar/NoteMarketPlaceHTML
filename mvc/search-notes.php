@@ -33,7 +33,7 @@ session_start();
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="css/header-footer/user-header.css">
+    <link rel="stylesheet" href="css/header-footer/user-header.css?version=176041631">
     <link rel="stylesheet" href="css/header-footer/footer.css">
 
     <!-- Custom CSS -->
