@@ -43,7 +43,7 @@ if($selectUserProfileResult){
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="../css/header-footer/user-header.css">
+    <link rel="stylesheet" href="../css/header-footer/user-header.css?version=546381210">
     <link rel="stylesheet" href="../css/header-footer/footer.css">
 
     <!-- Custom CSS -->
@@ -55,7 +55,7 @@ if($selectUserProfileResult){
 
     <!-- Header -->
     <?php 
-        require "header.php";
+        require "../header.php";
     ?>
     <!-- Header Ends -->
 
