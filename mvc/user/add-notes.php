@@ -86,7 +86,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="../css/header-footer/user-header.css">
+    <link rel="stylesheet" href="../css/header-footer/user-header.css?version=31800433">
     <link rel="stylesheet" href="../css/header-footer/footer.css">
 
     <!-- Custom CSS -->
@@ -247,7 +247,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     <label for="description">Description</label>
                                 </div>
                             </div>
-                            <textarea name="book-description" placeholder="Enter your description" id="description" required><?php echo $editNoteDescription; ?></textarea>
+                            <textarea name="book-description" placeholder="Enter your description" id="description" required><?php if ($isNoteSet) {echo $editNoteDescription; }?></textarea>
                         </div>
 
                     </div>
@@ -563,6 +563,7 @@ if (isset($_POST['save'])) {
         mkdir($FolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
 
         // file To upload 
+        date_default_timezone_set("Asia/Kolkata");
         $dateTime  = new DateTime();
         $timeStamp = $dateTime->getTimestamp();
 
