@@ -141,7 +141,65 @@ ul.navbar-nav>li.loginNavTab>a.nav-link:focus {
 .white-navbar ul.navbar-nav>li.user-image>a.nav-link:focus {
     border: 1px solid transparent;
 }
-
+/* Logout Button  */
+#navbarNav > ul > li.nav-item.loginNavTab > button {
+    color: #ffffff;
+    background-color: #6255a5;
+    font-family: "Open sans", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    padding: 6px 12px;
+    margin: 15px 15px;
+    border: none;
+  }
+  h2#logoutModalLabel {
+      color: #6255a5;
+      font-family: "Open sans", sans-serif;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 35px;
+      text-transform: uppercase;
+      margin-top: 20px;
+      margin-left: 20px;
+  }
+  .modal-body P {
+      color: #333333;
+      font-family: "Open sans", sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 20px;
+      margin-left: 20px;
+  }
+  button.yes {
+      color: #ffffff;
+    background-color: red;
+    font-family: "Open sans", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    padding: 6px 15px;
+    margin: 15px 7px;
+    border: none;
+  }
+  button.no {
+      color: #ffffff;
+    background-color: #6255a5;
+    font-family: "Open sans", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    padding: 6px 15px;
+    margin: 15px 7px;
+    border: none;
+  }
+  
 .mobile-navbar{
     z-index: 10;
 }
