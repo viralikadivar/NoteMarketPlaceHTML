@@ -141,11 +141,11 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="css/header-footer/user-header.css">
+    <link rel="stylesheet" href="css/header-footer/admin-header.css?version=51310531">
     <link rel="stylesheet" href="css/header-footer/footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/notes-detail.css?version=5431318">
+    <link rel="stylesheet" href="css/notes-detail.css?version=543112318">
 
 </head>
 
@@ -196,7 +196,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <!-- Button trigger modal -->
                             <form action="notes-detail.php" method="post">
 
-                                <button type="button" id="showModel" data-toggle="modal" data-target="#exampleModalScrollable">download/&#36;<?php echo $priceDollar; ?></button>
+                                <button type="button" class="downloadButton" id="showModel" data-toggle="modal" data-target="#exampleModalScrollable">download/&#36;<?php echo $priceDollar; ?></button>
                                 <button type="submit" name="downloadTheBook" style="display:none"></button>
 
                             </form>
@@ -308,6 +308,14 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                                     <hr>';
                         }
 
+                        if(!mysqli_num_rows($getCustomerReviewResult)){
+                           echo '<div class="row customer-review">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <h5>No Reviews Yet</h5>
+                                
+                                    </div>
+                            </div>';
+                        }
                         ?>
 
                     </div>
