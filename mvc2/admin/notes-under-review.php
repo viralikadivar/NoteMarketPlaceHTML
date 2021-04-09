@@ -1,3 +1,15 @@
+<?php
+session_start();
+ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+require "../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +38,7 @@
     <link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="../css/header-footer/admin-header.css">
+    <link rel="stylesheet" href="../css/header-footer/admin-header.css?version=1525025">
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- datatable -->
@@ -34,7 +46,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/notes-under-review.css">
+    <link rel="stylesheet" href="../css/admin/notes-under-review.css?version=10521455">
 
 </head>
 
@@ -46,69 +58,11 @@
     </div>
     <!-- Preloader Ends -->
 
-     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item active">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item active" href="notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="members.html">Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="spam-reports.html">Reports</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item" href="super-admin/manage-config.html">Manage System Configuration</a>
-                                    <a class="dropdown-item" href="super-admin/add-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item" href="manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
     <!-- Header Ends -->
-
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
@@ -124,311 +78,191 @@
             </div>
 
             <div class="row" style="background:transparent;">
-                <div class="col-lg-3 col-md-2 col-sm-2">
-                    <div class="form-group">
-                        <label for="seller" required>Seller</label>
-                        <div class="dropdown">
-                            <button type="button" id="seller" class="select-field" data-toggle="dropdown">
-                                Seller<img src="../images/form/arrow-down.png" alt="Down">
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="seller">
-                                <li class="dropdown-item">Khayati</li>
-                                <li class="dropdown-item">Rahul Shah</li>
-                                <li class="dropdown-item">Raj Seth</li>
-                            </ul>
-                        </div>
+
+                <div class="col-lg-3 col-md-2 col-sm-2 sellerDropdownName">
+                    <?php
+                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1";
+                    $getSellerIDResult = mysqli_query($connection, $getSellerIDQuery);
+                    ?>
+                    <label>Seller</label>
+                    <div class="dropdown">
+                        <button class="form-control select-field" id="seller" data-toggle="dropdown">
+                            Seller<img src="../images/form/arrow-down.png" alt="Down">
+                        </button>
+                        <ul class="dropdown-menu sellerName" aria-labelledby="seller">
+                            <?php
+                            while ($SellerID =  mysqli_fetch_assoc($getSellerIDResult)) {
+                                $ID =  $SellerID['SellerID'];
+                                $getSellerNameQuery = "SELECT * FROM Users WHERE ID = $ID ";
+                                $getSellerrNameResult = mysqli_query($connection, $getSellerNameQuery);
+                                $sellerDetails = mysqli_fetch_assoc($getSellerrNameResult);
+                                $sellerFirstName = $sellerDetails['FirstName'];
+                                $sellerLastName = $sellerDetails['LastName'];
+                                $sellerName = $sellerFirstName . ' ' . $sellerLastName;
+
+                                echo '<li class="dropdown-item" value="' . $ID . '">' . $sellerName  . '</li>';
+                            }
+                            ?>
+
+                        </ul>
                     </div>
+
                 </div>
+
             </div>
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
+            <form action="notes-under-review.php" method="post">
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
 
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">NOTE TITLE</th>
-                                    <th scope="col">CATEGORY</th>
-                                    <th scope="col">SELLER</th>
-                                    <th scope="col">DATE ADDED</th>
-                                    <th scope="col">STATUS</th>
-                                    <th scope="col">ACTION</th>
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">NOTE TITLE</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">SELLER</th>
+                                        <th scope="col">DATE ADDED</th>
+                                        <th scope="col">STATUS</th>
+                                        <th scope="col">ACTION</th>
 
 
-                                    <th scope="col">&emsp13;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
+                                        <th scope="col">&emsp13;</th>
+                                    </tr>
+                                </thead>
 
-                                    <td>Khyati Patel</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
+                                <?php
+                                $getInReviewNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 7 OR Status = 8 AND IsActive = 1 ";
+                                $getInReviewNotesResult = mysqli_query($connection, $getInReviewNotesQuery);
+                                ?>
+                                <tbody>
+                                    <?php
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    $count = 1;
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
+                                    while ($inProgressBook = mysqli_fetch_assoc($getInReviewNotesResult)) {
 
-                                    <td>Khyati Patel</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Submitted for Review</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
+                                        $inProgressID = $inProgressBook['ID'];
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        $addedDate = $inProgressBook['CreatedDate'];
+                                        $addedDate = strtotime($addedDate);
+                                        $addedDate = date('d-m-Y,H:i', $addedDate);
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>Khyati Patel</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        $inProgressTitle = $inProgressBook['Title'];
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>Khyati Patel</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        $categoryID = $inProgressBook['Category'];
+                                        $queryCategories = "SELECT * FROM NoteCategories WHERE ID = $categoryID ";
+                                        $noteCategoriesResult = mysqli_query($connection, $queryCategories);
+                                        $noteCategories = mysqli_fetch_assoc($noteCategoriesResult);
+                                        $category = $noteCategories['Name'];
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>Khyati Patel</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
-                                    <td>Khyati Patel</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
+                                        $bookStatusID = $inProgressBook['Status'];
+                                        $bookStatusQuery = "SELECT * FROM ReferenceData WHERE RefCategory = 'Notes Status' AND ID = $bookStatusID ";
+                                        $bookStatusResult = mysqli_query($connection, $bookStatusQuery);
+                                        $bookStatusDetail = mysqli_fetch_assoc($bookStatusResult);
+                                        $bookStatus = $bookStatusDetail['Value'];
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        // Book Seller 
+                                        $publisher = $inProgressBook['SellerID'];
+                                        $getPublisherNameQuery = "SELECT * FROM Users WHERE ID = $publisher ";
+                                        $getPublisherNameResult = mysqli_query($connection, $getPublisherNameQuery);
+                                        $publisherDetail = mysqli_fetch_assoc($getPublisherNameResult);
+                                        $publisherFirstName = $publisherDetail['FirstName'];
+                                        $publisherLastName = $publisherDetail['LastName'];
+                                        $publisherName = $publisherFirstName . ' ' . $publisherLastName;
+                                        $bookSellerEmail = $publisherDetail['EmailID'];
 
-                                <tr>
-                                    <td>7</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
-                                    <td>Khyati Patel</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Submitted for Review</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
 
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        echo '<tr class="table-row">
+                                        <td>' . $count . '</td>
+                                        <td class="noteTitle">' . $inProgressTitle . '</td>
+                                        <td>' . $category . '</td>
+    
+                                        <td>' . $publisherName . '</td>
+                                        <td>' . $addedDate . '</td>
+                                        <td>' . $bookStatus . '</td>
+                                        <td> <button type="button" class="approve">Approve</button> 
+                                             <button type="button" class="reject" data-toggle="modal" data-target="#remark">Reject</button>
+                                             <button type="button" class="inrerview">InReview</button></td>
+    
+                                        <td class="dropup dropleft">
+                                            <div data-toggle="dropdown">
+                                                <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                            </div>
+                                            <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                <button type="submit" name="noteDetail" class="dropdown-item">View More Details</button>
+                                                <button type="submit" name="download" class="dropdown-item">Download Notes</button>
+                                            </div>
+                                        </td>
 
-                                <tr>
-                                    <td>8</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>Khyati Patel</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <input type = "hidden" name="givenNoteID" class="noteID" value="' . $inProgressID . '">
+                                        <input type = "hidden" name="noteID">
 
-                                <tr>
-                                    <td>9</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>Khyati Patel</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    </tr>';
 
-                                <tr>
-                                    <td>10</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>Khyati Patel</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>InReview</td>
-                                    <td> <button class="approve">Approve</button> <button class="reject"
-                                            data-toggle="modal" data-target="#remark">Reject</button> <button
-                                            class="inrerview">InReview</button></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <!-- popup  -->
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="remark" tabindex="-1" role="dialog" aria-labelledby="remarkLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header heading">
-                                    <h3 class="modal-title" id="remarkLabel">Human Body - Science</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
-                                    </button>
+                                        $count++;
+                                    }
+                                    if (!$getInReviewNotesResult) {
+                                        die(mysqli_error($connection));
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- popup  -->
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="remark" tabindex="-1" role="dialog" aria-labelledby="remarkLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header heading">
+                                        <h3 class="modal-title" id="remarkLabel">Human Body - Science</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label>Remarks</label><br>
+                                        <textarea placeholder="Write remarks" name="comments" id="description"></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="reject">Reject</button>
+                                        <button type="button" class="inrerview" data-dismiss="modal">Cancel</button>
+                                    </div>
                                 </div>
-                                <div class="modal-body">
-                                    <label>Remarks</label><br>
-                                    <textarea placeholder="Write remarks" name="comments"
-                                        id="description"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="reject">Reject</button>
-                                    <button type="button" class="inrerview" data-dismiss="modal">Cancel</button>     
-                                  </div>
                             </div>
                         </div>
+
                     </div>
-
                 </div>
-            </div>
-
+            </form>
 
         </div>
 
     </section>
 
     <!-- Footer  -->
-<footer id="footer">
-    <hr>
-    <div class="container-fluid">
-        <div class="row">
-           <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-               <h6>Version:1.1.24</h6>
-           </div>
-           <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-            <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-           </div>
+    <footer id="footer">
+        <hr>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
+                    <h6>Version:1.1.24</h6>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
+                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Ends -->
+    </footer>
+    <!-- Footer Ends -->
 
     <!-- ================================================
                         JS Files 
@@ -446,8 +280,51 @@
 
     <!-- custom js  -->
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/data-table.js"></script>
+    <script src="../js/admin/notes-under-review.js"></script>
 
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['download'])) {
+
+    $downloadNoteID = $_POST['noteID'];
+    $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
+    $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+    $attachments = array();
+    while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+        array_push($attachments, $attachmentDetails['FilePath']);
+    }
+
+    if (count($attachments) == 1) {
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        readfile($attachments[0]);
+    } else {
+        $zipname = 'notes.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($attachments as $file) {
+            $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename=' . $zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
+}
+
+if (isset($_POST['noteDetail'])) {
+
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+
+    header('Location:../notes-detail.php');
+}
+
+ob_end_flush();
+?>
