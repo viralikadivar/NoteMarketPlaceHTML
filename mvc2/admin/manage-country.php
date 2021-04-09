@@ -1,3 +1,13 @@
+<?php
+session_start();
+if(!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");  
+}
+require "../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,66 +58,9 @@
     <!-- Preloader Ends -->
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item" href="notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="members.html">Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="spam-reports.html">Reports</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item" href="super-admin/manage-config.html">Manage System Configuration</a>
-                                    <a class="dropdown-item" href="super-admin/add-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item active" href="manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+        require "../header.php";
+    ?>
     <!-- Header Ends -->
 
 
