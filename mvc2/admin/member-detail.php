@@ -1,3 +1,15 @@
+<?php
+session_start();
+ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+require "../db_connection.php";
+global $connection;
+
+$memberID = $_SESSION['MemberID'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,8 +45,8 @@
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/member-detail.css">
+    <link rel="stylesheet" href="../css/admin/data-table.css?version=57852389562">
+    <link rel="stylesheet" href="../css/admin/member-detail.css?version=145265232">
 
 </head>
 
@@ -46,68 +58,11 @@
     </div>
     <!-- Preloader Ends -->
 
-  <!-- Header -->
-  <header id="header">
-    <nav class="navbar white-navbar navbar-expand-lg">
-        <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="../index.html">
-                <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-            </a>
-
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                            <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                <a class="dropdown-item" href="notes-under-review.html">Notes Under Review</a>
-                                <a class="dropdown-item" href="published-notes.html">Published Notes</a>
-                                <a class="dropdown-item" href="downloaded-notes.html">Downloaded Notes</a>
-                                <a class="dropdown-item" href="rejected-notes.html">Rejected Notes</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item active"><a class="nav-link" href="members.html">Members</a></li>
-                    <li class="nav-item"><a class="nav-link" href="spam-reports.html">Reports</a></li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                            <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                <a class="dropdown-item" href="super-admin/manage-config.html">Manage System Configuration</a>
-                                <a class="dropdown-item" href="super-admin/add-admin.html">Manage Administrator</a>
-                                <a class="dropdown-item" href="manage-category.html">Manage Category</a>
-                                <a class="dropdown-item" href="manage-type.html">Manage Type</a>
-                                <a class="dropdown-item" href="manage-country.html">Manage Countries</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown user-image">
-                            <img id="image-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                alt="Admin">
-                            <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="admin-profile.html">Update Profile</a>
-                                <a class="dropdown-item" href="../user/change-password.html">Change Password</a>
-                                <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span id="open" class="navbar-toggler-icon">&#9776;</span>
-            <span id="close" class="navbar-toggler-icon">&times;</span>
-        </button>
-    </nav>
-</header>
-<!-- Header Ends -->
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
+    <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
@@ -122,10 +77,46 @@
                 </div>
             </div>
 
+            <?php
+
+            // Members Details From Users Table 
+            $usersQuery = "SELECT * FROM Users WHERE ID = $memberID ";
+            $usersResult = mysqli_query($connection, $usersQuery);
+            $usersDetail = mysqli_fetch_assoc($usersResult);
+            $firstName = $usersDetail['FirstName'];
+            $lastName = $usersDetail['LastName'];
+            $emailID = $usersDetail['EmailID'];
+
+            // Members Details From UserProfile Table 
+            $userProfileQuery = "SELECT * FROM UserProfile WHERE UserID =  $memberID ";
+            $userProfileResult = mysqli_query($connection,$userProfileQuery);
+            $userProfileDetails = mysqli_fetch_assoc( $userProfileResult);
+
+            // Date of Birth 
+            $dob =  $userProfileDetails['DOB'];
+            $dob = strtotime($dob);
+            $dob = date("d-m-Y",$dob);
+
+            $phoneNumber = $userProfileDetails['PhoneNumber'];
+            $college = $userProfileDetails['College'];
+            $add1 = $userProfileDetails['AddressLine1'];
+            $add2 = $userProfileDetails['AddressLine2'];
+            $city = $userProfileDetails['City'];
+            $state = $userProfileDetails['State'];
+            $country = $userProfileDetails['Country'];
+            $zipCode = $userProfileDetails['ZipCode'];
+
+            // Profile Pic 
+            $profile = $userProfileDetails['ProfilePicture'];
+            // $profile = "../members/73/DP_1616312853.jpg";
+
+            // $path_info = pathinfo($profile);
+            // print_r($path_info); 
+
+            ?>
             <!-- member detail  -->
             <div class="row">
-                <div class="col-lg-2 col-md-12 col-sm-12 member-photo"><img src="../images/member-detail/member.png"
-                        alt="Member Photo"></div>
+                <div class="col-lg-2 col-md-12 col-sm-12 member-photo"><img src="<?php echo $profile;?>" alt="Member Photo"></div>
                 <div class="col-lg-5 col-md-6 col-sm-12 col member-detail">
                     <div class="row">
                         <div class="col-lg-5 col-md-6 col-sm-6 detaii-field">
@@ -137,12 +128,12 @@
                             <h6>College/University:</h6>
                         </div>
                         <div class="col-lg-5 col-md-6 col-sm-6 detail">
-                            <h6>Richard</h6>
-                            <h6>Brown</h6>
-                            <h6>richardbrown77@gmail.com</h6>
-                            <h6>13-08-1990</h6>
-                            <h6>9988731221</h6>
-                            <h6>University of California</h6>
+                            <h6><?php echo $firstName;?></h6>
+                            <h6><?php echo $lastName;?></h6>
+                            <h6><?php echo $emailID;?></h6>
+                            <h6><?php echo $dob;?></h6>
+                            <h6><?php echo $phoneNumber;?></h6>
+                            <h6><?php echo $college;?></h6>
                         </div>
                     </div>
                 </div>
@@ -157,245 +148,147 @@
                             <h6>Zip Code:</h6>
                         </div>
                         <div class="col-lg-5 col-md-6 col-sm-6 detail">
-                            <h6>144-Diamond Height</h6>
-                            <h6>Star Colony</h6>
-                            <h6>New York</h6>
-                            <h6>New York State</h6>
-                            <h6>United State</h6>
-                            <h6>11004-05</h6>
+                            <h6><?php echo $add1;?></h6>
+                            <h6><?php echo $add2;?></h6>
+                            <h6><?php echo $city;?></h6>
+                            <h6><?php echo $state;?></h6>
+                            <h6><?php echo $country;?></h6>
+                            <h6><?php echo $zipCode;?></h6>
                         </div>
                     </div>
                 </div>
 
             </div>
+
             <hr style="border:1px solid #d1d1d1">
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-4 col-md-4 table-heading">
-                    <h4>Notes</h4>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
 
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">NOTE TITLE</th>
-                                    <th scope="col">CATEGORY</th>
-                                    <th scope="col">STATUS</th>
-                                    <th scope="col">DOWNLOADED NOTES</th>
-                                    <th scope="col">TOTAL EARNINGS</th>
-                                    <th scope="col">DATE ADDED</th>
-                                    <th scope="col">PUBLISHED DATE</th>
-
-
-                                    <th scope="col">&emsp13;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
-                                    <td>InReview</td>
-                                    <td>22</td>
-                                    <td>$117</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
-                                    <td>Published</td>
-                                    <td>4</td>
-                                    <td>$125</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>3</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>InReview</td>
-                                    <td>17</td>
-                                    <td>$978</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>4</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>Published</td>
-                                    <td>28</td>
-                                    <td>$15254</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>5</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>Published</td>
-                                    <td>0</td>
-                                    <td>$69</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>NA</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>6</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
-                                    <td>InReview</td>
-                                    <td>22</td>
-                                    <td>$117</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
-                                    <td>Submitted for Review</td>
-                                    <td>4</td>
-                                    <td>$125</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>InReview</td>
-                                    <td>17</td>
-                                    <td>$978</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>Published</td>
-                                    <td>28</td>
-                                    <td>$15254</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>Published</td>
-                                    <td>0</td>
-                                    <td>$69</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>NA</td>
-
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
+            <form action="member-detail.php" method="post">
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 table-heading">
+                        <h4>Notes</h4>
                     </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">NOTE TITLE</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">STATUS</th>
+                                        <th scope="col">DOWNLOADED NOTES</th>
+                                        <th scope="col">TOTAL EARNINGS</th>
+                                        <th scope="col">DATE ADDED</th>
+                                        <th scope="col">PUBLISHED DATE</th>
 
 
+                                        <th scope="col">&emsp13;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+                                    $getMemberNotesQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND SellerID = $memberID ";
+                                    $getMemberNotesResult = mysqli_query($connection, $getMemberNotesQuery);
+                                    if ($getMemberNotesResult) {
+                                        $count = 1;
+                                        while ($notesDetail = mysqli_fetch_assoc($getMemberNotesResult)) {
+
+                                            // Book ID 
+                                            $bookID = $notesDetail['ID'];
+
+                                            // Book title 
+                                            $bookTitle = $notesDetail['Title'];
+
+                                            // Book Category 
+                                            $categoryID = $notesDetail['Category'];
+                                            $queryCategories = "SELECT * FROM NoteCategories WHERE ID = $categoryID ";
+                                            $noteCategoriesResult = mysqli_query($connection, $queryCategories);
+                                            $noteCategories = mysqli_fetch_assoc($noteCategoriesResult);
+                                            $category = $noteCategories['Name'];
+
+                                            // Book Status 
+                                            $bookStatusID = $notesDetail['Status'];
+                                            $bookStatusQuery = "SELECT * FROM ReferenceData WHERE RefCategory = 'Notes Status' AND ID = $bookStatusID ";
+                                            $bookStatusResult = mysqli_query($connection, $bookStatusQuery);
+                                            $bookStatusDetail = mysqli_fetch_assoc($bookStatusResult);
+                                            $bookStatus = $bookStatusDetail['Value'];
+
+                                            // Downloaded Notes 
+                                            $noOfDownloads =  0;
+                                            $totalDollarEarning = 0;
+                                            $noOfDownloadsQuery = "SELECT * FROM NotesDownloads WHERE NoteID = $bookID AND IsAttachmentDownloaded = 1 ";
+                                            $noOfDownloadsResult = mysqli_query($connection, $noOfDownloadsQuery);
+                                            if ($noOfDownloadsResult) {
+                                                $noOfDownloads = mysqli_num_rows($noOfDownloadsResult);
+                                                // Total Earnings 
+                                                $priceINR = 0;
+                                                while ($downloaddeNote = mysqli_fetch_assoc($noOfDownloadsResult)) {
+                                                    if ($downloaddeNote['IsPaid']) {
+                                                        $priceINR = $priceINR + $downloaddeNote['PurchasedPrice'];
+                                                    }
+                                                }
+                                                $priceINR = bcdiv($priceINR, 1, 2);
+                                                $dollarRate = 72.67;
+                                                $totalDollarEarning  = bcdiv($priceINR, $dollarRate, 2);
+                                            }
+
+                                            if ($bookStatusID == 9) {
+                                                $publishedDate = '';
+                                                // Published Date 
+                                                $publishedDate = $notesDetail['PublishedDate'];
+                                                $publishedDate = strtotime($publishedDate);
+                                                $publishedDate = date('d-m-Y,H:i', $publishedDate);
+                                            } else {
+                                                $publishedDate = 'NA';
+                                            }
+
+                                            // Date Added 
+                                            $addedDate = $notesDetail['CreatedDate'];
+                                            $addedDate = strtotime($addedDate);
+                                            $addedDate = date('d-m-Y,H:i', $addedDate);
+
+                                            echo '<tr class="table-row">
+                                                <td>' . $count . '</td>
+                                                <td class="noteTitle">' . $bookTitle . '</td>
+                                                <td>' . $category . '</td>
+                                                <td>' . $bookStatus . '</td>
+                                                <td class="noOfDownloads">' . $noOfDownloads . '</td>
+                                                <td>$' . $totalDollarEarning . '</td>
+                                                <td>' . $addedDate . '</td>
+                                                <td>' .  $publishedDate . '</td>
+                                                <td class="dropup dropleft">
+                                                    <div data-toggle="dropdown">
+                                                        <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                                    </div>
+                                                    <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                        <button type="submit" class="dropdown-item" name="download">Download Notes</button>
+                                                    </div>
+                                                </td>
+                                                <input type = "hidden" name="givenNoteID" class="noteID" value="' . $bookID . '">
+                                                <input type = "hidden" name="noteID">
+                                                <button type="submit" name="getNoOfDownloads" style="display:none">Unpublish</button>
+                                                <button type="submit" name="noteDetail" style="display:none">Unpublish</button>
+
+                                            </tr>';
+                                            $count++;
+                                        }
+                                    }
+
+                                    ?>
+
+                                </tbody>
+                                </table>
+                        </div>
+
+
+                    </div>
                 </div>
+                </form>
+
             </div>
-
-
-        </div>
 
     </section>
 
@@ -428,45 +321,60 @@
 
     <!-- data table  -->
     <script src="../js/data-table/jquery.dataTables.js"></script>
+
     <script src="../js/header/header.js"></script>
-    <!-- <script src="../js/admin/data-table.js"></script> -->
+    <script src="../js/admin/member-detail.js?version=1166335362"></script>
 
-    <!-- custom js  -->
-    <script>
-
-        $(window).on('load', function () { // makes sure that whole site is loaded
-            $('#status').fadeOut();
-            $('#preloader').fadeOut('fast');
-        });
-
-
-        var table = $(".dashboard-table").DataTable({
-            "dom": '<"top">t<"bottom"p><"clear">',
-            "pagingType": "simple_numbers",
-            "pageLength": "5",
-            "lengthChange": "5",
-            "language": {
-                "zeroRecords": "No Record Found"
-            },
-            "aoColumnDefs": [
-                { "bSortable": false, "aTargets": ["_all"] } //disable ordering events and takeout the icon
-            ]
-        });
-
-        $(function () {
-
-            // for pagination 
-            $("#DataTables_Table_0_previous").html('&#12296;');
-            $("#DataTables_Table_0_next").html('&#12297;');
-
-            $(document).on('draw.dt', function () {
-                $("#DataTables_Table_0_previous").html('&#12296;');
-                $("#DataTables_Table_0_next").html('&#12297;');
-            });
-        });
-
-    </script>
 
 </body>
 
 </html>
+
+<?php
+if (isset($_POST['download'])) {
+
+    $downloadNoteID = $_POST['noteID'];
+    $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
+    $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+    $attachments = array();
+    while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+        array_push($attachments, $attachmentDetails['FilePath']);
+    }
+
+    if (count($attachments) == 1) {
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        readfile($attachments[0]);
+    } else {
+        $zipname = 'notes.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($attachments as $file) {
+            $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename=' . $zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
+}
+
+if (isset($_POST['noteDetail'])) {
+
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+
+    header('Location:../notes-detail.php');
+}
+if (isset($_POST['getNoOfDownloads'])) {
+
+    $getNoOfDownloadsNoteID = $_POST['noteID'];
+    $_SESSION['noteID'] = $getNoOfDownloadsNoteID;
+
+    header("Location:downloaded-notes.php");
+}
+ob_end_flush();
+?>
