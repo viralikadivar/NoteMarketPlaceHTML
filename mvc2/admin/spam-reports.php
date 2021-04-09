@@ -1,3 +1,14 @@
+<?php
+session_start();
+ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+require "../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,8 +45,8 @@
     <link rel="stylesheet" href="../css/data-table/jquery.dataTables.min.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/spam-report.css">
+    <link rel="stylesheet" href="../css/admin/data-table.css?version=485301005">
+    <link rel="stylesheet" href="../css/admin/spam-report.css?version=485301005">
 
 </head>
 
@@ -48,66 +59,9 @@
     <!-- Preloader Ends -->
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item" href="notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="members.html">Members</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="spam-reports.html">Reports</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item" href="super-admin/manage-config.html">Manage System Configuration</a>
-                                    <a class="dropdown-item" href="super-admin/add-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item" href="manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    require "../header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
@@ -123,221 +77,140 @@
                 </div>
             </div>
 
+            <form action="spam-reports.php" method="post">
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">REPORTED BY</th>
-                                    <th scope="col">NOTE TITLE</th>
-                                    <th scope="col">CATEGORY</th>
-                                    <th scope="col">DATE ADDED</th>
-                                    <th scope="col">REMARK</th>
-                                    <th scope="col">ACTION</th>
-                                    <th scope="col">&emsp13;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Khyati Patel</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Rahul shah</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">REPORTED BY</th>
+                                        <th scope="col">NOTE TITLE</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">DATE ADDED</th>
+                                        <th scope="col">REMARK</th>
+                                        <th scope="col">ACTION</th>
+                                        <th scope="col">&emsp13;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Suman trivedi</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    function getUserName($id)
+                                    {
+                                        global $connection;
+                                        $getUserNameQuery = "SELECT * FROM Users WHERE ID = $id ";
+                                        $getUserNameResult = mysqli_query($connection, $getUserNameQuery);
+                                        $userDetails = mysqli_fetch_assoc($getUserNameResult);
+                                        $userFirstName = $userDetails['FirstName'];
+                                        $usersLastName = $userDetails['LastName'];
+                                        $usersFullName = $userFirstName  . ' ' . $usersLastName;
+                                        return $usersFullName;
+                                    }
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>Raj Mlhotra</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    $getSpamReportsQuery =  "SELECT * FROM ReportedIssues";
+                                    $getSpamReportsResult = mysqli_query($connection, $getSpamReportsQuery);
+                                    if ($getSpamReportsResult) {
+                                        $count = 1;
+                                        while ($spamReports = mysqli_fetch_assoc($getSpamReportsResult)) {
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Niya Patel</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            $reportID = $spamReports['ID'];
 
-                                <tr>
-                                    <td>6</td>
-                                    <td>Khyati Patel</td>
-                                    <td>Software development</td>
-                                    <td>IT</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row1" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row1">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            // Reported By 
+                                            $reporterID = $spamReports['ReportedByID'];
+                                            $reporterName = getUserName($reporterID);
 
-                                <tr>
-                                    <td>7</td>
-                                    <td>Rahul shah</td>
-                                    <td>Computer Basic</td>
-                                    <td>Computer </td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row2" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row2">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            // Note title 
+                                            $bookID = $spamReports['NoteID'];
+                                            $getReportedNotesQuery = "SELECT * FROM NotesDetails WHERE ID = $bookID AND IsActive = 1 ";
+                                            $getReportedNotesResult = mysqli_query($connection, $getReportedNotesQuery);
 
-                                <tr>
-                                    <td>8</td>
-                                    <td>Suman trivedi</td>
-                                    <td>Human Body</td>
-                                    <td>Science</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row3" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row3">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            $bookDetail =  mysqli_fetch_assoc($getReportedNotesResult);
+                                            $noteTitle = $bookDetail['Title'];
 
-                                <tr>
-                                    <td>9</td>
-                                    <td>Raj Mlhotra</td>
-                                    <td>World war 2</td>
-                                    <td>History</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row4" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row4">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td>10</td>
-                                    <td>Niya Patel</td>
-                                    <td>Accounting</td>
-                                    <td>Account</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>Lorem ipsum is simply dummy text</td>
-                                    <td><img src="../images/form/delete.png" alt="Delete"></td>
-                                    <td class="dropup dropleft">
-                                        <div data-toggle="dropdown">
-                                            <img src="../images/form/dots.png" id="row5" alt="Detail">
-                                        </div>
-                                        <div class="dropdown-menu" aria-labelledby="row5">
-                                            <a class="dropdown-item" href="#">Download Notes</a>
-                                            <a class="dropdown-item" href="#">View More Details</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            // Category Name 
+                                            $bookCategoryID = $bookDetail['Category'];
+                                            $getCategoryNameQuery = "SELECT * FROM NoteCategories WHERE ID = $bookCategoryID ";
+                                            $getCategoryNameResult = mysqli_query($connection, $getCategoryNameQuery);
+                                            $categoryDetails = mysqli_fetch_assoc($getCategoryNameResult);
+                                            $categoryName = $categoryDetails['Name'];
 
-                            </tbody>
-                        </table>
+                                            // Date Addded 
+                                            $dateAdded = $spamReports['CreatedDate'];
+                                            $dateAdded = strtotime($dateAdded);
+                                            $dateAdded = date("d-m-Y,H:i", $dateAdded);
+
+                                            // Remarks 
+                                            $remarks = $spamReports['Remarks'];
+
+
+                                            echo '<tr class="table-row">
+                                                        <td>' . $count . '</td>
+                                                        <td>' . $reporterName . '</td>
+                                                        <td class="noteTitle">' . $noteTitle . '</td>
+                                                        <td>' . $categoryName . '</td>
+                                                        <td>' . $dateAdded . '</td>
+                                                        <td>' . $remarks . '</td>
+                                                        <td class="delete-report" name="unpublish" data-toggle="modal" data-target="#deleteReport"><img src="../images/form/delete.png" alt="Delete"></td>
+                                                        <td class="dropup dropleft">
+                                                            <div data-toggle="dropdown">
+                                                                <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                                            </div>
+                                                            <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                                <button type="submit" class="dropdown-item"  name="download">Download Notes</button>
+                                                                <button type="submit" class="dropdown-item" name="noteDetail">View More Details</button>
+                                                            </div>
+                                                        </td>
+                                                        <input type = "hidden" name="givenNoteID" class="noteID" value="' . $bookID . '">
+                                                        <input type = "hidden" name="noteID">
+
+                                                        <button type="submit" name="noteDetail" style="display:none"></button>
+
+                                                        <input type = "hidden" name="givenReportID" class="reportID" value="' . $reportID . '">
+                                                        <input type = "hidden" name="reportID">
+
+                                                    </tr>';
+                                            $count++;
+                                        }
+                                    }
+
+                                    ?>
+
+                                </tbody>
+                            </table>
+                            <!-- Modal For Unpublish Book -->
+                            <div class="modal fade" id="deleteReport" tabindex="-1" role="dialog" aria-labelledby="unpublisBbookTitle" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header heading">
+                                            <h4 class="modal-title" id="unpublisBbookTitle">
+
+                                            </h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="rating">
+                                                <p>Are you sure you want to delete reported issue?</p>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" name="deleteReport" style="color:#ffffff ; background-color:red">YES</button>
+                                            <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:grey">NO</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            </form>
 
         </div>
 
@@ -374,9 +247,59 @@
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/admin/data-table.js"></script>
+    <script src="../js/admin/spam-reports.js?version=5412321"></script>
     <script src="../js/header/header.js"></script>
 
 </body>
 
 </html>
+<?php
+if (isset($_POST['download'])) {
+
+    $downloadNoteID = $_POST['noteID'];
+    $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
+    $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+    $attachments = array();
+    while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+        array_push($attachments, $attachmentDetails['FilePath']);
+    }
+
+    if (count($attachments) == 1) {
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        readfile($attachments[0]);
+    } else {
+        $zipname = 'notes.zip';
+        $zip = new ZipArchive;
+        $zip->open($zipname, ZipArchive::CREATE);
+        foreach ($attachments as $file) {
+            $zip->addFile($file);
+        }
+        $zip->close();
+
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename=' . $zipname);
+        header('Content-Length: ' . filesize($zipname));
+        readfile($zipname);
+    }
+}
+
+if (isset($_POST['noteDetail'])) {
+
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+
+    header('Location:../notes-detail.php');
+}
+
+if (isset($_POST['deleteReport'])) {
+
+    $reportID = (int)$_POST['reportID'];
+
+    $deleteReportQuery = "DELETE FROM ReportedIssues WHERE ID = $reportID ";
+    $deleteReportResult = mysqli_query($connection,$deleteReportQuery);
+    
+}
+ob_end_flush();
+?>
