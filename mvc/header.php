@@ -30,7 +30,7 @@ if(isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-download.php">My Downloads</a>
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-sold-notes.php">My Sold Notes</a>
                                 <a class="dropdown-item" href="'.$fileURL.'user/my-rejected-notes.php">My Rejected Notes</a>
-                                <a class="dropdown-item" href="'.$fileURL.'change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="'.$fileURL.'user/change-password.php">Change Password</a>
                                 <a class="dropdown-item" href="'.$fileURL.'index.php" id="logout">Logout</a>
                             </div>
                         </div>
