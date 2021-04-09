@@ -563,6 +563,7 @@ if (isset($_POST['save'])) {
         mkdir($FolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
 
         // file To upload 
+        date_default_timezone_set("Asia/Kolkata");
         $dateTime  = new DateTime();
         $timeStamp = $dateTime->getTimestamp();
 
