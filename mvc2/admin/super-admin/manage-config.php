@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../../login.php");
+}
+require "../../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,11 +36,11 @@
     <link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
 
     <!-- Header footer CSS -->
-    <link rel="stylesheet" href="../../css/header-footer/admin-header.css">
+    <link rel="stylesheet" href="../../css/header-footer/admin-header.css?version=4240430445">
     <link rel="stylesheet" href="../../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../../css/admin/super-admin/manage-config.css">
+    <link rel="stylesheet" href="../../css/admin/super-admin/manage-config.css?version=7381761768">
 
 </head>
 
@@ -45,70 +55,13 @@
 
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../../index.html">
-                    <img class="img-responsive" src="../../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active"><a class="nav-link" href="../admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item" href="../notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="../published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="../downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="../rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="../members.html">Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../spam-reports.html">Reports</a></li>
-                        <li class="nav-item active">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item active" href="#">Manage System Configuration</a>
-                                    <a class="dropdown-item" href="manage-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="../manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="../manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item" href="../manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown"
-                                    src="../../images/header-footer/user-img.png" alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="../admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    require "../../header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- To remove deafult navigation overlay -->
-    <br><br><br>
+    <br><br>
 
     <!-- addition detail -->
     <section id="add">
@@ -124,15 +77,14 @@
                     </div>
 
                     <!-- form  -->
-                    <form>
+                    <form action="manage-config.php" method="post" enctype="multipart/form-data">
                         <div class="row">
 
                             <!-- Support Email -->
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="email" required>Support email address *</label>
-                                    <input type="email" class="form-control" id="email"
-                                        placeholder="Enter email address">
+                                    <input type="email" class="form-control" id="email" name="supportEmail" placeholder="Enter email address">
                                 </div>
                             </div>
 
@@ -140,8 +92,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="phone-number" required>Support phone number *</label>
-                                    <input type="tel" class="form-control" id="phone-number"
-                                        placeholder="Enter phone number">
+                                    <input type="tel" class="form-control" id="phone-number" name="supportPhoneNo" placeholder="Enter phone number">
                                 </div>
                             </div>
 
@@ -150,8 +101,7 @@
                                 <div class="form-group">
                                     <label for="email-sys" required>Email Address(es) (for various events system will
                                         send notifications to these users) *</label>
-                                    <input type="email" class="form-control" id="email-sys"
-                                        placeholder="Enter email address">
+                                    <input type="email" class="form-control" id="email-sys" name="sysEmail" placeholder="Enter email address">
                                 </div>
                             </div>
 
@@ -159,8 +109,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="facebook" required>Facebook URL</label>
-                                    <input type="url" class="form-control" id="facebook"
-                                        placeholder="Enter facebook url">
+                                    <input type="url" class="form-control" id="facebook" name="facebookURL" placeholder="Enter facebook url">
                                 </div>
                             </div>
 
@@ -168,7 +117,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="twitter" required>Twitter URL</label>
-                                    <input type="url" class="form-control" id="twitter" placeholder="Enter twitter url">
+                                    <input type="url" class="form-control" id="twitter" placeholder="Enter twitter url" name="twitterURL">
                                 </div>
                             </div>
 
@@ -176,8 +125,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="linkedin" required>LinkedIn URL</label>
-                                    <input type="url" class="form-control" id="linkedin"
-                                        placeholder="Enter linkedIn url">
+                                    <input type="url" class="form-control" id="linkedin" name="linkedInURL" placeholder="Enter linkedIn url">
                                 </div>
                             </div>
 
@@ -189,8 +137,7 @@
                                     <div class="take-profile">
                                         <label for="book"><img src="../../images/form/upload-file.png" alt="Uplaod"><br>
                                             Upload a picture</label>
-                                        <input type="file" id="book" style="visibility: hidden;"
-                                            accept="image/png, image/jpeg">
+                                        <input type="file" id="book" style="visibility: hidden;" name="bookImg" accept="image/png, image/jpeg , image/jpg ">
                                     </div>
                                 </div>
                             </div>
@@ -201,18 +148,16 @@
                                     <label for="profile" required>Default profile picture(if seller do not
                                         upload)</label>
                                     <div class="take-profile">
-                                        <label for="profile"><img src="../../images/form/upload-file.png"
-                                                alt="Uplaod"><br>
+                                        <label for="profile"><img src="../../images/form/upload-file.png" alt="Uplaod"><br>
                                             Upload a picture</label>
-                                        <input type="file" id="profile" style="visibility: hidden;"
-                                            accept="image/png, image/jpeg">
+                                        <input type="file" id="profile" style="visibility: hidden;" name="profileImg" accept="image/png, image/jpeg ,image/jpg">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- submit button  -->
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
-                                <button class="submit" type="submit"><span class="text-center">submit</span></button>
+                                <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
                             </div>
 
                         </div>
@@ -252,7 +197,109 @@
     <script src="../../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../../js/header/header.js"></script>
+    <!-- <script src="../../js/admin/manage-config.js?varsion=31381113137"></script> -->
 
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['submit'])) {
+
+    $email = $_POST['supportEmail'];
+    $phoneNo = $_POST['supportPhoneNo'];
+    $sysEmail = $_POST['sysEmail'];
+    $facebookURL = $_POST['facebookURL'];
+    $twitterURL = $_POST['twitterURL'];
+    $linkedInURL = $_POST['linkedInURL'];
+
+    // For Support email 
+    if ($email != "") {
+
+        $insertSupportEmailQuery = "UPDATE SystemConfiguration SET Value = '$email' WHERE KeyFields = 'SupportEmailAddress'";
+        $insertSupportEmailResult = mysqli_query($connection, $insertSupportEmailQuery);
+        if (!$insertSupportEmailResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // For Support Contact No 
+    if ( $phoneNo != "") {
+
+        $insertSupportPhoneNoQuery = "UPDATE SystemConfiguration SET Value = '$phoneNo' WHERE KeyFields = 'SupportContactNumber'";
+        $insertSupportPhoneNoResult = mysqli_query($connection, $insertSupportPhoneNoQuery);
+        if (!$insertSupportPhoneNoResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // For System Notification 
+    if ( $sysEmail != "") {
+
+        $insertSysEmailQuery = "UPDATE SystemConfiguration SET Value = '$sysEmail' WHERE KeyFields = 'EmailAddressesForNotify'";
+        $insertSysEmailResult = mysqli_query($connection, $insertSysEmailQuery);
+        if (!$insertSysEmailResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // For Facebook Link 
+    if ( $facebookURL != "") {
+
+        $insertfacebookURLQuery = "UPDATE SystemConfiguration SET Value = '$facebookURL' WHERE KeyFields = 'FBIcon'";
+        $insertfacebookURLResult = mysqli_query($connection, $insertfacebookURLQuery);
+        if (!$insertfacebookURLResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // For Twitter Link 
+    if ($twitterURL  != "") {
+
+        $inserttwitterURLQuery = "UPDATE SystemConfiguration SET Value = '$twitterURL' WHERE KeyFields = 'TwitterIcon'";
+        $inserttwitterURLResult = mysqli_query($connection, $inserttwitterURLQuery);
+        if (!$inserttwitterURLResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // For LinkedIn Link 
+    if ($linkedInURL != "") {
+
+        $insertlinkedInURLQuery = "UPDATE SystemConfiguration SET Value = '$linkedInURL' WHERE KeyFields = 'LinkedInIcon'";
+        $insertlinkedInURLResult = mysqli_query($connection, $insertlinkedInURLQuery);
+        if (!$insertlinkedInURLResult) {
+            die(mysqli_error($connection));
+        }
+    }
+
+    // file To upload 
+    date_default_timezone_set("Asia/Kolkata");
+    $dateTime  = new DateTime();
+    $timeStamp = $dateTime->getTimestamp();
+    $pathToSetDefaultFields = "../members/default/";
+
+    // For Default Note Display Picture 
+    if (isset($_FILES['bookImg'])) {
+        $pathToSetDefaultFields = "../../members/default/";
+        $book_image  = $_FILES['bookImg']['tmp_name'];
+        $book_DP_path = $pathToSetDefaultFields . "Book_DP_" . $timeStamp;
+        $bookImageUploades = move_uploaded_file($book_image, $book_DP_path);
+        if ($bookImageUploades) {
+            mysqli_query($connection, "UPDATE SystemConfiguration SET Value = '$book_DP_path'  WHERE KeyFields = 'DefaultNoteDisplayPicture'");
+        } 
+    } 
+
+    // For Default Member Display Picture 
+    if (isset($_FILES['profileImg'])) {
+
+        $member_image  = $_FILES['profileImg']['tmp_name'];
+        $member_DP_path = $pathToSetDefaultFields . "Member_DP_" . $timeStamp;
+        $memberImageUploades = move_uploaded_file($member_image, $member_DP_path);
+        if ($memberImageUploades) {
+            mysqli_query($connection, "UPDATE SystemConfiguration SET Value = '$member_DP_path'  WHERE KeyFields = 'DefaultMemberDisplayPicture'");
+        } 
+    }
+}
+
+?>
