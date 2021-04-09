@@ -2,223 +2,203 @@
                 Heading
 ============================================ */
 .heading h2 {
-    color: #6255a5;
-    font-family: "Open sans" , sans-serif;
-    font-size: 32px;
-    font-weight: 600;
-    line-height: 38px;
-    margin-top: 30px ;
-    margin-bottom: 20px;
+  color: #6255a5;
+  font-family: "Open sans", sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 38px;
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 .heading h3 {
-    color: #6255a5;
-    font-family: "Open sans" , sans-serif;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 28px;
-    margin-left: 20px;
-    margin-top: 20px;
+  color: #6255a5;
+  font-family: "Open sans", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  margin-left: 20px;
+  margin-top: 20px;
 }
-
-
-
-
 
 /* Label for feilds */
 label {
-    font-family: "Open sans" , sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20px;
-    color: #333333; 
-    margin-bottom: 6px;
+  font-family: "Open sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #333333;
+  margin-bottom: 6px;
 }
 
 /* select */
 button.select-field {
-    padding-left: 13px;
-    background-color: #ffffff;
-    text-align: left;
-    font-family: "Open sans" , sans-serif; 
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20px;
-    color: #8a8a8a;
-    height: 50px;
-    width: 170px;
-    border: 1px solid #d1d1d1;
-    border-radius: 3px;
+  padding-left: 13px;
+  background-color: #ffffff;
+  text-align: left;
+  font-family: "Open sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #8a8a8a;
+  height: 50px;
+  width: 170px;
+  border: 1px solid #d1d1d1;
+  border-radius: 3px;
+}
+#seller:focus {
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0px 0px 15px -5px #6255a5;
+  border: transparent;
+}
+.form-group li:hover {
+    color: #ffffff;
+    background-color: #6255a5;
 }
 button.select-field img {
-    float: right;
-    padding-top: 5px;
-    padding-right: 8px;
+  float: right;
+  padding-top: 5px;
+  padding-right: 8px;
 }
-.dropdown-menu{
-    cursor: pointer;
-    min-width: 170px;
+.dropdown-menu {
+  cursor: pointer;
+  min-width: 170px;
 }
 .form-group {
-    margin-bottom: -50px;
-}
-/* table button  */
-.inrerview,
-.reject,
-.approve {
-    text-align: left;
-    font-family: "Open sans" , sans-serif; 
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-    color: #ffffff;
-    height: 35px;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    padding-top: 0px;
-}
-.inrerview{
-    background-color: #cccccc;
-}
-.reject{
-    background-color: #ff3636;
-}
-.approve{
-    background-color: #19a119;
+  margin-bottom: -50px;
 }
 
-  /* table  */
-  .table thead th:nth-child(10),
-  .table tbody tr td:nth-child(10),
-  .table thead th:nth-child(1),
+/* table  */
+.table thead th:nth-child(10),
+.table tbody tr td:nth-child(10),
+.table thead th:nth-child(1),
 .table tbody tr td:nth-child(1) {
-    text-align: center;
+  text-align: center;
 }
 .table tbody tr td:nth-child(2) {
-    color: #6255a5;
+  color: #6255a5;
 }
 
 /* for popup on 3 dots */
 #DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu {
-    margin-bottom: -18px;
-    margin-right: 7px ;
-    box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
+  margin-bottom: -18px;
+  margin-right: 7px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
 }
-#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > a {
-    color: #333333;
-    font-family: "Open sans" , sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
+  color: #333333;
+  font-family: "Open sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+}
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover ,
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:focus {
+   color:#ffffff;
+   background-color: #6255a5;
 }
 
-
-
-
+#DataTables_Table_0 > thead > tr > th:nth-child(9),
+#DataTables_Table_0 > thead > tr > th:nth-child(5){
+    background:none;
+}
 
 /* responsive */
 /* // Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px)  {  
-    /* table button  */
-.inrerview,
-.reject,
-.approve {
+@media (min-width: 1200px) {
+  /* table button  */
+  .inrerview,
+  .reject,
+  .approve {
     padding: 0 7px;
-}
+  }
 }
 
 /* // Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) and (max-width: 991px) { 
-    .heading h2 {
-        margin-top: 10px;
-    }
-    button.select-field {
-        height: 40px;
-        margin-bottom: 7px;
-    }
-    .inrerview,
-.reject,
-.approve {
+@media (min-width: 768px) and (max-width: 991px) {
+  .heading h2 {
+    margin-top: 10px;
+  }
+  button.select-field {
+    height: 40px;
+    margin-bottom: 7px;
+  }
+  .inrerview,
+  .reject,
+  .approve {
     text-align: center;
     width: 100px;
+  }
 }
-
- }
 /* // Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) and  (max-width: 767px) { 
-    .heading h2 {
-        margin-top: 0px;
-        font-size: 28px;
-    }
-    button.select-field {
-        height: 40px;
-        margin-bottom: 35px;
-    }
-    #search-row{
-        margin-left: 0;
-    }
-    .approve {
+@media (min-width: 576px) and (max-width: 767px) {
+  .heading h2 {
+    margin-top: 0px;
+    font-size: 28px;
+  }
+  button.select-field {
+    height: 40px;
+    margin-bottom: 35px;
+  }
+  #search-row {
+    margin-left: 0;
+  }
+  .approve {
     text-align: center;
     width: 100px;
-}
-.inrerview,
-.reject,
-.approve {
+  }
+  .inrerview,
+  .reject,
+  .approve {
     text-align: center;
     width: 100px;
+  }
 }
 
- }
-
- 
-
-@media (min-width: 375px) and  (max-width: 575px){
-    .heading h2 {
-        margin-top: 0px;
-    }
-    button.select-field {
-        height: 40px;
-        margin-bottom: 35px;
-    }
-.top {
-    left:0;
-}
-    .approve {
+@media (min-width: 375px) and (max-width: 575px) {
+  .heading h2 {
+    margin-top: 0px;
+  }
+  button.select-field {
+    height: 40px;
+    margin-bottom: 35px;
+  }
+  .top {
+    left: 0;
+  }
+  .approve {
     text-align: center;
     width: 100px;
-}
-.inrerview,
-.reject,
-.approve {
+  }
+  .inrerview,
+  .reject,
+  .approve {
     text-align: center;
     width: 80px;
     height: 30px;
+  }
 }
 
-
-}
-
-
-@media (min-width: 320px) and  (max-width: 374px){
-    .heading h2 {
-        margin-top: 0px;
-    }
-    button.select-field {
-        height: 40px;
-        margin-bottom: 35px;
-    }
-.top {
-    left:0;
-}
-    .approve {
+@media (min-width: 320px) and (max-width: 374px) {
+  .heading h2 {
+    margin-top: 0px;
+  }
+  button.select-field {
+    height: 40px;
+    margin-bottom: 35px;
+  }
+  .top {
+    left: 0;
+  }
+  .approve {
     text-align: center;
     width: 100px;
-}
-.inrerview,
-.reject,
-.approve {
+  }
+  .inrerview,
+  .reject,
+  .approve {
     text-align: center;
     width: 80px;
     height: 30px;
-}
-
+  }
 }
