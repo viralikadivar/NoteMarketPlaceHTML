@@ -1,3 +1,14 @@
+<?php
+session_start();
+ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../../login.php");
+}
+require "../../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +46,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../css/admin/data-table.css">
-    <link rel="stylesheet" href="../../css/admin/super-admin/manage-admin.css">
+    <link rel="stylesheet" href="../../css/admin/super-admin/manage-admin.css?version=111516431">
 
 </head>
 
@@ -48,66 +59,9 @@
     <!-- Preloader Ends -->
 
     <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../../index.html">
-                    <img class="img-responsive" src="../../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active"><a class="nav-link" href="../admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item" href="../notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="../published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="../downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="../rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="../members.html">Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../spam-reports.html">Reports</a></li>
-                        <li class="nav-item active">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item" href="#">Manage System Configuration</a>
-                                    <a class="dropdown-item active" href="manage-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="../manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="../manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item" href="../manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown"
-                                    src="../../images/header-footer/user-img.png" alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item" href="../admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <?php
+    include "../../header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
@@ -125,154 +79,89 @@
 
             <div class="row add-field" style="background: transparent;">
                 <div class="col-lg-3 col-md-3">
-                    <button class="add-button"><a href="add-admin.html">Add Administrator</a></button>
+                    <button class="add-button"><a href="add-admin.php">Add Administrator</a></button>
                 </div>
             </div>
 
             <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">FIRST NAME</th>
-                                    <th scope="col">LAST NAME</th>
-                                    <th scope="col">EMAIL</th>
-                                    <th scope="col">PHONE NO.</th>
-                                    <th scope="col">DATE ADDED</th>
-                                    <th scope="col">ACTIVE</th>
-                                    <th scope="col">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Khyati</td>
-                                    <td>Patel</td>
-                                    <td>khyatipatel@gmail.com</td>
-                                    <td>9897959512</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+            <form action="manage-admin.php" method="post">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Rahul</td>
-                                    <td>Shah</td>
-                                    <td>rahulshah@gmail.com</td>
-                                    <td>9945321851</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                <thead>
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Sumal </td>
-                                    <td>Trivedi</td>
-                                    <td>sumantrivedi@gmail.com</td>
-                                    <td>785218120</td>
-                                    <td>11-10-2020,01:00</td>
-                                    <td>No</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">FIRST NAME</th>
+                                        <th scope="col">LAST NAME</th>
+                                        <th scope="col">EMAIL</th>
+                                        <th scope="col">PHONE NO.</th>
+                                        <th scope="col">DATE ADDED</th>
+                                        <th scope="col">ACTIVE</th>
+                                        <th scope="col">ACTION</th>
+                                    </tr>
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>Raj</td>
-                                    <td>Malhotra</td>
-                                    <td>rajmalhotra@gmail.com</td>
-                                    <td>9852655675</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                </thead>
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Niya</td>
-                                    <td>Patel</td>
-                                    <td>niyapatel@gmail.com</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>8516794532</td>
-                                    <td>No</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Khyati</td>
-                                    <td>Patel</td>
-                                    <td>khyatipatel@gmail.com</td>
-                                    <td>9897959512</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                <tbody>
+                                    <?php
+                                    $count = 1;
+                                    $adminQuery = "SELECT * FROM Users WHERE RoleID = 2";
+                                    $adminResult = mysqli_query($connection, $adminQuery);
+                                    while ($admin = mysqli_fetch_assoc($adminResult)) {
+                                        $adminID = $admin['ID'];
+                                        $firstName = $admin['FirstName'];
+                                        $lastName = $admin['LastName'];
+                                        $email = $admin['EmailID'];
+                                        $dateAdded = strtotime($admin['CreatedDate']);
+                                        $dateAdded  = date("d-m-Y,H:i", $dateAdded);
+                                        $isActive = $admin['IsActive'];
+                                        $active = "Yes";
 
-                                <tr>
-                                    <td>7</td>
-                                    <td>Rahul</td>
-                                    <td>Shah</td>
-                                    <td>rahulshah@gmail.com</td>
-                                    <td>9945321851</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                        // Phone Number 
+                                        $phoneNoQuery = "SELECT * FROM UserProfile WHERE UserID = $adminID ";
+                                        $phoneResult = mysqli_query($connection, $phoneNoQuery);
+                                        if ($phoneResult) {
+                                            $phoneNo = mysqli_fetch_assoc($phoneResult);
+                                            $mobileNo = $phoneNo['PhoneNumber'];
+                                        }
+                                        if ($isActive) {
+                                            $active = "Yes";
+                                        } else {
+                                            $active = "no";
+                                        }
 
-                                <tr>
-                                    <td>8</td>
-                                    <td>Sumal </td>
-                                    <td>Trivedi</td>
-                                    <td>sumantrivedi@gmail.com</td>
-                                    <td>785218120</td>
-                                    <td>11-10-2020,01:00</td>
-                                    <td>No</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                        echo '<tr class="table-row">
+                                        <td>' . $count . '</td>
+                                        <td>' . $firstName . '</td>
+                                        <td>' . $lastName . '</td>
+                                        <td>' . $email . '</td>
+                                        <td>' . $mobileNo . '</td>
+                                        <td>' . $dateAdded . '</td>
+                                        <td>' . $active . '</td>
+                                        <td><img class="edit" src="../../images/form/edit.png" alt="Edit"> &emsp13; <img class="delete" src="../../images/form/delete.png" alt="Delete"></td>
 
-                                <tr>
-                                    <td>9</td>
-                                    <td>Raj</td>
-                                    <td>Malhotra</td>
-                                    <td>rajmalhotra@gmail.com</td>
-                                    <td>9852655675</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Yes</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                        <input type="hidden" class="adminID" value="'.$adminID.'">
+                                        <input type="hidden" name="adminID">
 
-                                <tr>
-                                    <td>10</td>
-                                    <td>Niya</td>
-                                    <td>Patel</td>
-                                    <td>niyapatel@gmail.com</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>8516794532</td>
-                                    <td>No</td>
-                                    <td><img src="../../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                        <button type="submit" name="editAdmin" style="display:none">
+                                        <button type="submit" name="deleteAdmin" style="display:none">
 
-                            </tbody>
-                        </table>
+                                    </tr>';
+
+                                        $count++;
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
-
+            </form>
 
         </div>
 
@@ -309,9 +198,27 @@
     <script src="../../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../../js/admin/data-table.js"></script>
+    <script src="../../js/admin//manage-admin.js?version=1245648186"></script>
     <script src="../../js/header/header.js"></script>
 
 </body>
 
 </html>
+<?php
+
+if(isset($_POST['editAdmin'])){
+    $adminID = $_POST['adminID'];
+    $_SESSION['AdminEditID'] =  $adminID;
+    header("Location:add-admin.php");
+}
+
+if(isset($_POST['deleteAdmin'])){
+    $adminID = $_POST['adminID'];
+
+    $inActiveAdminQuery = "UPDATE Users SET IsActive = 0 WHERE ID = $adminID ";
+    $inActiveAdminResult = mysqli_query($connection,$inActiveAdminQuery);
+
+}
+ob_end_flush();
+
+?>
