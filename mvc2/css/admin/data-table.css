@@ -100,11 +100,6 @@ th {
     width: 300px;
 }
 
-table.dataTable thead .sorting, 
-table.dataTable thead .sorting_asc, 
-table.dataTable thead .sorting_desc {
-    background : none;
-}
 /* ===========================================
                    buttons
 ============================================ */
@@ -224,7 +219,7 @@ button.btn {
     background: linear-gradient(to bottom, #6255a5 0%, #6255a5 100%);
 }
 
-
+ 
 @media (min-width: 992px) and (max-width: 1199px)
 {
 
