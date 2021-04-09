@@ -49,6 +49,12 @@ button.select-field {
     border: 1px solid #d1d1d1;
     border-radius: 3px;
 }
+button.select-field:focus{
+    background: #ffffff;
+    outline: none;
+    box-shadow: 0px 0px 15px -5px #6255a5;
+    border: transparent;
+}
 button.select-field img {
     float: right;
     padding-top: 5px;
@@ -61,35 +67,16 @@ button.select-field img {
 .form-group {
     margin-bottom: -50px;
 }
-/* table button  */
-.inrerview,
-.reject,
-.approve {
-    text-align: left;
-    font-family: "Open sans" , sans-serif; 
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-    color: #ffffff;
-    height: 35px;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    padding-top: 0px;
-}
-.inrerview{
-    background-color: #cccccc;
-}
-.reject{
-    background-color: #ff3636;
-}
-.approve{
-    background-color: #19a119;
+.form-group li:hover {
+    color:#ffffff;
+    border: transparent;
+    background-color: #6255a5;
 }
 
-  /* table  */
-  .table thead th:nth-child(10),
-  .table tbody tr td:nth-child(10),
-  .table thead th:nth-child(1),
+/* table  */
+.table thead th:nth-child(10),
+.table tbody tr td:nth-child(10),
+.table thead th:nth-child(1),
 .table tbody tr td:nth-child(1) {
     text-align: center;
 }
@@ -103,15 +90,27 @@ button.select-field img {
     margin-right: 7px ;
     box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
 }
-#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > a {
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
     color: #333333;
     font-family: "Open sans" , sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
 }
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:focus,
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover {
+    color: #ffffff ;
+    background-color: #6255a5;
+}
+.form-group{
+    z-index: 1;
+}
 
-
+#DataTables_Table_0 > thead > tr > th:nth-child(5),
+#DataTables_Table_0 > thead > tr > th:nth-child(7),
+#DataTables_Table_0 > thead > tr > th:nth-child(11) {
+    background: none;
+}
 
 
 
