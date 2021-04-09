@@ -1,0 +1,329 @@
+/*=============================================================
+                       Costom CSS Styles
+font-family: "Open sans" , sans-serif;
+    font-weight: 300;
+    font-weight: 400;
+    font-weight: 600;
+    font-weight: 700;
+
+color : #6255a5  OR rbg(98,85,165)
+==============================================================*/
+
+/* =========================================
+                Html, Body
+============================================ */
+html,
+body {
+    height: 100%;
+}
+section {
+    background: #fff;
+    overflow: hidden;
+}
+
+
+
+/* ===========================================
+                Heading
+============================================ */
+.heading h2 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 38px;
+    margin-top: 60px ;
+    margin-bottom: 30px;
+}
+.heading h3 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 29px;
+    font-weight: 700;
+    line-height: 34px;
+    margin-bottom: 12px;
+}
+.heading h3 a{
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 29px;
+    font-weight: 700;
+    line-height: 34px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    margin-bottom: none;
+}
+
+.heading h4 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28px;
+    margin-top: 30px;
+    margin-bottom: -40px;
+}
+.heading p {
+    color: #333333;
+    font-family: "Open sans" , sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 22px;
+}
+
+.info-wrapper {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 150px;
+    padding: 32px 10px; 
+}
+  
+/* for data table */
+.table {
+    text-align: center
+}
+.table tbody tr td:nth-child(2),
+.table tbody tr td:nth-child(9)  {
+    color: #6255a5;
+}
+.table thead th:nth-child(2),
+.table tbody tr td:nth-child(2) ,
+.table thead th:nth-child(3),
+.table tbody tr td:nth-child(3) ,
+.table thead th:nth-child(7),
+.table tbody tr td:nth-child(7) ,
+.table thead th:nth-child(8),
+.table tbody tr td:nth-child(8) {
+    text-align: left;
+}
+/* Remove Sorting Icon From last column  */
+#DataTables_Table_0 > thead > tr > th:nth-child(10){
+    background-image: none;
+}
+/* for popup on 3 dots */
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu {
+    margin-bottom: -18px;
+    margin-right: 7px ;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
+}
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
+    color: #333333;
+    font-family: "Open sans" , sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+}
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover ,
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:focus {
+    color: #ffffff;
+    background-color: #6255a5;
+}
+button.select-field {
+    padding-left: 13px;
+    background-color: #ffffff;
+    text-align: left;
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+    height: 50px;
+    margin-left: 13px;
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    width: 180px;
+}
+button.select-field img {
+    float: right;
+    padding-top: 5px;
+    padding-right: 8px;
+}
+.dropdown-menu{
+    cursor: pointer;
+    min-width: 180px;
+}
+#table-btn {
+    margin-left: 13px;
+}
+/* Modal Popup  */
+
+/* popup  */
+.modal {
+    padding-top: 130px;
+} 
+.heading h4 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.modal-content {
+    width: 470px;
+}
+.close {
+    position: relative;
+}
+.close img  {
+    position: absolute;
+    height: 17px ;
+    right: 17px;
+    top: 17px;
+}
+.modal-body {
+    border-top: transparent;
+}
+.modal-footer {
+    position: relative;
+    border-top: transparent;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+#description {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    width: 400px;
+    height: 140px;
+    resize: none;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#description::placeholder{
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+    padding-left: 11px;
+    padding-top: 9px;
+}
+.modal-header {
+    border-bottom: transparent;
+}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) { 
+    .dashboard-field .heading h2{
+        margin-top: 40px;
+    }
+ }
+
+@media (min-width: 768px) and (max-width: 991px) {  
+    .heading h4 {
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+    .info-wrapper {
+        padding: 17px 10px;
+    }
+    .top{
+        position: relative;
+        width: 100%;
+        height: 50px;
+    }
+    #search-row {
+        position: absolute;
+        left:0;
+    }
+    button.select-field{
+        height: 43px;
+    }
+    .heading h2 {
+        margin-top: 25px;
+    }
+
+}
+
+@media (min-width: 576px) and  (max-width: 767px) {
+    .heading h2 {
+        margin-top: 20px;
+    }
+    .info-wrapper {
+        height: 130px;
+        padding: 17px 10px;
+    }
+    #DataTables_Table_0_filter label input  {
+        width: 220px;
+    }
+    #DataTables_Table_0_filter label #table-btn {
+        left: 220px;
+    }
+    button.select-field{
+        height: 43px;
+        width: 160px ;
+    }
+    .heading h4 {
+        margin-top: 20px;
+        margin-bottom: 0px;
+    }
+  }
+  
+@media (min-width: 375px) and  (max-width: 575px){
+    .heading h2 {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+    .info-wrapper {
+        height: 130px;
+        padding: 17px 10px;
+    }
+    #DataTables_Table_0_filter label input  {
+        width: 100%;
+    }
+    .top{
+        height: 140px;
+    }
+    #DataTables_Table_0_filter label #table-btn {
+        right: 0;
+        top:60px;
+    }
+    button.select-field{
+        position: absolute;
+        top:60px;
+        left: 0;
+        height: 43px;
+        width: 170px ;
+    }
+    .heading h4 {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+}
+@media (min-width: 320px) and  (max-width: 374px){
+    .heading h2 {
+        margin-top: 20px;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+    .info-wrapper {
+        height: 130px;
+        padding: 17px 10px;
+    }
+    #DataTables_Table_0_filter label input  {
+        width: 100%;
+    }
+    .top{
+        height: 140px;
+    }
+    #DataTables_Table_0_filter label #table-btn {
+        right: 0;
+        top:60px;
+    }
+    button.select-field{
+        position: absolute;
+        top:60px;
+        left: 0;
+        height: 43px;
+        width: 150px ;
+    }
+    .heading h4 {
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+}
