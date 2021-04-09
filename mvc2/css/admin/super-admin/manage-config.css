@@ -22,7 +22,6 @@ section {
 }
 
 
-
 /* ===========================================
                 Heading
 ============================================ */
@@ -59,6 +58,12 @@ label {
     width: 100%;
     margin-bottom: 30px;
 }
+#linkedin:hover,
+#twitter:hover,
+#facebook:hover,
+#email-sys:hover,
+#phone-number:hover,
+#email:hover,
 #linkedin:focus,
 #twitter:focus,
 #facebook:focus,
@@ -118,17 +123,13 @@ button.submit {
 }
 button.submit:hover ,
 button.submit:focus {
-    background-color: #ffffff;
-    border: 1px solid #6255a5;
-    color: #6255a5;
-    box-shadow: 0px 0px 15px 1px #6255a5;   
-}
-button.submit:focus {
-     background: #ffffff;
+    background: #ffffff;
+    color:#6255a5;
     outline: none;
     box-shadow: 0px 0px 15px -5px #6255a5;
-    border: transparent;
+    border: transparent;   
 }
+
 
 /* // Large devices (desktops, 992px and up) */
 @media (min-width: 992px) and (max-width: 1199px) { 
