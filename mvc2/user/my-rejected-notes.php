@@ -94,7 +94,7 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
                                         <th scope="col">CATEGORY</th>
                                         <th scope="col">REMARKS</th>
                                         <th scope="col">CLONE</th>
-                                        <th>&emsp13;</th>
+                                        <th style="background:none">&emsp13;</th>
                                     </tr>
                                 </thead>
 
