@@ -1,17 +1,43 @@
 <?php
 require "../db_connection.php";
 session_start();
-$userEmail =  $_SESSION['userEmail'] ;
+$userEmail =  $_SESSION['userEmail'];
 
 $selectUserQuery = "SELECT * FROM Users WHERE EmailID = '$userEmail'";
 $selectUserResult = mysqli_query($connection, $selectUserQuery);
 $userDetail = mysqli_fetch_assoc($selectUserResult);
 $userID = $userDetail['ID'];
+$firstName = $userDetail['FirstName'];
+$lastName = $userDetail['LastName'];
+
+$gender = "Select your gender";
+$phoneCode = "91";
 
 $selectUserProfileQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
-$selectUserProfileResult = mysqli_query( $connection , $selectUserProfileQuery );
-if($selectUserProfileResult){
+$selectUserProfileResult = mysqli_query($connection, $selectUserProfileQuery);
+$isSet = false;
+if (mysqli_num_rows($selectUserProfileResult)) {
+    $isSet = true;
     $userProfileDetail = mysqli_fetch_assoc($selectUserProfileResult);
+
+    $gender = $userProfileDetail['Gender'];
+    $genderNameQuery = " SELECT * FROM ReferenceData WHERE ID =  $gender  and IsActive = 1 ";
+    $genderNameResult = mysqli_query($connection, $genderNameQuery);
+    $genderName = mysqli_fetch_assoc($genderNameResult);
+    $gender = $genderName['Value'];
+
+    $phoneCode =  $userProfileDetail['PhonenNumberCountryCode'];
+    $phoneNumber = $userProfileDetail['PhoneNumber'];
+
+    $add1 = $userProfileDetail['AddressLine1'];
+    $add2 = $userProfileDetail['AddressLine2'];
+    $city = $userProfileDetail['City'];
+    $state = $userProfileDetail['State'];
+    $zipCode = $userProfileDetail['ZipCode'];
+    $country = $userProfileDetail['Country'];
+
+    $university = $userProfileDetail['University'];
+    $college = $userProfileDetail['College'];
 }
 
 ?>
@@ -54,8 +80,8 @@ if($selectUserProfileResult){
 <body>
 
     <!-- Header -->
-    <?php 
-        require "../header.php";
+    <?php
+    require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -104,7 +130,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="first-name" required>First Name *</label>
-                            <input type="text" name="firstName" class="form-control" id="first-name" placeholder="Enter Your first name">
+                            <input type="text" name="firstName" class="form-control" id="first-name" value="<?php echo $firstName; ?>" placeholder="Enter Your first name">
                             <small id="firstNameValidation" class="form-text"></small>
                         </div>
                     </div>
@@ -113,7 +139,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="last-name" required>Last Name *</label>
-                            <input type="text" name="lastName" class="form-control" id="last-name" placeholder="Enter Your last name">
+                            <input type="text" name="lastName" class="form-control" id="last-name" value="<?php echo $lastName; ?>" placeholder="Enter Your last name">
                             <small id="lastNameValidation" class="form-text"></small>
                         </div>
                     </div>
@@ -140,7 +166,7 @@ if($selectUserProfileResult){
                             <div class="dropdown">
                                 <label for="gender" required>Gender</label>
                                 <button type="button" id="gender" class="select-field" data-toggle="dropdown">
-                                    Select your gender<img src="../images/form/arrow-down.png" alt="Down">
+                                    <?php echo $gender; ?><img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
                                 <ul class="dropdown-menu gender" aria-labelledby="gender">
                                     <?php
@@ -171,7 +197,7 @@ if($selectUserProfileResult){
                                 <div class="col-lg-3 col-md-3 col-sm-3">
                                     <div class="dropdown">
                                         <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
-                                            +91<img src="../images/form/arrow-down.png" alt="Down">
+                                            +<?php echo $phoneCode; ?><img src="../images/form/arrow-down.png" alt="Down">
                                         </button>
                                         <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
                                             <?php
@@ -190,7 +216,7 @@ if($selectUserProfileResult){
                                 </div>
 
                                 <div class="col-lg-9 col-md-9 col-sm-9 pl-0">
-                                    <input type="text" name="phoneNumber" class="form-control" id="phone-number" placeholder="Enter your phone number">
+                                    <input type="text" name="phoneNumber" class="form-control" id="phone-number" value="<?php if($isSet) {echo $phoneNumber;}?>" placeholder="Enter your phone number">
                                 </div>
 
                                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -231,7 +257,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="add-1" required>Address Line 1 *</label>
-                            <input type="text" name="addrLine1" class="form-control" id="add-1" placeholder="Enter Your address">
+                            <input type="text" name="addrLine1" class="form-control" id="add-1" value="<?php if($isSet) {echo $add1;}?>" placeholder="Enter Your address">
                             <small id="addr1Validation" class="form-text">Address should not be empty</small>
                         </div>
                     </div>
@@ -240,7 +266,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="add-2" required>Address Line 2</label>
-                            <input type="text" name="addrLine2" class="form-control" id="add-2" placeholder="Enter Your address">
+                            <input type="text" name="addrLine2" class="form-control" id="add-2" value="<?php if($isSet){ echo $add2;}?>" placeholder="Enter Your address">
                             <small id="addr2Validation" class="form-text">Address should not be empty</small>
                         </div>
                     </div>
@@ -249,7 +275,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="city" required>City *</label>
-                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter Your city">
+                            <input type="text" name="city" class="form-control" id="city" value="<?php if($isSet) {echo $city;}?>" placeholder="Enter Your city">
                             <small id="cityValidation" class="form-text">Please enter your city name</small>
                         </div>
                     </div>
@@ -258,7 +284,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="state" required>State *</label>
-                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter Your state">
+                            <input type="text" name="state" class="form-control" id="state" value="<?php if($isSet) {echo $state;} ?>" placeholder="Enter Your state">
                             <small id="stateValidation" class="form-text">Please enter your state name</small>
                         </div>
                     </div>
@@ -267,7 +293,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="zipcode" required>ZipCode *</label>
-                            <input type="text" name="zipCode" class="form-control" id="zipcode" placeholder="Enter Your zipcode">
+                            <input type="text" name="zipCode" class="form-control" id="zipcode" value="<?php if($isSet) {echo $zipCode ;} ?>" placeholder="Enter Your zipcode">
                             <small id="zipCodeValidation" class="form-text">ZipCode should not be empty</small>
                         </div>
                     </div>
@@ -276,7 +302,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="country" required>Country *</label>
-                            <input type="text" name="country" class="form-control" id="country" placeholder="Enter Your country">
+                            <input type="text" name="country" class="form-control" id="country" value="<?php if($isSet) {echo $country; }?>" placeholder="Enter Your country">
                             <small id="countryValidation" class="form-text">Please enter your country name</small>
                         </div>
                     </div>
@@ -297,7 +323,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="university" required>University</label>
-                            <input type="text" name="university" class="form-control" id="university" placeholder="Enter Your university">
+                            <input type="text" name="university" class="form-control" id="university" value="<?php if($isSet){echo $university;}?>" placeholder="Enter Your university">
                         </div>
                     </div>
 
@@ -305,7 +331,7 @@ if($selectUserProfileResult){
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="college" required>College</label>
-                            <input type="text" name="college" class="form-control" id="college" placeholder="Enter Your college">
+                            <input type="text" name="college" class="form-control" id="college" value="<?php if($isSet){echo $college;}?>" placeholder="Enter Your college">
                         </div>
                     </div>
 
@@ -447,7 +473,7 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    global $path; 
+    global $path;
     // Get GenderID
     $getGenderID = "SELECT * FROM ReferenceData WHERE RefCategory = 'Gender' and Value = '$gender'";
     $getGenderIDResult = mysqli_query($connection, $getGenderID);
@@ -463,10 +489,10 @@ if (isset($_POST['submit'])) {
         if (!$addProfileResult) {
             die(mysqli_error($connection));
         }
-    } else if(mysqli_num_rows($getUserProfileResult) != 0){
+    } else if (mysqli_num_rows($getUserProfileResult) != 0) {
         $updateUserProfileQuery = "UPDATE UserProfile SET DOB = '$dateOfBirth' , Gender = $genderID , SecondaryEmailAddress = '$email' , PhonenNumberCountryCode = '$phoneCode' , PhoneNumber = '$phoneNumber' , ProfilePicture = '$path' , AddressLine1 = '$addrLine1' , AddressLine2 = '$addrLine2' , City = '$city' , State = '$state' , ZipCode = '$zipCode' , Country = '$country' , University = '$university' , College = '$college' WHERE UserID = $userID ";
-        $updateUserProfileResult = mysqli_query( $connection , $updateUserProfileQuery);
-        if ( !$updateUserProfileResult ) {
+        $updateUserProfileResult = mysqli_query($connection, $updateUserProfileQuery);
+        if (!$updateUserProfileResult) {
             die(mysqli_error($connection));
         }
     }
