@@ -13,7 +13,7 @@ $userID = $_SESSION['UserID'];
 
 $myDownloadQuery = "SELECT * FROM NotesDownloads WHERE Downloader = $userID AND IsSellerHasAllowedDownload = 1";
 $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
-
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,8 +102,8 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
                                             <!-- <th scope="col">Publisher</th>
                                         <th scope="col">Published Date</th> -->
                                             <th scope="col">DOWNLOADED DATE/TIME</th>
-                                            <th scope="col">&emsp13;</th>
-                                            <th scope="col">&emsp13;</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
                                         </tr>
                                     </thead>
 
