@@ -104,8 +104,8 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
                                         <!-- <th scope="col">Publisher</th>
                                         <th scope="col">Published Date</th> -->
                                         <th scope="col">DOWNLOADED DATE/TIME</th>
-                                        <th scope="col">&emsp13;</th>
-                                        <th scope="col">&emsp13;</th>
+                                        <th scope="col" style="background:none">&emsp13;</th>
+                                        <th scope="col" style="background:none">&emsp13;</th>
                                     </tr>
                                 </thead>
 
