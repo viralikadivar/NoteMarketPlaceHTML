@@ -216,7 +216,7 @@ $userID = $_SESSION['UserID'];
                                         <th scope="col">Title</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col" style="background:none">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -321,7 +321,7 @@ $userID = $_SESSION['UserID'];
                                         <th scope="col">Category</th>
                                         <th scope="col">Sell Type</th>
                                         <th scope="col">Price</th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col" style="background:none">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
