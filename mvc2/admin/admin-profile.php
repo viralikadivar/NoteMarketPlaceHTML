@@ -1,3 +1,35 @@
+<?php
+session_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+require "../db_connection.php";
+global $connection;
+
+$userID = $_SESSION['UserID'];
+
+$getUsersDetailsQuery  = "SELECT * FROM Users WHERE ID = $userID  ";
+$getUserDetailsResult = mysqli_query($connection, $getUsersDetailsQuery);
+$userDetail = mysqli_fetch_assoc($getUserDetailsResult);
+
+$firstName = $userDetail['FirstName'];
+$lastName = $userDetail['LastName'];
+$email = $userDetail['EmailID'];
+
+$getUsersProfileQuery  = "SELECT * FROM UserProfile WHERE UserID = $userID  ";
+$getUserProfileResult = mysqli_query($connection, $getUsersProfileQuery);
+$isSet = false;
+if (mysqli_num_rows($getUserProfileResult)) {
+
+    $isSet = true;
+    $userProfile = mysqli_fetch_assoc($getUserProfileResult);
+    $phoneCode = $userProfile['PhonenNumberCountryCode'];
+    $phoneNumber = $userProfile['PhoneNumber'];
+
+    $profilePic = $userProfile['ProfilePicture'];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +62,7 @@
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/admin-profile.css">
+    <link rel="stylesheet" href="../css/admin/admin-profile.css">
 
 </head>
 
@@ -44,67 +76,10 @@
     <!-- Preloader Ends -->
 
 
-      <!-- Header -->
-    <header id="header">
-        <nav class="navbar white-navbar navbar-expand-lg">
-            <div class="container navbar-wrapper">
-                <a class="navbar-brand" href="../index.html">
-                    <img class="img-responsive" src="../images/logo/logo-dark.png" alt="logo">
-                </a>
-
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Dashboard</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="notes-menu" data-toggle="dropdown">Notes</div>
-                                <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                    <a class="dropdown-item" href="notes-under-review.html">Notes Under Review</a>
-                                    <a class="dropdown-item" href="published-notes.html">Published Notes</a>
-                                    <a class="dropdown-item" href="downloaded-notes.html">Downloaded Notes</a>
-                                    <a class="dropdown-item" href="rejected-notes.html">Rejected Notes</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="members.html">Members</a></li>
-                        <li class="nav-item"><a class="nav-link" href="spam-reports.html">Reports</a></li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <div id="setting-menu" data-toggle="dropdown">Setting</div>
-                                <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                    <a class="dropdown-item" href="super-admin/manage-config.html">Manage System Configuration</a>
-                                    <a class="dropdown-item" href="super-admin/add-admin.html">Manage Administrator</a>
-                                    <a class="dropdown-item" href="manage-category.html">Manage Category</a>
-                                    <a class="dropdown-item" href="manage-type.html">Manage Type</a>
-                                    <a class="dropdown-item" href="manage-country.html">Manage Countries</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown user-image">
-                                <img id="image-menu" data-toggle="dropdown" src="../images/header-footer/user-img.png"
-                                    alt="Admin">
-                                <div class="dropdown-menu" aria-labelledby="user-menu">
-                                    <a class="dropdown-item active" href="admin-profile.html">Update Profile</a>
-                                    <a class="dropdown-item" href="../user/change-password.html">Change Password</a>
-                                    <a class="dropdown-item" href="../index.html" id="logout">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item loginNavTab"><a class="nav-link" href="../index.html">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <nav class="navbar mobile-navbar navbar-expand-lg justify-content-end">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span id="open" class="navbar-toggler-icon">&#9776;</span>
-                <span id="close" class="navbar-toggler-icon">&times;</span>
-            </button>
-        </nav>
-    </header>
+    <!-- Header -->
+    <?php
+    require "../header.php";
+    ?>
     <!-- Header Ends -->
 
     <!-- To remove deafult navigation overlay -->
@@ -124,15 +99,14 @@
                     </div>
 
                     <!-- form  -->
-                    <form>
+                    <form action="admin-profile.php" method="post" enctype="multipart/form-data">
                         <div class="row">
 
                             <!-- First Name -->
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="first-name" required>First Name *</label>
-                                    <input type="text" class="form-control" id="first-name"
-                                        placeholder="Enter Your first name">
+                                    <input type="text" class="form-control" id="first-name" name="firstName" value="<?php echo $firstName; ?>" placeholder="Enter Your first name">
                                 </div>
                             </div>
 
@@ -140,8 +114,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="last-name" required>Last Name *</label>
-                                    <input type="text" class="form-control" id="last-name"
-                                        placeholder="Enter Your last name">
+                                    <input type="text" class="form-control" id="last-name" name="lastName" value="<?php echo $lastName; ?>" placeholder="Enter Your last name">
                                 </div>
                             </div>
 
@@ -149,8 +122,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="email" required>Email *</label>
-                                    <input type="email" class="form-control" id="email"
-                                        placeholder="Enter Your email address">
+                                    <input type="email" class="form-control" id="email" name="emailID" value="<?php echo $email ?>" placeholder="Enter Your email address">
                                 </div>
                             </div>
 
@@ -158,8 +130,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="sec-email" required>Secondary Email</label>
-                                    <input type="email" class="form-control" id="sec-email"
-                                        placeholder="Enter Your email address">
+                                    <input type="email" class="form-control" id="sec-email" name="secondaryEmail" placeholder="Enter Your email address">
                                 </div>
                             </div>
 
@@ -172,20 +143,26 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-md-3 col-sm-4">
                                             <div class="dropdown">
-                                                <button type="button" id="phone-code" class="select-field"
-                                                    data-toggle="dropdown">
-                                                    +91<img src="images/admin-profile/arrow-down.png" alt="Down">
+                                                <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
+                                                    +<?php echo $phoneCode; ?><img src="../images/form/arrow-down.png" alt="Down">
                                                 </button>
-                                                <ul class="dropdown-menu" aria-labelledby="phone-code">
-                                                    <li class="dropdown-item">Male</li>
-                                                    <li class="dropdown-item">Female</li>
-                                                    <li class="dropdown-item">Other</li>
+                                                <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
+                                                    <?php
+
+                                                    $phoneCodeQuery = "SELECT * FROM Countries WHERE IsActive = 1 ORDER BY CountryCode ";
+                                                    $phoneCodeResult = mysqli_query($connection, $phoneCodeQuery);
+
+                                                    while ($phoneCode = mysqli_fetch_assoc($phoneCodeResult)) {
+                                                        echo '<li class="dropdown-item" value="' . $phoneCode['CountryCode'] . '">+' . $phoneCode['CountryCode'] . '</li>';
+                                                    }
+
+                                                    ?>
                                                 </ul>
                                             </div>
+                                            <input type="hidden" name="phoneCode" id="phoneCode" value="<?php echo $phoneCode; ?>">
                                         </div>
                                         <div class="col-lg-9 col-md-9 col-sm-8 pl-0">
-                                            <input type="tel" class="form-control" id="Phone-number"
-                                                placeholder="Enter your phone number">
+                                            <input type="tel" class="form-control" id="Phone-number" value="<?php echo $phoneNumber; ?>" name="phoneNo" placeholder="Enter your phone number">
                                         </div>
                                     </div>
                                 </div>
@@ -196,17 +173,16 @@
                                 <div class="form-group">
                                     <label for="photo" required>Profile Picture</label>
                                     <div class="take-profile">
-                                        <label for="photo"><img src="images/admin-profile/upload-file.png" alt="Uplaod"><br>
+                                        <label for="photo"><img src="../images/form/upload-file.png" alt="Uplaod"><br>
                                             Upload a picture</label>
-                                        <input type="file" id="photo" style="visibility: hidden;"
-                                            accept="image/png, image/jpeg">
+                                        <input type="file" name="adminDP" id="photo" style="visibility: hidden;" accept="image/png, image/jpeg ,image/jpg">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- submit button  -->
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <button class="submit" type="submit"><span class="text-center">submit</span></button>
+                                <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
                             </div>
 
                         </div>
@@ -217,22 +193,21 @@
         </div>
     </section>
 
-<!-- Footer  -->
-<footer id="footer">
-    <hr>
-    <div class="container-fluid">
-        <div class="row">
-           <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-               <h6>Version:1.1.24</h6>
-           </div>
-           <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-            <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-           </div>
+    <!-- Footer  -->
+    <footer id="footer">
+        <hr>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
+                    <h6>Version:1.1.24</h6>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
+                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Ends -->>
-
+    </footer>
+    <!-- Footer Ends -->
     <!-- ================================================
                         JS Files 
     ================================================= -->
@@ -244,16 +219,38 @@
     <script src="../js/bootstrap/bootstrap.bundle.js"></script>
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/header/header.js"></script>
-
-    <script>
-
-        $(window).on('load', function () { // makes sure that whole site is loaded
-            $('#status').fadeOut();
-            $('#preloader').delay(400).fadeOut('slow');
-        });
-
-    </script>
+    <script src="../js/admin/admin-profile.js?version=12542517451"></script>
 
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['submit'])) {
+
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $emailID = $_POST['emailID'];
+    $secondaryEmail = $_POST['secondaryEmail'];
+
+    $phoneCode = $_POST['phoneCode'];
+    $phoneNumber = $_POST['phoneNo'];
+
+    date_default_timezone_set("Asia/Kolkata");
+    $dateTime  = new DateTime();
+    $timeStamp = $dateTime->getTimestamp();
+
+    $addImagePath = "../members/" . $userID . "/";
+    
+
+    $updateUserQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName', EmailID = '$emailID' , ModifiedBy = $userID WHERE ID = $userID ";
+    $updateUserResult = mysqli_query($connection,$updateUserQuery);
+    if($updateUserResult){
+        echo "Updated";
+    } else {
+        die(mysqli_error($connection));
+    }
+
+}
+
+?>
