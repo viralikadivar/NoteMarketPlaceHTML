@@ -58,32 +58,8 @@ button.select-field img {
     cursor: pointer;
     min-width: 170px;
 }
-.form-group {
+.sellerDropdownName  {
     margin-bottom: -50px;
-}
-/* table button  */
-.inrerview,
-.reject,
-.approve {
-    text-align: left;
-    font-family: "Open sans" , sans-serif; 
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-    color: #ffffff;
-    height: 35px;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    padding-top: 0px;
-}
-.inrerview{
-    background-color: #cccccc;
-}
-.reject{
-    background-color: #ff3636;
-}
-.approve{
-    background-color: #19a119;
 }
 
   /* table  */
@@ -93,7 +69,8 @@ button.select-field img {
 .table tbody tr td:nth-child(1) {
     text-align: center;
 }
-.table tbody tr td:nth-child(2) {
+.table tbody tr td:nth-child(2),
+.table tbody tr td:nth-child(10) {
     color: #6255a5;
 }
 
@@ -103,16 +80,84 @@ button.select-field img {
     margin-right: 7px ;
     box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
 }
-#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > a {
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
     color: #333333;
     font-family: "Open sans" , sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
 }
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover {
+    color: #ffffff;
+    background-color: #6255a5;
+}
+.sellerDropdownName {
+    z-index: 1;
+}
+#DataTables_Table_0 > thead > tr > th:nth-child(11),
+#DataTables_Table_0 > thead > tr > th:nth-child(7){
+    background: none;
+}
 
+/* Modal Popup  */
 
+/* popup  */
+.modal {
+    padding-top: 130px;
+} 
+.heading h4 {
+    color: #6255a5;
+    font-family: "Open sans" , sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
 
+.modal-content {
+    width: 470px;
+}
+.close {
+    position: relative;
+}
+.close img  {
+    position: absolute;
+    height: 17px ;
+    right: 17px;
+    top: 17px;
+}
+.modal-body {
+    border-top: transparent;
+}
+.modal-footer {
+    position: relative;
+    border-top: transparent;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+#description {
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    width: 400px;
+    height: 140px;
+    resize: none;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#description::placeholder{
+    font-family: "Open sans" , sans-serif; 
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #8a8a8a;
+    padding-left: 11px;
+    padding-top: 9px;
+}
+.modal-header {
+    border-bottom: transparent;
+}
 
 
 /* responsive */
