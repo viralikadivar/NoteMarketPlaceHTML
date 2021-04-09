@@ -10,7 +10,7 @@
     margin-top: 30px ;
     margin-bottom: -45px;
 }
-
+ 
 /* not to edit  */
   /* table */
   .table thead th:nth-child(10),
@@ -27,6 +27,12 @@
 .table tbody tr td:nth-child(1) {
     text-align: center;
 }
+#DataTables_Table_0 > tbody > tr > td:nth-child(6),
+#DataTables_Table_0 > tbody > tr > td:nth-child(7),
+#DataTables_Table_0 > tbody > tr > td:nth-child(8),
+#DataTables_Table_0 > tbody > tr> td:nth-child(9){
+    color: #6255a5;
+}
 
 /* for popup on 3 dots */
 #DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu {
@@ -34,16 +40,22 @@
     margin-right: 7px ;
     box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
 }
-#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > a {
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
     color: #333333;
     font-family: "Open sans" , sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
 }
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover ,
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:focus {
+    color: #ffffff;
+    background-color: #6255a5 ;
+}
 
-
-
+#DataTables_Table_0 > thead > tr > th:nth-child(11) {
+    background: none;
+}
 /* responsive  */
 /* // Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {  
