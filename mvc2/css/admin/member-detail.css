@@ -18,13 +18,13 @@
     line-height: 28px;
     margin-top: 20px;
     margin-bottom: 20px;
-}
+} 
 
 
 /* member detail  */
 .member-photo img {
-    height: 140px;
-    width: 130px;
+    height: 100%;
+    width: 100%;
 }
 .member-detail {
     border-right : 1px solid #d1d1d1;
@@ -82,30 +82,6 @@ button.select-field img {
 .form-group {
     margin-bottom: -50px;
 }
-/* table button  */
-.inrerview,
-.reject,
-.approve {
-    text-align: left;
-    font-family: "Open sans" , sans-serif; 
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 22px;
-    color: #ffffff;
-    height: 35px;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    padding-top: 0px;
-}
-.inrerview{
-    background-color: #cccccc;
-}
-.reject{
-    background-color: #ff3636;
-}
-.approve{
-    background-color: #19a119;
-}
 
   /* table  */
   .table thead th:nth-child(6),
@@ -127,15 +103,22 @@ button.select-field img {
     margin-right: 7px ;
     box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
 }
-#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > a {
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button {
     color: #333333;
     font-family: "Open sans" , sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
 }
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:hover ,
+#DataTables_Table_0 > tbody > tr > td.dropup.dropleft > div.dropdown-menu > button:focus {
+    color:#ffffff;
+    background-color: #6255a5;
+}
 
-
+#DataTables_Table_0 > thead > tr > th:nth-child(9){
+    background: none;
+}
 
 
 
