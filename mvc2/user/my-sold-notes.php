@@ -98,8 +98,8 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
                                             <th scope="col">SELL TYPE</th>
                                             <th scope="col">PRICE</th>
                                             <th scope="col">DOWNLOADED DATE/TIME</th>
-                                            <th scope="col">&emsp13;</th>
-                                            <th scope="col">&emsp13;</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
                                         </tr>
                                     </thead>
 
