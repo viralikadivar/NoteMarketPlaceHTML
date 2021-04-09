@@ -56,7 +56,7 @@ section {
 
 
 /*  Download Button */
-button{
+button.downloadButton{
     background-color: #6255a5;
     width: 200px;
     height: 45px;
@@ -72,13 +72,13 @@ button{
     line-height: 22px;
     font-weight: 600;
 }
-button:hover ,
-button:focus {
+button.downloadButton:hover ,
+button.downloadButton:focus {
     background-color: #ffffff;
     border: 1px solid #6255a5;
     color: #6255a5;     
 }
-button:focus {
+button.downloadButton:focus {
     color: #6255a5;
 }
 
@@ -283,17 +283,12 @@ h5.star {
 }
 
 /*  Download Button */
-button{
+button.downloadButton{
     width: 160px;
     height: 40px;
+    font-size: 16px;
     margin-top: 5px ;
 }
-button a{
-    padding-top: 16px;
-    font-size: 16px;
-    line-height: 20px;
-}
-
 
 
 /* Book Details */
@@ -448,7 +443,6 @@ img#done {
 }
  }
 
-
 /* // Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and  (max-width: 767px) { 
 
@@ -492,17 +486,12 @@ img#done {
 }
 
 /*  Download Button */
-button{
+button.downloadButton{
     width: 140px;
     height: 35px;
+    font-size: 13px;
     margin-top:0px ;
 }
-button a{
-    padding-top: 0px;
-    font-size: 13px;
-    line-height: 18px;
-}
-
 
 
 /* Book Details */
@@ -650,17 +639,12 @@ img#done {
 }
 
 /*  Download Button */
-button{
+button.downloadButton{
     width: 140px;
     height: 35px;
+    font-size: 13px;
     margin-top:0px ;
 }
-button a{
-    padding-top: 0px;
-    font-size: 13px;
-    line-height: 18px;
-}
-
 
 
 /* Book Details */
@@ -815,17 +799,11 @@ img#done {
 }
 
 /*  Download Button */
-button{
+button.downloadButton{
     width: 140px;
     height: 35px;
     margin-top:0px ;
 }
-button a{
-    padding-top: 0px;
-    font-size: 13px;
-    line-height: 18px;
-}
-
 
 
 /* Book Details */
