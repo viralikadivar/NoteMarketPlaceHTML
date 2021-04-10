@@ -18,16 +18,39 @@ $email = $userDetail['EmailID'];
 
 $getUsersProfileQuery  = "SELECT * FROM UserProfile WHERE UserID = $userID  ";
 $getUserProfileResult = mysqli_query($connection, $getUsersProfileQuery);
-$isSet = false;
-if (mysqli_num_rows($getUserProfileResult)) {
+mysqli_num_rows($getUserProfileResult);
+$userProfile = mysqli_fetch_assoc($getUserProfileResult);
+$phoneCode = $userProfile['PhonenNumberCountryCode'];
+$phoneNumber = $userProfile['PhoneNumber'];
+$secondaryEmail = $userProfile['SecondaryEmailAddress'];
+
+$emailClass = "validate";
+$isSet =  false;
+$isSubmit = false ;
+if (isset($_POST['submit'])) {
 
     $isSet = true;
-    $userProfile = mysqli_fetch_assoc($getUserProfileResult);
-    $phoneCode = $userProfile['PhonenNumberCountryCode'];
-    $phoneNumber = $userProfile['PhoneNumber'];
 
     $profilePic = $userProfile['ProfilePicture'];
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $emailID = $_POST['emailID'];
+    $secondaryEmail = $_POST['secondaryEmail'];
+
+    $phoneCode = $_POST['phoneCode'];
+    $phoneNumber = $_POST['phoneNo'];
+
+    $getEmailQuery = "SELECT * FROM Users WHERE EmailID = '$emailID' AND ID != $userID  ";
+    $getEmailResult = mysqli_query($connection, $getEmailQuery);
+
+    if (mysqli_num_rows($getEmailResult)) {
+        $emailClass = "wrong-email";
+    } else {
+        $emailClass = "validate";
+        $isSubmit = true ;
+    }
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -62,7 +85,7 @@ if (mysqli_num_rows($getUserProfileResult)) {
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/admin-profile.css">
+    <link rel="stylesheet" href="../css/admin/admin-profile.css?version=7514217421">
 
 </head>
 
@@ -83,7 +106,7 @@ if (mysqli_num_rows($getUserProfileResult)) {
     <!-- Header Ends -->
 
     <!-- To remove deafult navigation overlay -->
-    <br><br><br>
+    <br><br>
 
     <!-- addition detail -->
     <section id="add">
@@ -120,9 +143,10 @@ if (mysqli_num_rows($getUserProfileResult)) {
 
                             <!-- Email -->
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="form-group">
+                                <div class="form-group <?php echo $emailClass; ?>">
                                     <label for="email" required>Email *</label>
-                                    <input type="email" class="form-control" id="email" name="emailID" value="<?php echo $email ?>" placeholder="Enter Your email address">
+                                    <input type="email" class="form-control" id="email" name="emailID" value="<?php if($isSet){echo $emailID;} else{echo $email;} ?>" placeholder="Enter Your email address">
+                                    <small>Email is already present</small>
                                 </div>
                             </div>
 
@@ -130,7 +154,7 @@ if (mysqli_num_rows($getUserProfileResult)) {
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="sec-email" required>Secondary Email</label>
-                                    <input type="email" class="form-control" id="sec-email" name="secondaryEmail" placeholder="Enter Your email address">
+                                    <input type="email" class="form-control" id="sec-email" name="secondaryEmail" value="<?php echo $secondaryEmail ; ?>" placeholder="Enter Your email address">
                                 </div>
                             </div>
 
@@ -219,38 +243,62 @@ if (mysqli_num_rows($getUserProfileResult)) {
     <script src="../js/bootstrap/bootstrap.bundle.js"></script>
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/admin-profile.js?version=12542517451"></script>
+    <script src="../js/admin/admin-profile.js?version=12117451"></script>
 
 </body>
 
 </html>
 <?php
 
-if (isset($_POST['submit'])) {
-
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $emailID = $_POST['emailID'];
-    $secondaryEmail = $_POST['secondaryEmail'];
-
+if($isSubmit){
+    
     $phoneCode = $_POST['phoneCode'];
-    $phoneNumber = $_POST['phoneNo'];
-
+    // file To upload 
     date_default_timezone_set("Asia/Kolkata");
     $dateTime  = new DateTime();
     $timeStamp = $dateTime->getTimestamp();
 
     $addImagePath = "../members/" . $userID . "/";
-    
+    $dp_path = $addImagePath . "DP_" . $timeStamp;
+    $path = "";
+
+    // Book Image
+    if ($_FILES['adminDP']['size'] != 0) {
+        if ($profilePic != null) {
+            unlink($profilePic);
+        }
+        $book_image  = $_FILES['adminDP']['tmp_name'];
+        unset($_FILES['adminDP']);
+        $bookImageUploades = move_uploaded_file($book_image, $dp_path);
+        if ($bookImageUploades) {
+            $path = $dp_path;
+        }
+    } else if (($profilePic != null) && ($_FILES['adminDP']['size'] == 0)) {
+        $path = $profilePic;
+    } else {
+        $defaultDPQuery = "SELECT * FROM SystemConfiguration WHERE KeyFields = 'DefaultMemberDisplayPicture' ";
+        $defaultDPResult = mysqli_query($connection, $defaultDPQuery);
+        $defaultDP = mysqli_fetch_assoc($defaultDPResult);
+        $dp = $defaultDP['Value'];
+        $dp = str_replace("../../", "../", $dp);
+        $isDefaultSeted = copy($dp, $dp_path);
+        if ($isDefaultSeted) {
+            $path = $dp_path;
+        }
+    }
 
     $updateUserQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName', EmailID = '$emailID' , ModifiedBy = $userID WHERE ID = $userID ";
-    $updateUserResult = mysqli_query($connection,$updateUserQuery);
-    if($updateUserResult){
-        echo "Updated";
+    $updateUserResult = mysqli_query($connection, $updateUserQuery);
+    if ($updateUserResult) {
+
+        $upadateUserProfileQuery = "UPDATE UserProfile SET SecondaryEmailAddress = '$secondaryEmail' ,PhonenNumberCountryCode = '$phoneCode',PhoneNumber='$phoneNumber',ProfilePicture='$path',ModifiedBy = $userID  WHERE UserID = $userID ";
+        $updateUserProfileResult = mysqli_query($connection, $upadateUserProfileQuery);
+        if (!$updateUserProfileResult) {
+            die(mysqli_error($connection));
+        }
     } else {
         die(mysqli_error($connection));
     }
-
-}
+    }
 
 ?>
