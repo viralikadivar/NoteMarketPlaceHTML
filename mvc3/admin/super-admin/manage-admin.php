@@ -123,7 +123,7 @@ $userID = $_SESSION['UserID'];
                                         // Phone Number 
                                         $phoneNoQuery = "SELECT * FROM UserProfile WHERE UserID = $adminID ";
                                         $phoneResult = mysqli_query($connection, $phoneNoQuery);
-                                        if ($phoneResult) {
+                                        if (mysqli_num_rows($phoneResult)) {
                                             $phoneNo = mysqli_fetch_assoc($phoneResult);
                                             $mobileNo = $phoneNo['PhoneNumber'];
                                         }
