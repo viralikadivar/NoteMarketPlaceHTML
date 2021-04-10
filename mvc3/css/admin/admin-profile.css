@@ -62,7 +62,7 @@ label {
 .take-profile:focus,
 .select-field:focus{
     background-color: #f1f1f1;
-    outline: none;
+    /* outline: none; */
     box-shadow: none;
     border: transparent;
 }
@@ -154,6 +154,17 @@ button.submit:focus {
     border: #6255a5;
 }
 
+/* for already present email id  */
+.validate small{
+    display: none;
+}
+.wrong-email > #email {
+    border-color: red;
+}
+.wrong-email > small {
+    display: inline;
+    color: red;
+}
 
 /* For Responsive Css  */
 
