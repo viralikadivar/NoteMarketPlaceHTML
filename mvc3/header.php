@@ -1,5 +1,5 @@
 <?php
-$linkURL = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/";
+$linkURL = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc3/";
 
 if (isset($_POST['logout'])) {
     session_start();
@@ -11,7 +11,7 @@ if (isset($_POST['logout'])) {
 ?>
 
 <?php
-$linkURL = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/";
+$linkURL = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc3/";
 if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
 
     $userRole = $_SESSION['userRoleID'];
