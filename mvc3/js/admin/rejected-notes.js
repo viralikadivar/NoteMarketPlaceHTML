@@ -50,6 +50,14 @@ $(window).on("load", function () {
   });
   
   $(function () {
+    $(".sellerName  li").click(function () {
+
+      let value = $(this).html();
+  
+      value =
+        value + '<img src="../images/form/arrow-down.png" alt="Down">';
+      $("#seller").html(value);
+    });
     $("button[name='download'] , button[name='noteDetail'] , button[name='publish'] ").click(function () {
       let noteID = $(this)
         .parents(".table-row")
