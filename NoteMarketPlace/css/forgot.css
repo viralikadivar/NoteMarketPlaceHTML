@@ -25,7 +25,7 @@ section {
                 Background Image
 ============================================ */
 #forgot-password-page {
-    background-image: url("../images/pre-login/banner-with-overlay.jpg");
+    background-image: url(../../images/pre-login/banner-with-overlay.jpg);
     height: 1000px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -68,15 +68,6 @@ form {
     color: #333333;
     margin: 15px 0 40px 0;
 }
-
-h6#message {
-    font-family: "Open sans" , sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 19px;
-    color: #333333;
-    margin: 0;
-}
  
 /* Label for feilds */
 label {
@@ -102,13 +93,7 @@ label {
     line-height: 20px;
     color: #8a8a8a;
 }
-#inputEmail:focus,
-#inputEmail:hover{
-    background: #ffffff;
-    outline: none;
-    box-shadow: 0px 0px 15px -5px #6255a5;
-    border: transparent;
-}
+
 
 /*  Submit Button */
 button {
