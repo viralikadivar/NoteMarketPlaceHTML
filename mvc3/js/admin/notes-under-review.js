@@ -1,65 +1,81 @@
-$(window).on('load', function () { // makes sure that whole site is loaded
-    $('#status').fadeOut();
-    $('#preloader').fadeOut('fast');
+$(window).on("load", function () {
+  // makes sure that whole site is loaded
+  $("#status").fadeOut();
+  $("#preloader").fadeOut("fast");
 });
 
-// add pagination to table 
+// add pagination to table
 var table = $(".dashboard-table").DataTable({
-    "dom": '<"top"f>t<"bottom"p><"clear">',
-    "pagingType": "simple_numbers",
-    "pageLength": "5",
-    "lengthChange": "5",
-    "language": {
-        "zeroRecords": "No Record Found"
-    },
-    "aoColumnDefs": [
-        { "bSortable": true, "aTargets": ["_all"] } //disable ordering events and takeout the icon
-    ]
+  dom: '<"top"f>t<"bottom"p><"clear">',
+  pagingType: "simple_numbers",
+  pageLength: "5",
+  lengthChange: "5",
+  language: {
+    zeroRecords: "No Record Found",
+  },
+  aoColumnDefs: [
+    { bSortable: true, aTargets: ["_all"] }, //disable ordering events and takeout the icon
+  ],
 });
 
-
-
-// for search field 
-var input = $('#DataTables_Table_0_filter label input');
+// for search field
+var input = $("#DataTables_Table_0_filter label input");
 $("#DataTables_Table_0_filter label").html("");
 $("#DataTables_Table_0_filter label").append(input);
 input.attr("type", "text");
 input.attr("id", "search-row");
-$("#DataTables_Table_0_filter label").append('<button class="btn" id="table-btn"  type="button">Search</button>');
+$("#DataTables_Table_0_filter label").append(
+  '<button class="btn" id="table-btn"  type="button">Search</button>'
+);
 $("#DataTables_Table_0_filter label input").attr("placeholder", "Search");
 
+$(function () {
+  var res;
+  $("#search-row").on("keyup", function () {
+    res = table.column(1).search(this.value);
+  });
+
+  $("#table-btn").click(function () {
+    res.draw();
+  });
+});
+
+// for pagination
+$("#DataTables_Table_0_previous").html("&#12296;");
+$("#DataTables_Table_0_next").html("&#12297;");
+
+$(document).on("draw.dt", function () {
+  $("#DataTables_Table_0_previous").html("&#12296;");
+  $("#DataTables_Table_0_next").html("&#12297;");
+});
 
 $(function () {
 
-    var res;
-    $('#search-row').on('keyup', function () {
-        res = table.column(1).search(this.value);
-    });
+  $(".sellerName  li").click(function () {
 
-    $('#table-btn').click(function () {
-        res.draw();
-    });
+    let value = $(this).html();
 
- 
-});
+    value =
+      value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    $("#seller").html(value);
+  });
 
-// for pagination 
-$("#DataTables_Table_0_previous").html('&#12296;');
-$("#DataTables_Table_0_next").html('&#12297;');
+  $(
+    "button[name='download'] , button[name='noteDetail'], button[name='isApprove'], button[name='isReject'], button[name='isInReview'] "
+  ).click(function () {
+    let noteID = $(this)
+      .parents(".table-row")
+      .children(".noteID")
+      .attr("value");
+    $("input[name='noteID']").val(noteID);
+  });
 
-$(document).on('draw.dt', function () {
-    $("#DataTables_Table_0_previous").html('&#12296;');
-    $("#DataTables_Table_0_next").html('&#12297;');
-});
-
-$(function() {
-
-    $("button[name='download'] , button[name='noteDetail']").click(function() {
-        
-        let noteID = $(this).parents('.table-row').children('.noteID').attr("value");
-        $("input[name='noteID']").val(noteID);
-
-    });
-
-
+  $(".noteTitle").click(function () {
+    let noteID = $(this)
+      .parents(".table-row")
+      .children(".noteID")
+      .attr("value");
+    $("input[name='noteID']").val(noteID);
+    $("button[name='noteDetail']").trigger("click");
+  });
 });
