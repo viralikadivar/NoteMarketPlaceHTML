@@ -1,5 +1,7 @@
 <?php
 session_start();
+unset($_SESSION['EditCategoryID']);
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../login.php");
 }
@@ -81,79 +83,86 @@ $userID = $_SESSION['UserID'];
                 </div>
             </div>
 
+            <form action="manage-category.php" method="post">
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sr No.</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">DESCRIPTION</th>
+                                        <th scope="col">DATE ADDED</th>
+                                        <th scope="col">ADDED BY </th>
+                                        <th scope="col">ACTIVE</th>
+                                        <th scope="col">ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Sr No.</th>
-                                    <th scope="col">CATEGORY</th>
-                                    <th scope="col">DESCRIPTION</th>
-                                    <th scope="col">DATE ADDED</th>
-                                    <th scope="col">ADDED BY </th>
-                                    <th scope="col">ACTIVE</th>
-                                    <th scope="col">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-
-                                function getUserName($userID){
-                                    global $connection;
-                                    $query = "SELECT * FROM Users WHERE ID = $userID";
-                                    $result = mysqli_query($connection , $query);
-                                    $detail = mysqli_fetch_assoc($result);
-                                    $firstName = $detail['FirstName'];
-                                    $lastName = $detail['LastName'];
-                                    $userName = $firstName.' '.$lastName;
-                                    return $userName;
-                                }
-
-                                $getCategoriesQuery = "SELECT * FROM NoteCategories";
-                                $getCategoriesResult = mysqli_query($connection, $getCategoriesQuery);
-
-                                $count = 1;
-                                while ($categories = mysqli_fetch_assoc($getCategoriesResult)) {
-                                    $id = $categories['ID'];
-                                    $name = $categories['Name'];
-                                    $decription = $categories['Description'];
-                                    $addedDate = $categories['CreatedDate'];
-                                    $addedDate = date("d-m-Y,H:i" , strtotime($addedDate));
-                                    $addedBy = getUserName($categories['CreatedBy']);
-                                    $active = $categories['IsActive'];
-                                    $isActive = "no";
-                                    if($active){
-                                        $isActive="yes";
+                                    function getUserName($userID)
+                                    {
+                                        global $connection;
+                                        $query = "SELECT * FROM Users WHERE ID = $userID";
+                                        $result = mysqli_query($connection, $query);
+                                        $detail = mysqli_fetch_assoc($result);
+                                        $firstName = $detail['FirstName'];
+                                        $lastName = $detail['LastName'];
+                                        $userName = $firstName . ' ' . $lastName;
+                                        return $userName;
                                     }
 
-                                    echo '<tr>
+                                    $getCategoriesQuery = "SELECT * FROM NoteCategories";
+                                    $getCategoriesResult = mysqli_query($connection, $getCategoriesQuery);
+
+                                    $count = 1;
+                                    while ($categories = mysqli_fetch_assoc($getCategoriesResult)) {
+                                        $id = $categories['ID'];
+                                        $name = $categories['Name'];
+                                        $decription = $categories['Description'];
+                                        $addedDate = $categories['CreatedDate'];
+                                        $addedDate = date("d-m-Y,H:i", strtotime($addedDate));
+                                        $addedBy = getUserName($categories['CreatedBy']);
+                                        $active = $categories['IsActive'];
+                                        $isActive = "no";
+                                        if ($active) {
+                                            $isActive = "yes";
+                                        }
+
+                                        echo '<tr class="table-row">
                                             <td>' . $count . '</td>
                                             <td>' . $name . '</td>
                                             <td>' . $decription . '</td>
-                                            <td>'.$addedDate.'</td>
-                                            <td>'.$addedBy.'</td>
-                                            <td>'.$isActive.'</td>
-                                            <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img src="../images/form/delete.png" alt="Delete"></td>
+                                            <td>' . $addedDate . '</td>
+                                            <td>' . $addedBy . '</td>
+                                            <td>' . $isActive . '</td>
+                                            <td><img class="edit" src="../images/form/edit.png" alt="Edit"> &emsp13; <img src="../images/form/delete.png" alt="Delete"></td>
+                                        
+                                            <input type="hidden" class="editID" value="' . $id . '">
+                                            <input type="hidden" name="editID">
+
+                                            <button type="submit" name="getDetail" style="display:none;"></button>
+                                        
                                         </tr>';
 
-                                    $count++;
-                                }
+                                        $count++;
+                                    }
 
 
 
-                                ?>
+                                    ?>
 
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+            </form>
 
 
-
-                </div>
-            </div>
+        </div>
+        </div>
 
 
         </div>
@@ -193,7 +202,20 @@ $userID = $_SESSION['UserID'];
     <!-- custom js  -->
     <script src="../js/admin/data-table.js"></script>
     <script src="../js/header/header.js"></script>
+    <script src="../js/admin/manage-fileds.js?version=45145148"></script>
 
 </body>
 
 </html>
+<?php
+
+if (isset($_POST['getDetail'])) {
+    
+    $editID = $_POST['editID'];
+    $_SESSION['EditCategoryID'] = $editID;
+    header("Location:add-category.php");
+
+}
+
+ob_flush();
+?>
