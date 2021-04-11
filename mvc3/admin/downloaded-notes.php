@@ -105,14 +105,15 @@ $userID = $_SESSION['UserID'];
 
                                 <?php
                                 
-                                $donloadedBookNameQuery = "SELECT DISTINCT NoteTitle FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
+                                $donloadedBookNameQuery = "SELECT DISTINCT NoteTitle , NoteID FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
                                 $donloadedBookNameResult = mysqli_query($connection, $donloadedBookNameQuery);
 
                                 if ($donloadedBookNameResult) {
 
                                     while ($noteTitle = mysqli_fetch_assoc($donloadedBookNameResult)) {
                                         $bookName = $noteTitle['NoteTitle'];
-                                        echo '<li class="dropdown-item" value="' . $bookName . '">' . $bookName . '</li>';
+                                        $id =  $noteTitle['NoteID'];
+                                        echo '<li class="dropdown-item" value="' . $id . '">' . $bookName . '</li>';
                                     }
                                 }
                                 ?>
@@ -140,8 +141,8 @@ $userID = $_SESSION['UserID'];
 
                                     while ($sellerName = mysqli_fetch_assoc($selleNameResult)) {
                                         $seller = $sellerName['Seller'];
-                                        $seller = getUserName($seller);
-                                        echo '<li class="dropdown-item" value="' . $seller . '">' . $seller . '</li>';
+                                        $sellerName = getUserName($seller);
+                                        echo '<li class="dropdown-item" value="' . $seller . '">' .$sellerName . '</li>';
                                     }
                                 }
                                 ?>
@@ -168,8 +169,8 @@ $userID = $_SESSION['UserID'];
 
                                     while ($buyerName = mysqli_fetch_assoc($buyerNameResult)) {
                                         $buyer = $buyerName['Downloader'];
-                                        $buyer = getUserName($buyer);
-                                        echo '<li class="dropdown-item" value="' . $buyer . '">' . $buyer . '</li>';
+                                        $buyerName = getUserName($buyer);
+                                        echo '<li class="dropdown-item" value="' . $buyer . '">' . $buyerName . '</li>';
                                     }
                                 }
                                 ?>
@@ -321,7 +322,7 @@ $userID = $_SESSION['UserID'];
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/admin/downloaded-notes.js?version=85642748512"></script>
+    <script src="../js/admin/downloaded-notes.js?version=161154854512"></script>
     <script src="../js/header/header.js"></script>
 
 </body>
