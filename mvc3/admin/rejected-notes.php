@@ -91,36 +91,38 @@ $userID = $_SESSION['UserID'];
                 </div>
 
                 <div class="row" style="background:transparent;">
-                    <!-- Seller  -->
-                    <div class="col-lg-2 col-md-3 col-sm-4 form-group" style="z-index:1">
 
-                        <label for="seller" required>Seller</label>
-                        <div class="dropdown">
-                            <button type="button" id="seller" class="select-field" data-toggle="dropdown">
-                                Seller<img src="../images/form/arrow-down.png" alt="Down">
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="seller">
+                <div class="col-lg-3 col-md-2 col-sm-2 sellerDropdownName">
+                    <?php
+                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1 AND Status = 10";
+                    $getSellerIDResult = mysqli_query($connection, $getSellerIDQuery);
+                    ?>
+                    <label>Seller</label>
+                    <div class="dropdown">
+                        <button class="form-control select-field" id="seller" data-toggle="dropdown">
+                            Seller<img src="../images/form/arrow-down.png" alt="Down">
+                        </button>
+                        <ul class="dropdown-menu sellerName" aria-labelledby="seller">
+                            <?php
+                            while ($SellerID =  mysqli_fetch_assoc($getSellerIDResult)) {
+                                $ID =  $SellerID['SellerID'];
+                                $getSellerNameQuery = "SELECT * FROM Users WHERE ID = $ID ";
+                                $getSellerrNameResult = mysqli_query($connection, $getSellerNameQuery);
+                                $sellerDetails = mysqli_fetch_assoc($getSellerrNameResult);
+                                $sellerFirstName = $sellerDetails['FirstName'];
+                                $sellerLastName = $sellerDetails['LastName'];
+                                $sellerName = $sellerFirstName . ' ' . $sellerLastName;
 
-                                <?php
-                                $selleNameQuery = "SELECT DISTINCT Seller FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
-                                $selleNameResult = mysqli_query($connection, $selleNameQuery);
+                                echo '<li class="dropdown-item" value="' . $ID . '">' . $sellerName  . '</li>';
+                            }
+                            ?>
 
-                                if ($selleNameResult) {
-
-                                    while ($sellerName = mysqli_fetch_assoc($selleNameResult)) {
-                                        $seller = $sellerName['Seller'];
-                                        $seller = getUserName($seller);
-                                        echo '<li class="dropdown-item" value="' . $seller . '">' . $seller . '</li>';
-                                    }
-                                }
-                                ?>
-
-                            </ul>
-                        </div>
-
+                        </ul>
                     </div>
 
                 </div>
+
+            </div>
 
                 <!-- table  -->
                 <div class="row">
@@ -235,7 +237,7 @@ $userID = $_SESSION['UserID'];
                                             
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" name="publishNote" style="color:#ffffff ; background-color:red">Unpublish</button>
+                                            <button type="submit" name="publishNote" style="color:#ffffff ; background-color:red">Publish</button>
                                             <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:grey">Close</button>
                                         </div>
                                     </div>
@@ -285,7 +287,7 @@ $userID = $_SESSION['UserID'];
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/admin/rejected-notes.js?version=1542878248"></script>
+    <script src="../js/admin/rejected-notes.js?version=1542122878248"></script>
     <script src="../js/header/header.js"></script>
 
 </body>
@@ -294,7 +296,7 @@ $userID = $_SESSION['UserID'];
 <?php
 
 if (isset($_POST['download'])) {
-    echo "downloas";
+
 
     $downloadNoteID = $_POST['noteID'];
     $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $downloadNoteID";
@@ -339,12 +341,15 @@ if(isset($_POST['publishNote'])){
 
     //publish Note 
     $updateNoteDetailsQuery = "UPDATE NotesDetails SET AdminRemarks = '' , ActionedBy = $userID , Status = 7 , IsActive = 1 WHERE ID = $publishNoteID ";
-    $updateNoteDetailsResult =  mysqli_query($connection,$updateNoteDetailsQuery);
+    $updateNoteDetailsResult =  mysqli_query($connection,$updateNoteDetailsQuery); 
+    if($updateNoteDetailsResult){
+        header("refresh:0");
+    }
     
 }
 if(isset($_POST['viewMemberDetail'])){
     $_SESSION['MemberID'] = $_POST['sellerID'];
     header("Location:member-detail.php");
 }
-ob_end_flush();
+ob_flush();
 ?>
