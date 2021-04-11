@@ -291,7 +291,8 @@ if (isset($_POST['rejectedSellerID'])) {
 
         $count++;
     }
-    if (!mysqli_num_rows($getRejectededNotesResult )) {
+    if (!mysqli_num_rows($getRejectededNotesResult)) {
         echo '<tr><td colspan="9">No Record Found<tr>';
     }
 }
+
