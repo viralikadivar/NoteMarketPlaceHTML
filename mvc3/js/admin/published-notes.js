@@ -50,6 +50,16 @@ $(document).on("draw.dt", function () {
 });
 
 $(function () {
+  
+  $(".sellerName li").click(function () {
+
+    let value = $(this).html();
+    alert(value );
+
+    value =
+      value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    $("#seller").html(value);
+  });
   $("button[name='download'] , button[name='noteDetail']").click(function () {
     let noteID = $(this)
       .parents(".table-row")
@@ -104,4 +114,13 @@ $(function () {
      }
   });
  
+  // view Seller 
+  $(".view-seller").click(function () {
+    let memberID = $(this)
+      .parents(".table-row")
+      .children(".seller")
+      .attr("value");
+    $("input[name='memberID']").val( memberID);
+    $("button[name='viewMember']").trigger("click");
+  });
 });
