@@ -85,7 +85,7 @@ $userID = $_SESSION['UserID'];
 
                 <div class="col-lg-3 col-md-2 col-sm-2 sellerDropdownName">
                     <?php
-                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1";
+                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1 AND Status = 9";
                     $getSellerIDResult = mysqli_query($connection, $getSellerIDQuery);
                     ?>
                     <label>Seller</label>
@@ -141,7 +141,7 @@ $userID = $_SESSION['UserID'];
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="table-body">
 
                                     <?php
 
