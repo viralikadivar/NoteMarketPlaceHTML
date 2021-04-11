@@ -51,13 +51,25 @@ $(document).on("draw.dt", function () {
 
 $(function () {
 
-  $(".sellerName  li").click(function () {
+  $(".sellerName li").click(function () {
 
     let value = $(this).html();
+    let selectedSellerID = $(this).attr("value");
 
     value =
       value + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#seller").html(value);
+
+    $.ajax({
+      url: "filtered-notes.php",
+      type: "POST",
+      data: {
+        inReviewSellerID : selectedSellerID
+      },
+      success: function (data) {
+        $("#table-body").html(data);
+      },
+    });
   });
 
   $(
