@@ -9,10 +9,9 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
-if (empty($_SESSION['EditTypeID'])) {
+if (!empty($_SESSION['EditTypeID'])) {
     $isEdit = true;
-    // $editID  = $_SESSION['EditTypeID'];
-    $editID = 2;
+    $editID  = $_SESSION['EditTypeID'];
     $getTypesDetail = "SELECT * FROM NoteTypes WHERE ID = $editID";
     $getTypeResult = mysqli_query($connection,$getTypesDetail);
     $typeDetail = mysqli_fetch_assoc($getTypeResult);
@@ -178,6 +177,8 @@ if ($isSubmit) {
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
+        } else {
+            unset($_SESSION['EditTypeID']);
         }
     } else {
         $addTypeQuery = "INSERT INTO NoteTypes(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
