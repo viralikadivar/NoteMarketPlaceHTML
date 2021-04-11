@@ -1,5 +1,6 @@
 <?php
 session_start();
+unset($_SESSION['AdminEditID']);
 ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../../login.php");
@@ -217,8 +218,13 @@ if(isset($_POST['deleteAdmin'])){
 
     $inActiveAdminQuery = "UPDATE Users SET IsActive = 0 WHERE ID = $adminID ";
     $inActiveAdminResult = mysqli_query($connection,$inActiveAdminQuery);
+    if($inActiveAdminResult){
+        header("refresh:0");
+    } else {
+        die(mysqli_error($connection));
+    }
 
 }
-ob_end_flush();
+ob_flush();
 
 ?>
