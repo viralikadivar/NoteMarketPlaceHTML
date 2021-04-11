@@ -9,10 +9,9 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
-if (empty($_SESSION['EditCountryID'])) {
+if (!empty($_SESSION['EditCountryID'])) {
     $isEdit = true;
-    // $editID  = $_SESSION['EditCountryID'];
-    $editID = 248;
+    $editID  = $_SESSION['EditCountryID'];
     $getCountryDetail = "SELECT * FROM Countries WHERE ID = $editID";
     $getCountryResult = mysqli_query($connection,$getCountryDetail);
     $countryDetail = mysqli_fetch_assoc($getCountryResult);
@@ -173,6 +172,8 @@ if ($isSubmit) {
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
+        } else{
+            unset($_SESSION['EditCountryID']);
         }
     } else {
         $addCountryQuery = "INSERT INTO Countries(Name ,CountryCode , CreatedBy) VALUES('$name','$code',$userID)";
