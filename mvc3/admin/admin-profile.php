@@ -31,7 +31,6 @@ if (isset($_POST['submit'])) {
 
     $isSet = true;
 
-    $profilePic = $userProfile['ProfilePicture'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
     $emailID = $_POST['emailID'];
@@ -154,7 +153,7 @@ if (isset($_POST['submit'])) {
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="sec-email" required>Secondary Email</label>
-                                    <input type="email" class="form-control" id="sec-email" name="secondaryEmail" value="<?php echo $secondaryEmail ; ?>" placeholder="Enter Your email address">
+                                    <input type="email" class="form-control" id="sec-email" name="secondaryEmail" value="<?php if($secondaryEmail != NULL) {echo $secondaryEmail ;} ?>" placeholder="Enter Your email address">
                                 </div>
                             </div>
 
@@ -253,6 +252,7 @@ if (isset($_POST['submit'])) {
 if($isSubmit){
     
     $phoneCode = $_POST['phoneCode'];
+    $profilePic = $userProfile['ProfilePicture'];
     // file To upload 
     date_default_timezone_set("Asia/Kolkata");
     $dateTime  = new DateTime();
