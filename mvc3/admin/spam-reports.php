@@ -301,5 +301,5 @@ if (isset($_POST['deleteReport'])) {
     $deleteReportResult = mysqli_query($connection,$deleteReportQuery);
     
 }
-ob_end_flush();
+ob_flush();
 ?>
