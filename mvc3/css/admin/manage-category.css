@@ -10,7 +10,7 @@
     margin-top: 30px ;
     /* margin-bottom: -45px; */
 }
-
+ 
 /* not to edit  */
   /* table  */
   .table thead th:nth-child(6),
@@ -24,7 +24,7 @@
 
 /* add administrator button  */
 .add-field{
-    margin-bottom: -57px;
+    margin-bottom: -20px;
 }
 button.add-button{
     background-color: #6255a5;
@@ -44,8 +44,12 @@ button.add-button a {
     line-height: 22px;
     font-weight: 600;
 }
-
-
+#DataTables_Table_0 > thead > tr > th:nth-child(7){
+    background: none;
+}
+#DataTables_Table_0 > tbody > tr > td:nth-child(6){
+    text-transform: uppercase;
+}
 /* responsive  */
 /* // Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991px) {  
