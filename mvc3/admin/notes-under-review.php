@@ -46,7 +46,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/notes-under-review.css?version=10521455">
+    <link rel="stylesheet" href="../css/admin/notes-under-review.css?version=1012521455">
 
 </head>
 
@@ -184,9 +184,9 @@ $userID = $_SESSION['UserID'];
                                         <td>' . $publisherName . '</td>
                                         <td>' . $addedDate . '</td>
                                         <td>' . $bookStatus . '</td>
-                                        <td> <button type="button" class="approve">Approve</button> 
-                                             <button type="button" class="reject" data-toggle="modal" data-target="#remark">Reject</button>
-                                             <button type="button" class="inrerview">InReview</button></td>
+                                        <td> <button type="button" name="isApprove" class="approve" data-toggle="modal" data-target="#approve">Approve</button> 
+                                             <button type="button" name="isReject" class="reject" data-toggle="modal" data-target="#remark">Reject</button>
+                                             <button type="button" name="isInReview" class="inrerview" data-toggle="modal" data-target="#review">InReview</button></td>
     
                                         <td class="dropup dropleft">
                                             <div data-toggle="dropdown">
@@ -218,12 +218,12 @@ $userID = $_SESSION['UserID'];
 
                         <!-- popup  -->
 
-                        <!-- Modal -->
+                        <!-- Modal for Book Rejection -->
                         <div class="modal fade" id="remark" tabindex="-1" role="dialog" aria-labelledby="remarkLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header heading">
-                                        <h3 class="modal-title" id="remarkLabel">Human Body - Science</h3>
+                                        <h3 class="modal-title" id="remarkLabel"></h3>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
                                         </button>
@@ -233,8 +233,50 @@ $userID = $_SESSION['UserID'];
                                         <textarea placeholder="Write remarks" name="comments" id="description"></textarea>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="reject">Reject</button>
+                                        <button type="submit" name="reject" class="reject">Reject</button>
                                         <button type="button" class="inrerview" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal for Book Approve -->
+                        <div class="modal fade" id="approve" tabindex="-1" role="dialog" aria-labelledby="approveLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header heading">
+                                        <h3 class="modal-title" id="approveLabel"></h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>If you approve the notes – System will publish the notes over portal. Please press yes to continue.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="publish" class="reject" style="background-color:#6255a5">Yes</button>
+                                        <button type="button" class="inrerview" data-dismiss="modal">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal for In review -->
+                        <div class="modal fade" id="review" tabindex="-1" role="dialog" aria-labelledby="reviewLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header heading">
+                                        <h3 class="modal-title" id="reviewLabel"></h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Via marking the note In Review – System will let user know that review process has been initiated. Please press yes to continue.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="inReview" class="reject" style="background-color:#6255a5">Yes</button>
+                                        <button type="button" class="inrerview" data-dismiss="modal">No</button>
                                     </div>
                                 </div>
                             </div>
@@ -280,7 +322,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- custom js  -->
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/notes-under-review.js"></script>
+    <script src="../js/admin/notes-under-review.js?version=7872725946"></script>
 
 </body>
 
@@ -325,6 +367,47 @@ if (isset($_POST['noteDetail'])) {
 
     header('Location:../notes-detail.php');
 }
+ 
+if (isset($_POST['reject'])) {
+// 10 
+    $rejectID = (int)$_POST['noteID'];
+    $remark  = $_POST['comments'];
 
-ob_end_flush();
+    $rejectQuery = "UPDATE NotesDetails SET Status = 10 ,ActionedBy = $userID ,AdminRemarks='$remark' ,ModifiedBy = $userID WHERE ID = $rejectID ";
+    $rejectResult = mysqli_query($connection,$rejectQuery);
+    if($rejectResult){
+        header("refresh:0");
+    } else {
+        die(mysqli_error($connection));
+    }
+    
+}
+
+if (isset($_POST['publish'])) {
+// 9
+    $publishID = (int)$_POST['noteID'];
+    $publishQuery = "UPDATE NotesDetails SET Status = 9 ,ActionedBy = $userID  ,ModifiedBy = $userID WHERE ID = $publishID  ";
+    $publishResult = mysqli_query($connection,$publishQuery);
+    if($publishResult){
+        header("refresh:0");
+    } else {
+        die(mysqli_error($connection));
+    }
+    
+}
+
+if (isset($_POST['inReview'])) {
+// 8 
+    $inReviewID = (int)$_POST['noteID'];
+    $inReviewQuery = "UPDATE NotesDetails SET Status = 8 ,ActionedBy = $userID  ,ModifiedBy = $userID WHERE ID = $inReviewID ";
+    $inReviewResult = mysqli_query($connection,$inReviewQuery);
+    if($inReviewResult){
+        header("refresh:0");
+    } else {
+        die(mysqli_error($connection));
+    }
+    
+}
+
+ob_flush();
 ?>
