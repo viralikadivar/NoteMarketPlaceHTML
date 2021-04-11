@@ -41,7 +41,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/downloaded-notes.css?version=245132452">
+    <link rel="stylesheet" href="../css/admin/downloaded-notes.css?version=24125132452">
 
 </head>
 
@@ -94,16 +94,17 @@ $userID = $_SESSION['UserID'];
                 <div class="row" style="background:transparent;">
 
                     <!-- Book name  -->
-                    <div class="col-lg-2 col-md-3 col-sm-4 form-group">
+                    <div class="col-lg-2 col-md-3 col-sm-4 sellerDropdownName">
 
                         <label for="bookName" required>Note</label>
                         <div class="dropdown">
                             <button type="button" id="bookName" class="select-field" data-toggle="dropdown">
                                 Note<img src="../images/form/arrow-down.png" alt="Down">
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="bookName">
+                            <ul class="dropdown-menu bookName" aria-labelledby="bookName">
 
                                 <?php
+                                
                                 $donloadedBookNameQuery = "SELECT DISTINCT NoteTitle FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
                                 $donloadedBookNameResult = mysqli_query($connection, $donloadedBookNameQuery);
 
@@ -129,7 +130,7 @@ $userID = $_SESSION['UserID'];
                             <button type="button" id="seller" class="select-field" data-toggle="dropdown">
                                 Seller<img src="../images/form/arrow-down.png" alt="Down">
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="seller">
+                            <ul class="dropdown-menu sellerName" aria-labelledby="seller">
 
                                 <?php
                                 $selleNameQuery = "SELECT DISTINCT Seller FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
@@ -158,7 +159,7 @@ $userID = $_SESSION['UserID'];
                             <button type="button" id="buyer" class="select-field" data-toggle="dropdown">
                                 Buyer<img src="../images/form/arrow-down.png" alt="Down">
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="buyer">
+                            <ul class="dropdown-menu buyerName" aria-labelledby="buyer">
                                 <?php
                                 $buyerNameQuery = "SELECT DISTINCT Downloader FROM NotesDownloads WHERE IsAttachmentDownloaded = 1 AND IsActive = 1";
                                 $buyerNameResult = mysqli_query($connection, $buyerNameQuery);
@@ -238,10 +239,9 @@ $userID = $_SESSION['UserID'];
                                             $downloadedDate = date("d-m-Y,h:i", $downloadedDate);
 
 
-
                                             echo '<tr class="table-row">
                                                 <td>' . $count . '</td>
-                                                <td>' . $bookTitle . '</td>
+                                                <td class="viewNote">' . $bookTitle . '</td>
                                                 <td>' . $bookCategory . '</td>
             
                                                 <td>' . $buyerName . '</td>
@@ -265,6 +265,12 @@ $userID = $_SESSION['UserID'];
 
                                                 <input type = "hidden" name="givenNoteID" class="noteID" value="' . $bookID . '">
                                                 <input type = "hidden" name="noteID">
+
+                                                <input type = "hidden"  class="buyer" value="' . $buyerID . '">
+                                                <input type = "hidden"  class="seller" value="' . $sellerID . '">
+                                                <input type = "hidden" name="memberID">
+                                                <button type="submit" name="viewMember" style="display:none;">
+
                                             </tr>';
                                             $count++;
                                         }
@@ -315,7 +321,7 @@ $userID = $_SESSION['UserID'];
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/admin/downloaded-notes.js"></script>
+    <script src="../js/admin/downloaded-notes.js?version=85642748512"></script>
     <script src="../js/header/header.js"></script>
 
 </body>
@@ -361,5 +367,12 @@ if (isset($_POST['noteDetail'])) {
 
     header('Location:../notes-detail.php');
 }
-ob_end_flush();
+if(isset($_POST['viewMember'])) {
+
+    $memberID = (int)$_POST['memberID'];
+    $_SESSION['MemberID'] = $memberID;
+    header("Location:member-detail.php");
+
+}
+ob_flush();
 ?>
