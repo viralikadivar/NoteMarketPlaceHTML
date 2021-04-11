@@ -200,7 +200,7 @@ $userID = $_SESSION['UserID'];
                                         <th scope="col">&emsp13;</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="table-body">
                                     <?php
 
                                     $getDownloadedNotesQuery = "SELECT * FROM NotesDownloads WHERE 	IsAttachmentDownloaded = 1 AND IsActive = 1 ";
