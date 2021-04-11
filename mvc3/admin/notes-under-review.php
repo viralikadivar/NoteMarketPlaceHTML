@@ -81,7 +81,7 @@ $userID = $_SESSION['UserID'];
 
                 <div class="col-lg-3 col-md-2 col-sm-2 sellerDropdownName">
                     <?php
-                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1";
+                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE Status = 7 OR Status = 8 AND  IsActive = 1";
                     $getSellerIDResult = mysqli_query($connection, $getSellerIDQuery);
                     ?>
                     <label>Seller</label>
@@ -134,13 +134,11 @@ $userID = $_SESSION['UserID'];
                                     </tr>
                                 </thead>
 
-                                <?php
-                                $getInReviewNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 7 OR Status = 8 AND IsActive = 1 ";
-                                $getInReviewNotesResult = mysqli_query($connection, $getInReviewNotesQuery);
-                                ?>
-                                <tbody>
+                                <tbody id="table-body"> 
                                     <?php
 
+                                    $getInReviewNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 7 OR Status = 8 AND IsActive = 1 ";
+                                    $getInReviewNotesResult = mysqli_query($connection, $getInReviewNotesQuery);
                                     $count = 1;
 
                                     while ($inProgressBook = mysqli_fetch_assoc($getInReviewNotesResult)) {
