@@ -108,7 +108,7 @@ $(function() {
             $("#inputPassword").parent().removeClass("validation");
             $("#passwordValidation").html(validationMessage);
             event.preventDefault();
-            exit();
+            exit(); 
             // #passwordValidation
             // #inputPassword
         } else{
