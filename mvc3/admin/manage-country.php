@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
 require "../db_connection.php";
 global $connection;
@@ -45,7 +45,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/manage-country.css">
+    <link rel="stylesheet" href="../css/admin/manage-country.css?version=52004512412">
 
 </head>
 
@@ -59,7 +59,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Header -->
     <?php
-        require "../header.php";
+    require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -79,7 +79,7 @@ $userID = $_SESSION['UserID'];
 
             <div class="row add-field" style="background: transparent;">
                 <div class="col-lg-3 col-md-3">
-                    <button class="add-button"><a href="add-country.html">Add Country</a></button>
+                    <button class="add-button"><a href="add-country.php">Add Country</a></button>
                 </div>
             </div>
 
@@ -101,127 +101,56 @@ $userID = $_SESSION['UserID'];
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>India</td>
-                                    <td>11</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Khyati Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
+                                <?php
 
-                                </tr>
+                                function getUserName($userID)
+                                {
+                                    global $connection;
+                                    $query = "SELECT * FROM Users WHERE ID = $userID";
+                                    $result = mysqli_query($connection, $query);
+                                    $detail = mysqli_fetch_assoc($result);
+                                    $firstName = $detail['FirstName'];
+                                    $lastName = $detail['LastName'];
+                                    $userName = $firstName . ' ' . $lastName;
+                                    return $userName;
+                                }
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Australia</td>
-                                    <td>24</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Rahul shah</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
+                                $getCategoriesQuery = "SELECT * FROM Countries";
+                                $getCategoriesResult = mysqli_query($connection, $getCategoriesQuery);
 
-                                </tr>
+                                $count = 1;
+                                while ($categories = mysqli_fetch_assoc($getCategoriesResult)) {
+                                    $id = $categories['ID'];
+                                    $name = $categories['Name'];
+                                    $code = $categories['CountryCode'];
+                                    $addedDate = $categories['CreatedDate'];
+                                    $addedDate = date("d-m-Y,H:i", strtotime($addedDate));
+                                    $addedBy = getUserName($categories['CreatedBy']);
+                                    $active = $categories['IsActive'];
+                                    $isActive = "no";
+                                    if ($active) {
+                                        $isActive = "yes";
+                                    }
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>USA</td>
-                                    <td>04</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Suman trived</td>
-                                    <td>No</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
+                                    echo '<tr>
+                                            <td>' . $count . '</td>
+                                            <td>' . $name . '</td>
+                                            <td>' . $code  . '</td>
+                                            <td>' . $addedDate . '</td>
+                                            <td>' . $addedBy . '</td>
+                                            <td>' . $isActive . '</td>
+                                            <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img src="../images/form/delete.png" alt="Delete"></td>
+                                        </tr>';
 
-                                </tr>
+                                    $count++;
+                                }
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>United Kingdom</td>
-                                    <td>12</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Raj malhotra</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
 
-                                </tr>
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Canada</td>
-                                    <td>13</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>niya Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>6</td>
-                                    <td>India</td>
-                                    <td>11</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Khyati Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Australia</td>
-                                    <td>24</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Rahul shah</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>USA</td>
-                                    <td>04</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Suman trived</td>
-                                    <td>No</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>United Kingdom</td>
-                                    <td>12</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Raj malhotra</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Canada</td>
-                                    <td>13</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>niya Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
+                                ?>
+                             
                             </tbody>
+                          
                         </table>
                     </div>
 
