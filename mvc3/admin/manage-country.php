@@ -141,7 +141,7 @@ $userID = $_SESSION['UserID'];
                                             <td>' . $addedDate . '</td>
                                             <td>' . $addedBy . '</td>
                                             <td>' . $isActive . '</td>
-                                            <td><img class="edit" src="../images/form/edit.png" alt="Edit"> &emsp13; <img src="../images/form/delete.png" alt="Delete"></td>
+                                            <td><img class="edit" src="../images/form/edit.png" alt="Edit"> &emsp13; <img class="delete" src="../images/form/delete.png" alt="Delete" data-toggle="modal" data-target="#deleteReport"></td>
                                             
                                             <input type="hidden" class="editID" value="' . $id . '">
                                             <input type="hidden" name="editID">
@@ -161,7 +161,30 @@ $userID = $_SESSION['UserID'];
 
                             </table>
                         </div>
+                        <!-- Modal For Unpublish Book -->
+                        <div class="modal fade" id="deleteReport" tabindex="-1" role="dialog" aria-labelledby="unpublisBbookTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header heading">
+                                        <h4 class="modal-title" id="unpublisBbookTitle">
 
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="rating">
+                                            <p>Are you sure you want to make this country inactive?</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="delete" style="color:#ffffff ; background-color:red">YES</button>
+                                        <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:grey">NO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -216,6 +239,18 @@ if (isset($_POST['getDetail'])) {
     $_SESSION['EditCountryID'] = $editID;
     header("Location:add-country.php");
 }
+if (isset($_POST['delete'])) {
 
+    $deleteID = $_POST['editID'];
+
+    $updateQuery = "UPDATE Countries SET IsActive = 0 WHERE ID = $deleteID ";
+    $updateResult = mysqli_query($connection,$updateQuery);
+    if($updateResult) {
+        header("refresh:0");
+    } else {
+        die(mysqli_error($connection));
+    }
+    
+}
 ob_flush();
 ?>
