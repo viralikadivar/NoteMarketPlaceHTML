@@ -1,12 +1,31 @@
 <?php
 session_start();
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
 require "../db_connection.php";
 global $connection;
 
 $userID = $_SESSION['UserID'];
+$isEdit = false;
+$isSubmit = false;
+if (empty($_SESSION['EditCategoryID'])) { 
+    $isEdit = true;
+    // $editID  = $_SESSION['EditCategoryID'];
+    $editID = 2;
+    $getCategoryDetail = "SELECT * FROM NoteCategories WHERE ID = $editID";
+    $getCategoryResult = mysqli_query($connection, $getCategoryDetail);
+    $categoryDetail = mysqli_fetch_assoc($getCategoryResult);
+
+    $categoryName = $categoryDetail['Name'];
+    $categoryDesc = $categoryDetail['Description'];
+}
+if (isset($_POST['submit'])) {
+
+    $isSubmit = true;
+    $name = $_POST['name'];
+    $description = $_POST['comments'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,17 +65,15 @@ $userID = $_SESSION['UserID'];
 
 <body>
 
-
     <!-- Preloader -->
     <div id="preloader">
         <div id="status">&nbsp;</div>
     </div>
     <!-- Preloader Ends -->
 
-
     <!-- Header -->
     <?php
-        require "../header.php";
+    require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -76,11 +93,15 @@ $userID = $_SESSION['UserID'];
                     </div>
 
                     <!-- form  -->
-                    <form>
+                    <form action="add-category.php" method="post">
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Category Name *</label>
-                            <input type="text" class="form-control" id="title" placeholder="Enter Category">
+                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                                                                                                                        echo $name;
+                                                                                                                    } else if($isEdit){
+                                                                                                                        echo  $categoryName;
+                                                                                                                    }?>" placeholder="Enter Category">
                         </div>
 
                         <!-- description of field -->
@@ -93,16 +114,20 @@ $userID = $_SESSION['UserID'];
                                             <label for="description" required>Description *</label>
                                         </div>
                                     </div>
-                                    <textarea placeholder="Enter your description" name="comments"
-                                        id="description"></textarea>
+                                    <textarea placeholder="Enter your description" name="comments" id="description"><?php if ($isSubmit) {
+                                                                                                                        echo $description;
+                                                                                                                    }  else if($isEdit){
+                                                                                                                        echo $categoryDesc;
+                                                                                                                    } ?></textarea>
                                 </div>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button class="submit" type="submit"><span class="text-center">submit</span></button>
+                                <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -138,7 +163,29 @@ $userID = $_SESSION['UserID'];
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
+    <script src="../js/admin/manage-fileds.js?version=8745854854"></script>
 
 </body>
 
 </html>
+<?php
+
+if ($isSubmit) {
+    if ($isEdit) {
+        $updateQuery = "UPDATE NoteCategories SET Name = '$name',Description='$description' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateResult = mysqli_query($connection, $updateQuery);
+        if (!$updateResult) {
+            die(mysqli_error($connection));
+        }
+    } else {
+        $addCategoryQuery = "INSERT INTO NoteCategories(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
+        $addCategoryResult = mysqli_query($connection, $addCategoryQuery);
+        if ($addCategoryResult) {
+            $isSubmit = false;
+        } else {
+            die(mysqli_error($connection));
+        }
+    }
+}
+
+?>
