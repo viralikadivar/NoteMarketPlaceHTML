@@ -9,10 +9,9 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
-if (empty($_SESSION['EditCategoryID'])) { 
+if (!empty($_SESSION['EditCategoryID'])) { 
     $isEdit = true;
-    // $editID  = $_SESSION['EditCategoryID'];
-    $editID = 2;
+    $editID  = $_SESSION['EditCategoryID'];
     $getCategoryDetail = "SELECT * FROM NoteCategories WHERE ID = $editID";
     $getCategoryResult = mysqli_query($connection, $getCategoryDetail);
     $categoryDetail = mysqli_fetch_assoc($getCategoryResult);
@@ -176,6 +175,8 @@ if ($isSubmit) {
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
+        } else {
+            unset($_SESSION['EditCategoryID']);
         }
     } else {
         $addCategoryQuery = "INSERT INTO NoteCategories(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
