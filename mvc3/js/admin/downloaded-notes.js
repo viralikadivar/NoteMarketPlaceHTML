@@ -51,28 +51,70 @@ $(document).on("draw.dt", function () {
 
 $(function () {
   // for sorting buttons
+  var selectedSellerID = "";
+  var selectedBookID = "";
+  var selectedBuyerID = "";
+
   $(".sellerName li").click(function () {
     let value = $(this).html();
-
+    selectedSellerID = $(this).attr("value");
     value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#seller").html(value);
+    $.ajax({
+      url: "download-search.php",
+      type: "POST",
+      data: {
+        downloadedBookID: selectedBookID,
+        downloadedSellerID: selectedSellerID,
+        downloadedBuyerID: selectedBuyerID,
+      },
+      success: function (data) {
+        $("#table-body").html(data);
+      },
+    });
   });
 
   $(".bookName li").click(function () {
     let value = $(this).html();
+    selectedBookID = $(this).attr("value");
 
     value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#bookName").html(value);
+
+    $.ajax({
+      url: "download-search.php",
+      type: "POST",
+      data: {
+        downloadedBookID: selectedBookID,
+        downloadedSellerID: selectedSellerID,
+        downloadedBuyerID: selectedBuyerID,
+      },
+      success: function (data) {
+        $("#table-body").html(data);
+      },
+    });
   });
 
   $(".buyerName li").click(function () {
     let value = $(this).html();
-
+    selectedBuyerID = $(this).attr("value");
     value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#buyer").html(value);
+    $.ajax({
+      url: "download-search.php",
+      type: "POST",
+      data: {
+        downloadedBookID: selectedBookID,
+        downloadedSellerID: selectedSellerID,
+        downloadedBuyerID: selectedBuyerID,
+      },
+      success: function (data) {
+        $("#table-body").html(data);
+      },
+    });
   });
 
-  // getiing detail 
+  // getiing detail
 
   $("button[name='download'] , button[name='noteDetail']").click(function () {
     let noteID = $(this)
