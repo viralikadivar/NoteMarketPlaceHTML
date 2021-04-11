@@ -53,10 +53,21 @@ $(window).on("load", function () {
     $(".sellerName  li").click(function () {
 
       let value = $(this).html();
+      selectedSellerID = $(this).attr("value");
   
       value =
         value + '<img src="../images/form/arrow-down.png" alt="Down">';
       $("#seller").html(value);
+      $.ajax({
+        url: "filtered-notes.php",
+        type: "POST",
+        data: {
+          rejectedSellerID : selectedSellerID
+        },
+        success: function (data) {
+          $("#table-body").html(data);
+        },
+      });
     });
     $("button[name='download'] , button[name='noteDetail'] , button[name='publish'] ").click(function () {
       let noteID = $(this)
