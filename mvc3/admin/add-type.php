@@ -1,12 +1,31 @@
 <?php
 session_start();
-require "../db_connection.php";
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
+require "../db_connection.php";
 global $connection;
 
 $userID = $_SESSION['UserID'];
+$isEdit = false;
+$isSubmit = false;
+if (empty($_SESSION['EditTypeID'])) {
+    $isEdit = true;
+    // $editID  = $_SESSION['EditTypeID'];
+    $editID = 2;
+    $getTypesDetail = "SELECT * FROM NoteTypes WHERE ID = $editID";
+    $getTypeResult = mysqli_query($connection,$getTypesDetail);
+    $typeDetail = mysqli_fetch_assoc($getTypeResult);
+
+    $typeName = $typeDetail['Name'];
+    $typeDesc = $typeDetail['Description'];
+}
+if (isset($_POST['submit'])) {
+
+    $isSubmit = true;
+    $name = $_POST['name'];
+    $description = $_POST['comments'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,9 +73,9 @@ $userID = $_SESSION['UserID'];
     <!-- Preloader Ends -->
 
 
-   <!-- Header -->
+    <!-- Header -->
     <?php
-        require "../header.php";
+    require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -76,11 +95,15 @@ $userID = $_SESSION['UserID'];
                     </div>
 
                     <!-- form  -->
-                    <form>
+                    <form action="add-type.php" method="post">
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Type *</label>
-                            <input type="text" class="form-control" id="title" placeholder="Enter type">
+                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                                                                                                        echo $name;
+                                                                                                    } else if ($isEdit) {
+                                                                                                        echo $typeName;
+                                                                                                    } ?>" placeholder="Enter type">
                         </div>
 
                         <!-- description of field -->
@@ -93,15 +116,18 @@ $userID = $_SESSION['UserID'];
                                             <label for="description" required>Description *</label>
                                         </div>
                                     </div>
-                                    <textarea placeholder="Enter your description" name="comments"
-                                        id="description"></textarea>
+                                    <textarea placeholder="Enter your description" name="comments" id="description"><?php if ($isSubmit) {
+                                                                                                                        echo $description;
+                                                                                                                    } else if ($isEdit) {
+                                                                                                                        echo $typeDesc;
+                                                                                                                    } ?></textarea>
                                 </div>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button class="submit" type="submit"><span class="text-center">submit</span></button>
+                                <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
                             </div>
                         </div>
                     </form>
@@ -139,7 +165,29 @@ $userID = $_SESSION['UserID'];
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
+    <script src="../js/admin/manage-fileds.js?version=18652395427845"></script>
 
 </body>
 
 </html>
+<?php
+
+if ($isSubmit) {
+    if ($isEdit) {
+        $updateQuery = "UPDATE NoteTypes SET Name = '$name',Description='$description' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateResult = mysqli_query($connection, $updateQuery);
+        if (!$updateResult) {
+            die(mysqli_error($connection));
+        }
+    } else {
+        $addTypeQuery = "INSERT INTO NoteTypes(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
+        $addTypeResult = mysqli_query($connection,$addTypeQuery);
+        if ($addTypeResult) {
+            $isSubmit = false;
+        } else {
+            die(mysqli_error($connection));
+        }
+    }
+}
+
+?>
