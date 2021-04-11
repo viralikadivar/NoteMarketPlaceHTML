@@ -1,5 +1,6 @@
 $(function() {
 
+    // for validation 
     $('button[name="submit"]').click(function(event) {
 
        
@@ -30,6 +31,7 @@ $(function() {
 
     });
 
+    // for edit data 
     $('.edit').click(function() {
         
         let editID = $(this).parents('.table-row').children('.editID').attr('value');
@@ -38,4 +40,13 @@ $(function() {
         $("button[name='getDetail']").trigger("click");
 
     });
+
+    // for edit data 
+    $('.delete').click(function() {
+        
+        let editID = $(this).parents('.table-row').children('.editID').attr('value');
+        $('input[name="editID"]').val(editID);
+
+    });
+
 });
