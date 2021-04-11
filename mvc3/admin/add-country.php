@@ -1,12 +1,31 @@
 <?php
 session_start();
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
 require "../db_connection.php";
 global $connection;
 
 $userID = $_SESSION['UserID'];
+$isEdit = false;
+$isSubmit = false;
+if (empty($_SESSION['EditCountryID'])) {
+    $isEdit = true;
+    // $editID  = $_SESSION['EditCountryID'];
+    $editID = 248;
+    $getCountryDetail = "SELECT * FROM Countries WHERE ID = $editID";
+    $getCountryResult = mysqli_query($connection,$getCountryDetail);
+    $countryDetail = mysqli_fetch_assoc($getCountryResult);
+
+    $countryName = $countryDetail['Name'];
+    $countryCode = $countryDetail['CountryCode'];
+}
+if (isset($_POST['submit'])) {
+
+    $isSubmit = true;
+    $name = $_POST['name'];
+    $code = $_POST['code'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +75,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Header -->
     <?php
-        require "../header.php";
+    require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -76,11 +95,15 @@ $userID = $_SESSION['UserID'];
                     </div>
 
                     <!-- form  -->
-                    <form>
+                    <form action="add-country.php" method="post">
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Country Name *</label>
-                            <input type="text" class="form-control" id="title" placeholder="Enter Country Name">
+                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                                                                                            echo $name;
+                                                                                        } else if ($isEdit) {
+                                                                                            echo $countryName;
+                                                                                        } ?>" placeholder="Enter Country Name">
                         </div>
 
                         <!-- description of field -->
@@ -89,15 +112,18 @@ $userID = $_SESSION['UserID'];
                                 <!-- Text area -->
                                 <div class="form-group">
                                     <label for="country-code" required>Country Code *</label>
-                                    <input type="text" class="form-control" id="country-code"
-                                        placeholder="Enter country code">
+                                    <input type="text" class="form-control" id="country-code" name="code" value="<?php if ($isSubmit) {
+                                                                                                            echo $code;
+                                                                                                        } else if ($isEdit) {
+                                                                                                            echo $countryCode;
+                                                                                                        } ?>" placeholder="Enter country code">
                                 </div>
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button class="submit" type="submit"><span class="text-center">submit</span></button>
+                                <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
                             </div>
                     </form>
                 </div>
@@ -134,7 +160,29 @@ $userID = $_SESSION['UserID'];
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
+    <script src="../js/admin/manage-fileds.js?version=742168345"></script>
 
 </body>
 
 </html>
+<?php
+
+if ($isSubmit) {
+    if ($isEdit) {
+        $updateQuery = "UPDATE Countries SET Name = '$name',CountryCode='$code' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateResult = mysqli_query($connection, $updateQuery);
+        if (!$updateResult) {
+            die(mysqli_error($connection));
+        }
+    } else {
+        $addCountryQuery = "INSERT INTO Countries(Name ,CountryCode , CreatedBy) VALUES('$name','$code',$userID)";
+        $addCountryResult = mysqli_query($connection,$addCountryQuery);
+        if ($addCountryResult) {
+            $isSubmit = false;
+        } else {
+            die(mysqli_error($connection));
+        }
+    }
+}
+
+?>
