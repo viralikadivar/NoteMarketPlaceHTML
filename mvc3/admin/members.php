@@ -290,9 +290,11 @@ if(isset($_POST['deactivateMember'])){
         $deactivateNoteResult = mysqli_query($connection,$deactivateNotesQuery);
         if(!$deactivateNoteResult){
             die(mysqli_error($connection));
-        } 
+        } else{
+            header("refresh:0");
+        }
     }
 }
 
-ob_end_flush();
+ob_flush();
 ?>
