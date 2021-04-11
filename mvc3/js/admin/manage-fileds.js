@@ -30,4 +30,12 @@ $(function() {
 
     });
 
+    $('.edit').click(function() {
+        
+        let editID = $(this).parents('.table-row').children('.editID').attr('value');
+        $('input[name="editID"]').val(editID);
+
+        $("button[name='getDetail']").trigger("click");
+
+    });
 });
