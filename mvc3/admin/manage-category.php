@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
 require "../db_connection.php";
 global $connection;
@@ -28,7 +28,6 @@ $userID = $_SESSION['UserID'];
     <!-- Google Fonts -->
     <link rel="stylesheet" href="../css/fonts/fonts.css">
 
-
     <!-- ================================================
                       CSS Files 
   ================================================= -->
@@ -45,7 +44,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/admin/data-table.css">
-    <link rel="stylesheet" href="../css/admin/manage-category.css">
+    <link rel="stylesheet" href="../css/admin/manage-category.css?version=1527514542">
 
 </head>
 
@@ -57,11 +56,11 @@ $userID = $_SESSION['UserID'];
     </div>
     <!-- Preloader Ends -->
 
-  <!-- Header -->
-  <?php
-        require "../header.php";
+    <!-- Header -->
+    <?php
+    require "../header.php";
     ?>
-<!-- Header Ends -->
+    <!-- Header Ends -->
 
     <!-- for removing default navbar overlay -->
     <br><br><br>
@@ -78,7 +77,7 @@ $userID = $_SESSION['UserID'];
 
             <div class="row add-field" style="background: transparent;">
                 <div class="col-lg-3 col-md-3">
-                    <button class="add-button"><a href="add-category.html">Add Category</a></button>
+                    <button class="add-button"><a href="add-category.php">Add Category</a></button>
                 </div>
             </div>
 
@@ -100,124 +99,52 @@ $userID = $_SESSION['UserID'];
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>IT</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Khya ti Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                <?php
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>Computer</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Rahul shah</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-                                </tr>
+                                function getUserName($userID){
+                                    global $connection;
+                                    $query = "SELECT * FROM Users WHERE ID = $userID";
+                                    $result = mysqli_query($connection , $query);
+                                    $detail = mysqli_fetch_assoc($result);
+                                    $firstName = $detail['FirstName'];
+                                    $lastName = $detail['LastName'];
+                                    $userName = $firstName.' '.$lastName;
+                                    return $userName;
+                                }
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>Science</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Suman trived</td>
-                                    <td>No</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
+                                $getCategoriesQuery = "SELECT * FROM NoteCategories";
+                                $getCategoriesResult = mysqli_query($connection, $getCategoriesQuery);
 
-                                </tr>
+                                $count = 1;
+                                while ($categories = mysqli_fetch_assoc($getCategoriesResult)) {
+                                    $id = $categories['ID'];
+                                    $name = $categories['Name'];
+                                    $decription = $categories['Description'];
+                                    $addedDate = $categories['CreatedDate'];
+                                    $addedDate = date("d-m-Y,H:i" , strtotime($addedDate));
+                                    $addedBy = getUserName($categories['CreatedBy']);
+                                    $active = $categories['IsActive'];
+                                    $isActive = "no";
+                                    if($active){
+                                        $isActive="yes";
+                                    }
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>History</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Raj malhotra</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
+                                    echo '<tr>
+                                            <td>' . $count . '</td>
+                                            <td>' . $name . '</td>
+                                            <td>' . $decription . '</td>
+                                            <td>'.$addedDate.'</td>
+                                            <td>'.$addedBy.'</td>
+                                            <td>'.$isActive.'</td>
+                                            <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img src="../images/form/delete.png" alt="Delete"></td>
+                                        </tr>';
 
-                                </tr>
+                                    $count++;
+                                }
 
-                                <tr>
-                                    <td>5</td>
-                                    <td>Account</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>niya Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
 
-                                </tr>
 
-                                <tr>
-                                    <td>6</td>
-                                    <td>It</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>09-10-2020,10:10</td>
-                                    <td>Khyati Patel</td>
-                                    <td>Yes</td>
-                                    <td></td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Computer</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>10-10-2020,11:25</td>
-                                    <td>Rahul shah</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>8</td>
-                                    <td>History</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>11-10-2020,1:00</td>
-                                    <td>Suman trived</td>
-                                    <td>No</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>9</td>
-                                    <td>Account</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>12-10-2020,10:10</td>
-                                    <td>Raj malhotra</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Val10</td>
-                                    <td>lorem ipsum is simply dummy text</td>
-                                    <td>13-10-2020,11:25</td>
-                                    <td>niya Patel</td>
-                                    <td>Yes</td>
-                                    <td><img src="../images/form/edit.png" alt="Edit"> &emsp13; <img
-                                            src="../images/form/delete.png" alt="Delete"></td>
-
-                                </tr>
+                                ?>
 
                             </tbody>
                         </table>
@@ -233,21 +160,21 @@ $userID = $_SESSION['UserID'];
 
     </section>
 
-   <!-- Footer  -->
-<footer id="footer">
-    <hr>
-    <div class="container-fluid">
-        <div class="row">
-           <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-               <h6>Version:1.1.24</h6>
-           </div>
-           <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-            <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-           </div>
+    <!-- Footer  -->
+    <footer id="footer">
+        <hr>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
+                    <h6>Version:1.1.24</h6>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
+                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
+                </div>
+            </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Ends -->
+    </footer>
+    <!-- Footer Ends -->
 
     <!-- ================================================
                         JS Files 
@@ -263,9 +190,9 @@ $userID = $_SESSION['UserID'];
     <!-- data table  -->
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
-      <!-- custom js  -->
-      <script src="../js/admin/data-table.js"></script>
-      <script src="../js/header/header.js"></script>
+    <!-- custom js  -->
+    <script src="../js/admin/data-table.js"></script>
+    <script src="../js/header/header.js"></script>
 
 </body>
 
