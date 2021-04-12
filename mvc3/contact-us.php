@@ -9,8 +9,9 @@ require "db_connection.php";
 global $connection;
 
 $isSet = false;
+$isSubmit = false;
 if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
-    
+
     $emailUser = $_SESSION['userEmail'];
     $isSet = true;
 
@@ -20,7 +21,14 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
     $userName = $userInfo['FirstName'] . " " . $userInfo['LastName'];
 }
 
+if (isset($_POST['submit'])) {
+    $isSubmit = true;
 
+    $userGivenEmail = $_POST['emailID'];
+    $userGivenName = $_POST['fullName'];
+    $subjectGiven = $_POST['subject'];
+    $commentsGiven = $_POST['comments'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -110,19 +118,29 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
                         <!-- Last Name -->
                         <div class="form-group">
                             <label for="fullName" required>Full Name *</label>
-                            <input type="text" class="form-control" id="fullName" name="fullName" value="<?php if($isSet){echo $userName;}?>" placeholder="Enter Email id">
+                            <input type="text" class="form-control" id="fullName" name="fullName" value="<?php if ($isSubmit) {
+                                                                                                                echo $userGivenName;
+                                                                                                            } else if ($isSet) {
+                                                                                                                echo $userName;
+                                                                                                            } ?>" placeholder="Enter Your Fullname">
                         </div>
 
                         <!-- Email Address -->
                         <div class="form-group">
                             <label for="inputEmail" required>Email Address *</label>
-                            <input type="email" class="form-control" id="inputEmail" value="<?php if($isSet){echo $emailUser;}?>" placeholder="Enter Your Fullname">
+                            <input type="email" class="form-control" id="inputEmail" name="emailID" value="<?php if ($isSubmit) {
+                                                                                                                echo $userGivenEmail;
+                                                                                                            } else if ($isSet) {
+                                                                                                                echo $emailUser;
+                                                                                                            } ?>" placeholder="Enter Email id">
                         </div>
 
-                        <!-- Enter Password -->
+                        <!-- Enter Subject-->
                         <div class="form-group">
                             <label for="subject" required>Subject *</label>
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Enter your subject">
+                            <input type="text" class="form-control" name="subject" id="subject" value="<?php if ($isSubmit) {
+                                                                                                            echo $subjectGiven;
+                                                                                                        } ?>" placeholder="Enter your subject">
                         </div>
 
                     </div>
@@ -135,7 +153,9 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
                                 </div>
                             </div>
 
-                            <textarea placeholder="Comments..." name="comments" id="comments-questions"></textarea>
+                            <textarea placeholder="Comments..." name="comments" id="comments-questions"><?php if ($isSubmit) {
+                                                                                                            echo $commentsGiven;
+                                                                                                        } ?></textarea>
                         </div>
 
                     </div>
@@ -204,17 +224,18 @@ $receiverEmail = $supportFieldReceive['Value'];
 
 
 
-if (isset($_POST['submit'])) {
+if ($isSubmit) {
     // For Sending Confirmation Mail 
     require "smtp/src/Exception.php";
     require "smtp/src/PHPMailer.php";
     require "smtp/src/SMTP.php";
     $mail = new PHPMailer(true);
 
+    $userEmail = $_POST['emailID'];
     $userName = $_POST['fullName'];
     $subject = $_POST['subject'];
     $comments = $_POST['comments'];
-   
+
     try {
         //Server settings
         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
@@ -235,11 +256,12 @@ if (isset($_POST['submit'])) {
 
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = $userName. ' -' .$subject ;
+        $mail->Subject = $userName . ' - ' . $subject;
         $mail->Body    =  'Hello,' . '<br>' .
             $comments . '<br>' .
             'Regards,' . '<br>' .
-            $userName;
+            $userName . '<br>' .
+            '(' . $userEmail . ')';
         // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
