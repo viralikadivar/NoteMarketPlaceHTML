@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 session_start();
+ob_start();
 
 require "../db_connection.php";
 global $connection;
@@ -84,107 +85,117 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
                 </div>
             </div>
 
-            <!-- table  -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="table-responsive">
+            <form action="buyers-request.php" method="post">
+                <!-- table  -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="table-responsive">
-                            <table class="table dashboard-table-long">
+                            <div class="table-responsive">
 
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sr No.</th>
-                                        <th scope="col">NOTE TITLE</th>
-                                        <th scope="col">CATEGORY</th>
-                                        <th scope="col">BUYER</th>
+                                <table class="table dashboard-table-long">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sr No.</th>
+                                            <th scope="col">NOTE TITLE</th>
+                                            <th scope="col">CATEGORY</th>
+                                            <th scope="col">BUYER</th>
 
-                                        <th scope="col">PHONE .NO</th>
-                                        <th scope="col">SELL TYPE</th>
-                                        <th scope="col">PRICE</th>
-                                        <!-- <th scope="col">Publisher</th>
+                                            <th scope="col">PHONE .NO</th>
+                                            <th scope="col">SELL TYPE</th>
+                                            <th scope="col">PRICE</th>
+                                            <!-- <th scope="col">Publisher</th>
                                         <th scope="col">Published Date</th> -->
-                                        <th scope="col">DOWNLOADED DATE/TIME</th>
-                                        <th scope="col" style="background:none">&emsp13;</th>
-                                        <th scope="col" style="background:none">&emsp13;</th>
-                                    </tr>
-                                </thead>
+                                            <th scope="col">DOWNLOADED DATE/TIME</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
+                                            <th scope="col" style="background:none">&emsp13;</th>
+                                        </tr>
+                                    </thead>
 
-                                <tbody>
+                                    <tbody>
 
-                                    <?php
+                                        <?php
 
-                                    $count = 1;
+                                        $count = 1;
 
-                                    while ($bookRequests = mysqli_fetch_assoc($bookRequestsResult)) {
+                                        while ($bookRequests = mysqli_fetch_assoc($bookRequestsResult)) {
 
-                                        $buyerID = $bookRequests['Downloader'];
+                                            $downloadID = $bookRequests['ID'];
+                                            $buyerID = $bookRequests['Downloader'];
+                                            $bookID = $bookRequests['NoteID'];
 
-                                        $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
-                                        $buyerResult = mysqli_query($connection, $buyerQuery);
-                                        $buyersDetail = mysqli_fetch_assoc($buyerResult);
-                                        $buyerEmailID = $buyersDetail['EmailID'];
+                                            $buyerQuery = " SELECT * FROM Users WHERE ID = $buyerID ";
+                                            $buyerResult = mysqli_query($connection, $buyerQuery);
+                                            $buyersDetail = mysqli_fetch_assoc($buyerResult);
+                                            $buyerEmailID = $buyersDetail['EmailID'];
 
-                                        $buyerDetailQuery = " SELECT * FROM UserProfile WHERE UserID = $buyerID ";
-                                        $buyerDetailResult = mysqli_query($connection, $buyerDetailQuery);
-                                        $buyerDetail = mysqli_fetch_assoc($buyerDetailResult);
-                                        $contactNo = "+" . $buyerDetail['PhonenNumberCountryCode'] . " " . $buyerDetail['PhoneNumber'];
+                                            $buyerDetailQuery = " SELECT * FROM UserProfile WHERE UserID = $buyerID ";
+                                            $buyerDetailResult = mysqli_query($connection, $buyerDetailQuery);
+                                            $buyerDetail = mysqli_fetch_assoc($buyerDetailResult);
+                                            $contactNo = "+" . $buyerDetail['PhonenNumberCountryCode'] . " " . $buyerDetail['PhoneNumber'];
 
-                                        $paidOrFree = "";
-                                        $priceDollar = 0;
-                                        if ($bookRequests['IsPaid']) {
-                                            $paidOrFree = "Paid";
-                                            $priceINR = (int)$bookRequests['PurchasedPrice'];
-                                            $priceINR = bcdiv($priceINR, 1, 2);
-                                            $dollarRate = 72.67;
-                                            $priceDollar = bcdiv($priceINR, $dollarRate, 2);
-                                        }
-                                        if (!$bookRequests['IsPaid']) {
-                                            $paidOrFree = "Free";
-                                        }
+                                            $paidOrFree = "";
+                                            $priceDollar = 0;
+                                            if ($bookRequests['IsPaid']) {
+                                                $paidOrFree = "Paid";
+                                                $priceINR = (int)$bookRequests['PurchasedPrice'];
+                                                $priceINR = bcdiv($priceINR, 1, 2);
+                                                $dollarRate = 72.67;
+                                                $priceDollar = bcdiv($priceINR, $dollarRate, 2);
+                                            }
+                                            if (!$bookRequests['IsPaid']) {
+                                                $paidOrFree = "Free";
+                                            }
 
-                                        $downloadedDate = $bookRequests['CreatedDate'];
-                                        $dateTime = strtotime($downloadedDate);
-                                        $downloadedDate = date("d M Y , H:i:s", $dateTime);
+                                            $downloadedDate = $bookRequests['CreatedDate'];
+                                            $dateTime = strtotime($downloadedDate);
+                                            $downloadedDate = date("d M Y , H:i:s", $dateTime);
 
-                                        echo '<tr class="table-row">
+                                            echo '<tr class="table-row">
                                             <td>' . $count . '</td>
-                                            <td class="note-title">' . $bookRequests['NoteTitle'] . '</td>
+                                            <td class="view note-title">' . $bookRequests['NoteTitle'] . '</td>
                                             <td>' . $bookRequests['NoteCategory'] . '</td>
-                                            <td class="buyer-email">' . $buyerEmailID . '</td>n
+                                            <td class="buyer-email">' . $buyerEmailID . '</td>
                                             <td>' . $contactNo . '</td>
                                             <td>' . $paidOrFree . '</td>
                                             <td>$' . $priceDollar . '</td>
-                                            <td>' .  $downloadedDate. '</td>
-                                            <td><img src="../images/form/eye.png" alt="View"></td>
-                                            <form action="buyers-request.php" method="post">
+                                            <td>' .  $downloadedDate . '</td>
+                                            <td><img class="view" src="../images/form/eye.png" alt="View"></td>
+                                           
                                             <td class="dropup dropleft">
                                                 <div data-toggle="dropdown">
                                                     <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
                                                 </div>
                                                 <div class="dropdown-menu" aria-labelledby="row' . $count . '">
-                                                    <button class="dropdown-item" name="received">Yes, I Received</button>
+                                                    <button class="dropdown-item" type="submit" name="received">Yes, I Received</button>
                                                 </div>
                                             </td>
+                                            <input type="hidden" class="downloadID" value="' . $downloadID . '">
+                                            <input type="hidden" name="downloadID">
                                             <input type="hidden" name = "user-email">
-                                            <input type="hidden" name = "note-title">
-                                         </form>
+                                            <input type="hidden" name="note-title">
+                                            <input type="hidden" class="noteID" value="' . $bookID . '">
+                                            <input type="hidden" name="noteID">
+                                            <button type="submit" name="noteDetail" style="visibility:hidden"></button>
+                                                        
+                                         
                                     </tr>';
 
-                                        $count++;
-                                    }
+                                            $count++;
+                                        }
 
-                                    ?>
+                                        ?>
 
-                                </tbody>
+                                    </tbody>
 
-                            </table>
+                                </table>
+
+                            </div>
+
                         </div>
 
                     </div>
-
                 </div>
-            </div>
-
+            </form>
 
         </div>
 
@@ -227,9 +238,8 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/user/data-table.js"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/buyers-request.js?version=126351"></script>
+    <script src="../js/user/buyers-request.js?version=12554562563351"></script>
 
 
 </body>
@@ -237,23 +247,23 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
 </html>
 
 <?php
-date_default_timezone_set('Asia/Kolkata');
-$downloadedDate = date("Y-m-d H:i:s");
 
-if (isset($_POST["received"])) {
+if (isset($_POST['noteDetail'])) {
+    $noteDetailID = (int)$_POST['noteID'];
+    $_SESSION['noteID'] = $noteDetailID;
+    header('Location:../notes-detail.php');
+}
+
+if(isset($_POST['received'])) {
+   
+    date_default_timezone_set('Asia/Kolkata');
+    $downloadedDate = date("Y-m-d H:i:s");
 
     $userEmail = $_POST['user-email'];
     $bookName = $_POST['note-title'];
-
-
-    $buyerMailQuery = " SELECT * FROM Users WHERE EmailID = '$userEmail' ";
-    $buyerMailResult = mysqli_query($connection, $buyerMailQuery);
-    $buyersMailDetail = mysqli_fetch_assoc($buyerMailResult);
-    $buyerName = $buyersMailDetail['FirstName'] . " " . $buyersMailDetail['LastName'];
-    $ID = $buyersMailDetail['ID'];
-
-
-    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 , AttachmentDownloadedDate = '$downloadedDate' WHERE NoteTitle = '$bookName' and Downloader = $ID ";
+    $downloadID = $_POST['downloadID'];
+    
+    $updateDownloadQuery = " UPDATE NotesDownloads SET IsSellerHasAllowedDownload = 1 , AttachmentDownloadedDate = '$downloadedDate' WHERE ID = $downloadID ";
     $updateDownloadResult = mysqli_query($connection, $updateDownloadQuery);
 
     if ($updateDownloadResult) {
@@ -304,11 +314,16 @@ if (isset($_POST["received"])) {
 
             $mail->send();
 
-            header('Refresh: ' . 0);
+            header("refresh:0");
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
+    } else {
+        die(mysqli_error($connection));
     }
+
 }
 
+
+ob_flush();
 ?>
