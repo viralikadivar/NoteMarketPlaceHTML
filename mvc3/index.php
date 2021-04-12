@@ -152,7 +152,7 @@
                     <h4>Download Free/Paid Notes</h4>
                     <h5>Get Material for your<br>Course etc.</h5>
                     <div class="home-work-btn">
-                        <a href="#" title="Download" role="button">Download</a>
+                        <a href="login.php" title="Download" role="button">Download</a>
                     </div>
 
                 </div>
@@ -163,7 +163,7 @@
                     <h4>Seller</h4>
                     <h5>Upload and Download Courses<br>and Materials etc.</h5>
                     <div class="home-work-btn">
-                        <a href="#" title="Sell books" role="button">Sell Books</a>
+                        <a href="login.php" title="Sell books" role="button">Sell Books</a>
                     </div>
                 </div>
             </div>
