@@ -8,17 +8,16 @@ session_start();
 require "db_connection.php";
 global $connection;
 
+$isSet = false;
 if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
     
     $emailUser = $_SESSION['userEmail'];
+    $isSet = true;
 
     $userQuery = "SELECT * FROM Users WHERE EmailID = '$emailUser' ";
     $userqueryResult = mysqli_query($connection, $userQuery);
     $userInfo = mysqli_fetch_assoc($userqueryResult);
     $userName = $userInfo['FirstName'] . " " . $userInfo['LastName'];
-} else {
-    $emailUser = "Enter Emailid";
-    $userName = "Enter Your Fullname";
 }
 
 
@@ -69,7 +68,6 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
     ?>
     <!-- Header Ends -->
 
-
     <!-- Preloader -->
     <div id="preloader">
         <div id="status">&nbsp;</div>
@@ -112,13 +110,13 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
                         <!-- Last Name -->
                         <div class="form-group">
                             <label for="fullName" required>Full Name *</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="<?php echo $userName; ?>">
+                            <input type="text" class="form-control" id="fullName" name="fullName" value="<?php if($isSet){echo $userName;}?>" placeholder="Enter Email id">
                         </div>
 
                         <!-- Email Address -->
                         <div class="form-group">
                             <label for="inputEmail" required>Email Address *</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="<?php echo $emailUser; ?>">
+                            <input type="email" class="form-control" id="inputEmail" value="<?php if($isSet){echo $emailUser;}?>" placeholder="Enter Your Fullname">
                         </div>
 
                         <!-- Enter Password -->
@@ -186,6 +184,7 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
     <script src="js/header/header.js"></script>
+    <script src="js/contact-us.js?version=54528451254"></script>
 
 </body>
 
@@ -212,10 +211,10 @@ if (isset($_POST['submit'])) {
     require "smtp/src/SMTP.php";
     $mail = new PHPMailer(true);
 
+    $userName = $_POST['fullName'];
     $subject = $_POST['subject'];
     $comments = $_POST['comments'];
-    global $userName;
-
+   
     try {
         //Server settings
         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
@@ -236,7 +235,7 @@ if (isset($_POST['submit'])) {
 
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
-        $mail->Subject = $userName . ' ' . '- Query';
+        $mail->Subject = $userName. ' -' .$subject ;
         $mail->Body    =  'Hello,' . '<br>' .
             $comments . '<br>' .
             'Regards,' . '<br>' .
