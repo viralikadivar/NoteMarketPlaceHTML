@@ -3,9 +3,9 @@ $linkURL = "http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc3/";
 
 if (isset($_POST['logout'])) {
     session_start();
-    unset($_SESSION['logged_in']); 
+    unset($_SESSION['logged_in']);
     session_destroy();
-    header("Location:".$linkURL."login.php");
+    header("Location:login.php");
 }
 
 ?>
@@ -24,27 +24,27 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="'.$linkURL .'index.php">
-                <img class="img-responsive" src="'.$linkURL .'images/logo/logo-dark.png" alt="logo">
+            <a class="navbar-brand" href="' . $linkURL . 'index.php">
+                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'search-notes.php">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'user/user-dashboard.php">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'user/buyers-request.php">Buyer Requests</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'faq.php">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'contact-us.php">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'search-notes.php">Search Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'user/user-dashboard.php">Sell Your Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'user/buyers-request.php">Buyer Requests</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'faq.php">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'contact-us.php">Contact Us</a></li>
                     <li class="nav-item">
                         <div class="dropdown user-image">
                         <img id="user-menu" data-toggle="dropdown" src="' . $profilePicPath . '" alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item active" href="'.$linkURL .'user/user-profile.php">My Profile</a>
-                                <a class="dropdown-item" href="'.$linkURL .'user/my-download.php">My Downloads</a>
-                                <a class="dropdown-item" href="'.$linkURL .'user/my-sold-notes.php">My Sold Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'user/my-rejected-notes.php">My Rejected Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="'.$linkURL .'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item active" href="' . $linkURL . 'user/user-profile.php">My Profile</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'user/my-download.php">My Downloads</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'user/my-sold-notes.php">My Sold Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'user/my-rejected-notes.php">My Rejected Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -61,43 +61,43 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         </button>
         </nav>
         </header>';
-    } else if($userRole == 1) {
+    } else if ($userRole == 1) {
         $profilePic = $_SESSION['UserProfilePic'];
         $profilePic = str_replace('../', '', $profilePic);
-        $profilePicPath = $linkURL . $profilePic.".jpg";
+        $profilePicPath = $linkURL . $profilePic . ".jpg";
 
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="'.$linkURL .'index.php">
-                <img class="img-responsive" src="'.$linkURL .'images/logo/logo-dark.png" alt="logo">
+            <a class="navbar-brand" href="' . $linkURL . 'index.php">
+                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/admin-dashboard.php">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/admin-dashboard.php">Dashboard</a></li>
                     <li class="nav-item">
                         <div class="dropdown">
                             <div id="notes-menu" data-toggle="dropdown">Notes</div>
                             <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                <a class="dropdown-item" href="'.$linkURL .'admin/notes-under-review.php">Notes Under Review</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/published-notes.php">Published Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/downloaded-notes.php">Downloaded Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/rejected-notes.php">Rejected Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/notes-under-review.php">Notes Under Review</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/published-notes.php">Published Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/downloaded-notes.php">Downloaded Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/rejected-notes.php">Rejected Notes</a>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/members.php">Members</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/spam-reports.php">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/members.php">Members</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/spam-reports.php">Reports</a></li>
                     <li class="nav-item">
                         <div class="dropdown">
                             <div id="setting-menu" data-toggle="dropdown">Setting</div>
                             <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                <a class="dropdown-item" href="'.$linkURL .'admin/super-admin/manage-config.php">Manage System Configuration</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/super-admin/manage-admin.php">Manage Administrator</a>
-                                <a class="dropdown-item active" href="'.$linkURL .'admin/manage-category.php">Manage Category</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/manage-type.php">Manage Type</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/manage-country.php">Manage Countries</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/super-admin/manage-config.php">Manage System Configuration</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/super-admin/manage-admin.php">Manage Administrator</a>
+                                <a class="dropdown-item active" href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/manage-type.php">Manage Type</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/manage-country.php">Manage Countries</a>
                             </div>
                         </div>
                     </li>
@@ -106,9 +106,9 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <img id="image-menu" data-toggle="dropdown" src="' . $profilePicPath . '"
                                 alt="Admin">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="'.$linkURL .'admin/admin-profile.php">Update Profile</a>
-                                <a class="dropdown-item" href="'.$linkURL .'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="'.$linkURL .'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/admin-profile.php">Update Profile</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -134,33 +134,33 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
-            <a class="navbar-brand" href="'.$linkURL .'index.php">
-                <img class="img-responsive" src="'.$linkURL .'images/logo/logo-dark.png" alt="logo">
+            <a class="navbar-brand" href="' . $linkURL . 'index.php">
+                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/admin-dashboard.php">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/admin-dashboard.php">Dashboard</a></li>
                     <li class="nav-item">
                         <div class="dropdown">
                             <div id="notes-menu" data-toggle="dropdown">Notes</div>
                             <div class="dropdown-menu" aria-labelledby="notes-menu">
-                                <a class="dropdown-item" href="'.$linkURL .'admin/notes-under-review.php">Notes Under Review</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/published-notes.php">Published Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/downloaded-notes.php">Downloaded Notes</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/rejected-notes.php">Rejected Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/notes-under-review.php">Notes Under Review</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/published-notes.php">Published Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/downloaded-notes.php">Downloaded Notes</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/rejected-notes.php">Rejected Notes</a>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/members.php">Members</a></li>
-                    <li class="nav-item"><a class="nav-link" href="'.$linkURL .'admin/spam-reports.php">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/members.php">Members</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/spam-reports.php">Reports</a></li>
                     <li class="nav-item">
                         <div class="dropdown">
                             <div id="setting-menu" data-toggle="dropdown">Setting</div>
                             <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                <a class="dropdown-item active" href="'.$linkURL .'admin/manage-category.php">Manage Category</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/manage-type.php">Manage Type</a>
-                                <a class="dropdown-item" href="'.$linkURL .'admin/manage-country.php">Manage Countries</a>
+                                <a class="dropdown-item active" href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/manage-type.php">Manage Type</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/manage-country.php">Manage Countries</a>
                             </div>
                         </div>
                     </li>
@@ -169,9 +169,9 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <img id="image-menu" data-toggle="dropdown" src="' . $profilePicPath . '"
                                 alt="Admin">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item" href="'.$linkURL .'admin/admin-profile.php">Update Profile</a>
-                                <a class="dropdown-item" href="'.$linkURL .'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="'.$linkURL .'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/admin-profile.php">Update Profile</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -189,14 +189,13 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
         </button>
         </nav>
         </header>';
-
     }
 } else {
     echo '<header id="header">
     <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
             <a class="navbar-brand" href="index.php">
-                <img class="img-responsive" src="'.$linkURL .'images/logo/logo-dark.png" alt="logo">
+                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -223,7 +222,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
 
 
 ?>
-<form action="../header.php" method="post">
+<form action="<?php echo $linkURL; ?>header.php" method="post">
     <!-- Logout Modal -->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
