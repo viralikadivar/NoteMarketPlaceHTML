@@ -259,5 +259,5 @@ if (isset($_POST['download'])) {
     }
 }
 
-ob_end_flush();
+ob_flush();
 ?>
