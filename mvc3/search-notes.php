@@ -25,7 +25,7 @@ session_start();
     <!-- Google Fonts -->
     <link rel="stylesheet" href="css/fonts/fonts.css">
 
-    <!-- ================================================
+    <!-- ================================================ 
                         CSS Files 
     ================================================= -->
 
@@ -240,7 +240,7 @@ session_start();
                 }
                 $thisPAgeResult = ($currentPage - 1) * $noOFResultPerPage;
 
-                $reultBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1';
+                $reultBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9';
                 $resultBookResult = mysqli_query($connection, $reultBooksQuery);
                 $totalSearhedBooks = mysqli_num_rows($resultBookResult);
 
@@ -354,11 +354,8 @@ session_start();
                 </div>
 
             </div>
-        </section>
-        <!-- Search Result Ends -->
-
-        <!-- Pagination -->
-        <section id="pagination">
+                  <!-- Pagination -->
+        <div id="pagination">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                     <li class="page-item arrow">
@@ -382,7 +379,36 @@ session_start();
                     </li>
                 </ul>
             </nav>
+        </div>
+        <!-- paginaation Main Ends -->
         </section>
+        <!-- Search Result Ends -->
+
+        <!-- Pagination -->
+        <!-- <div id="pagination">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item arrow">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&#8249;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <?php
+                    // $noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
+                    // for ($page = 1; $page <= $noOfPages; $page++) {
+                    //     echo '<li class="page-item "><a class="page-link" href="search-notes.php?page=' . $page . '">' . $page . '</a></li>';
+                    // }
+                    ?>
+                    <li class="page-item arrow">
+                        <a class="page-link text-center" href="#" aria-label="Next">
+                            <span aria-hidden="true">&#8250;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div> -->
         <!-- paginaation Main Ends -->
 
     </form>
@@ -421,7 +447,7 @@ session_start();
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
     <script src="js/header/header.js"></script>
-    <script src="js/search-notes.js?version=1454562"></script>
+    <script src="js/search-notes.js?version=1454555562"></script>
 
 </body>
 
