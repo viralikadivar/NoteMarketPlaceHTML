@@ -105,7 +105,7 @@ $(function() {
     $('.delete').click(function() {
         let noteID =  $(this).parent().children('.noteID').attr("value");
         $('input[name="noteID"]').val(noteID);
-        $('button[name="deleteNoteModel"]').trigger('click');
+        // $('button[name="deleteNoteModel"]').trigger('click');
     }); 
 
 });
