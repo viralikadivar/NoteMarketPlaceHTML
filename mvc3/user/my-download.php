@@ -421,5 +421,5 @@ if (isset($_POST['download'])) {
         readfile($zipname);
     }
 }
-ob_end_flush();
+ob_flush();
 ?>
