@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../login.php");
 }
@@ -269,6 +270,9 @@ if($isSubmit){
         }
         $book_image  = $_FILES['adminDP']['tmp_name'];
         unset($_FILES['adminDP']);
+        $ext = pathinfo($_FILES['adminDP']['name'], PATHINFO_EXTENSION);
+        $dp_path = $dp_path.".".$ext;
+        echo $dp_path;
         $bookImageUploades = move_uploaded_file($book_image, $dp_path);
         if ($bookImageUploades) {
             $path = $dp_path;
@@ -281,6 +285,9 @@ if($isSubmit){
         $defaultDP = mysqli_fetch_assoc($defaultDPResult);
         $dp = $defaultDP['Value'];
         $dp = str_replace("../../", "../", $dp);
+        $ext = pathinfo($dp, PATHINFO_EXTENSION);
+        $dp_path = $dp_path.".".$ext;
+        echo $dp_path;
         $isDefaultSeted = copy($dp, $dp_path);
         if ($isDefaultSeted) {
             $path = $dp_path;
@@ -295,10 +302,15 @@ if($isSubmit){
         $updateUserProfileResult = mysqli_query($connection, $upadateUserProfileQuery);
         if (!$updateUserProfileResult) {
             die(mysqli_error($connection));
+        } else {
+            $_SESSION['UserProfilePic'] = $path;
+            header("Refresh:0");
+
         }
     } else {
         die(mysqli_error($connection));
     }
     }
+    ob_flush();
 
 ?>
