@@ -2,11 +2,12 @@ $(function () {
   // Get Gender
   $(".gender li").click(function () {
     var value = $(this).attr("value");
+    let name = $(this).html();
 
     $("input[name='gender']").val(value);
 
-    value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
-    $("#gender").html(value);
+    name = name + '<img src="../images/form/arrow-down.png" alt="Down">';
+    $("#gender").html(name);
   });
 
   // Get PhoneCode
