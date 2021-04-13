@@ -11,76 +11,94 @@ $bookcategory = "";
 $bookUniversity =  "";
 $bookCourse = "";
 $bookCountry = "";
-$bookRating  ="";
+$bookRating  = "";
+
+$noOFResultPerPage = 9;
+
+if (!isset($_GET['page'])) {
+    $currentPage = 1;
+} else {
+    $currentPage = (int)$_GET['page'];
+}
+$thisPAgeResult = ($currentPage - 1) * $noOFResultPerPage;
 
 
 // Book Title 
-if(isset($_POST['searchName'])){
+if (isset($_POST['searchName'])) {
     $bookName = $_POST['searchName'];
-    if(!empty($bookName)){
-        $bookSearch = "AND Title LIKE '%".$bookName."%'";
+    if (!empty($bookName)) {
+        $bookSearch = "AND Title LIKE '%" . $bookName . "%'";
     }
 }
 
 // Book type 
-if(isset($_POST['type'])){
+if (isset($_POST['type'])) {
     $type = (int)$_POST['type'];
-    if(!empty($type)){
-        $boookType = " AND NoteType = ".$type ;
+    if (!empty($type)) {
+        $boookType = " AND NoteType = " . $type;
     }
 }
 
 // Book Category 
-if(isset($_POST['category'])){
+if (isset($_POST['category'])) {
     $category = (int)$_POST['category'];
-    if(!empty($category)){
-        $bookcategory = " AND Category = ".$category;
+    if (!empty($category)) {
+        $bookcategory = " AND Category = " . $category;
     }
 }
 
 // Book University 
-if(isset($_POST['university'])){
+if (isset($_POST['university'])) {
     $university = $_POST['university'];
-    if(!empty($university)){
-        $bookUniversity =  " AND UniversityName LIKE '%".$university."%'";
+    if (!empty($university)) {
+        $bookUniversity =  " AND UniversityName LIKE '%" . $university . "%'";
     }
 }
 
 // Book Course 
-if(isset($_POST['course'])){
+if (isset($_POST['course'])) {
     $course = $_POST['course'];
-    if(!empty($course)){
-        $bookCourse = " AND Course LIKE '%".$course."%'";
+    if (!empty($course)) {
+        $bookCourse = " AND Course LIKE '%" . $course . "%'";
     }
 }
 
 // Book Country
-if(isset($_POST['country'])){
+if (isset($_POST['country'])) {
     $country = $_POST['country'];
-    if(!empty($country)){
-        $bookCountry = " AND Country = ".$country;
+    if (!empty($country)) {
+        $bookCountry = " AND Country = " . $country;
     }
 }
 
 // Book Ratings 
-if(isset($_POST['rating'])){
+if (isset($_POST['rating'])) {
     $ratings = $_POST['rating'];
-    if(!empty($ratings)){
-        $bookRating  = " AND Ratings >= ".$ratings;
+    if (!empty($ratings)) {
+        $bookRating  = " AND Ratings >= " . $ratings;
     }
-    
 }
 
-
-$showBooksQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 ".$bookSearch.$boookType.$bookcategory.$bookUniversity.$bookCourse.$bookCountry.$bookRating ;
+$showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 ' . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating ;
 $showBookResult = mysqli_query($connection, $showBooksQuery);
 $totalSearhedBooks = mysqli_num_rows($showBookResult);
 
-if($totalSearhedBooks != 0) {
+$pageNo = "";
+$noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
+for ($page = 1; $page <= $noOfPages; $page++) {
+    $pageNo = $pageNo . '<li class="page-item "><a class="page-link" href="search-notes.php?page=' . $page . '">' . $page . '</a></li>';
+}
+
+$showBooksQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 " . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating. ' LIMIT '  . $thisPAgeResult . ',' . $noOFResultPerPage;
+$showBookResult = mysqli_query($connection, $showBooksQuery);
+
+
+
+if ($totalSearhedBooks != 0) {
     $output =  "";
 
     while ($bookDetails = mysqli_fetch_assoc($showBookResult)) {
-    
+
         $bookID = $bookDetails['ID'];
         $bookTitle = $bookDetails['Title'];
         $bookUniversity = $bookDetails['UniversityName'];
@@ -161,7 +179,7 @@ if($totalSearhedBooks != 0) {
                         </div>
                     </div>';
     }
-} else  {
+} else {
     $output =  '<div class="col-lg-4 col-md-6 col-sm-12">No Such Book Found!</div>';
 }
 
@@ -169,11 +187,30 @@ echo '<div class="container">
 
         <div class="row heading">
             <div class="col-lg-12 col-md-12 col-sm-12">
-                <h2>Total '.$totalSearhedBooks.' notes</h2>
+                <h2>Total ' . $totalSearhedBooks . ' notes</h2>
             </div>
         </div>
 
-        <div class="row" >'.$output.'</div>
+        <div class="row" >' . $output . '</div>
 
-    </div>';
+    </div>'.'<div id="pagination">
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item arrow">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&#8249;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            '.$pageNo.'
+            <li class="page-item arrow">
+                <a class="page-link text-center" href="#" aria-label="Next">
+                    <span aria-hidden="true">&#8250;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>'
+    ;
 ?>
