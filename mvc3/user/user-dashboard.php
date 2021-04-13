@@ -251,7 +251,7 @@ $userID = $_SESSION['UserID'];
                                         $bookAction = "";
                                         if ($bookStatus == 'Draft') {
                                             $bookAction = '<img class="edit" src="../images/form/edit.png" alt="edit"> &emsp14;
-                                                           <img class="delete" src="../images/form/delete.png" alt="delete">';
+                                                           <img class="delete" data-toggle="modal" data-target="#deleteNoteWarning" src="../images/form/delete.png" alt="delete">';
                                         } else {
                                             $bookAction = '<img class="view" src="../images/form/eye.png" alt="view">';
                                         }
@@ -266,7 +266,6 @@ $userID = $_SESSION['UserID'];
                                                     <input type="hidden" class="noteID" value="' . $inProgressID . '" style="display:none">
                                                     <input type="hidden" name="noteID" style="display:none">
                                                     <button type="submit" name="editNote" style="display:none"></buttton>
-                                                    <button type="button" name="deleteNoteModel" data-toggle="modal" data-target="#deleteNoteWarning" style="display:none"></buttton>
                                                 </td>
                                                 
                                             </tr>';
@@ -291,8 +290,9 @@ $userID = $_SESSION['UserID'];
                                             Are you sure, you want to delete this note?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="delete-note" data-dismiss="modal">NO</button>
-                                            <button type="submit" name="deleteNote" class="delete-note">YES</button>
+                                        <button type="submit" name="deleteNote" class="delete-note">YES</button>
+                                        <button type="button" class="delete-note" data-dismiss="modal">NO</button>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -426,7 +426,7 @@ $userID = $_SESSION['UserID'];
     <!-- data table  -->
     <script src="../js/data-table/jquery.dataTables.js"></script>
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/user-dashboard.js?version=4562163"></script>
+    <script src="../js/user/user-dashboard.js?version=4562155563"></script>
 
 </body>
 
@@ -450,7 +450,7 @@ if (isset($_POST['editNote'])) {
 // Delete notes 
 if (isset($_POST['deleteNote'])) {
     $noteID = $_POST['noteID'];
-
+echo $noteID ;
     // Delete Note From NotesAttachments 
     $deleteNoteAtttachmentsQuery = "DELETE FROM NotesAttachments WHERE NoteID = $noteID ";
     $deleteNoteAtttachmentsResult = mysqli_query($connection, $deleteNoteAtttachmentsQuery);
@@ -459,9 +459,9 @@ if (isset($_POST['deleteNote'])) {
         // Delete note From NotesDetails 
         $deleteNoteDetailsQuery = "DELETE FROM NotesDetails WHERE ID = $noteID ";
         $deleteNoteDetailsResult = mysqli_query($connection, $deleteNoteDetailsQuery);
-        header("refresh: 1");
+        header("Refresh:0");
     }
 }
 
-ob_end_flush();
+ob_flush();
 ?>
