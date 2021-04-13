@@ -284,6 +284,8 @@ if (isset($_POST['submit'])) {
         $pathToSetDefaultFields = "../../members/default/";
         $book_image  = $_FILES['bookImg']['tmp_name'];
         $book_DP_path = $pathToSetDefaultFields . "Book_DP_" . $timeStamp;
+        $ext = pathinfo($_FILES['bookImg']['name'], PATHINFO_EXTENSION);
+        $book_DP_path = $book_DP_path.".".$ext;
         $bookImageUploades = move_uploaded_file($book_image, $book_DP_path);
         if ($bookImageUploades) {
             mysqli_query($connection, "UPDATE SystemConfiguration SET Value = '$book_DP_path'  WHERE KeyFields = 'DefaultNoteDisplayPicture'");
@@ -295,6 +297,8 @@ if (isset($_POST['submit'])) {
 
         $member_image  = $_FILES['profileImg']['tmp_name'];
         $member_DP_path = $pathToSetDefaultFields . "Member_DP_" . $timeStamp;
+        $ext = pathinfo($_FILES['profileImg']['name'], PATHINFO_EXTENSION);
+        $member_DP_path =  $member_DP_path.".".$ext;
         $memberImageUploades = move_uploaded_file($member_image, $member_DP_path);
         if ($memberImageUploades) {
             mysqli_query($connection, "UPDATE SystemConfiguration SET Value = '$member_DP_path'  WHERE KeyFields = 'DefaultMemberDisplayPicture'");
