@@ -249,14 +249,21 @@ $(function () {
   });
 
   // Search By Book Name
-  $("#filter-with-icon").on("keyup", function () {
+  $("#filter-with-icon").on("keyup click", function () {
     searchBookName = $(this).val();
 
     $.ajax({
       url: "search-result.php",
       type: "POST",
       data: {
-        searchName: searchBookName
+        searchName: searchBookName,
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
       },
       success: function (data) {
         $("#search-result").html(data);
