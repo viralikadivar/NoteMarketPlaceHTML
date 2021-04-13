@@ -1,6 +1,7 @@
 <?php
 require "../db_connection.php";
 session_start();
+ob_start();
 $userEmail =  $_SESSION['userEmail'];
 
 $selectUserQuery = "SELECT * FROM Users WHERE EmailID = '$userEmail'";
@@ -10,8 +11,6 @@ $userID = $userDetail['ID'];
 $firstName = $userDetail['FirstName'];
 $lastName = $userDetail['LastName'];
 
-$gender = "Select your gender";
-$phoneCode = "91";
 
 $selectUserProfileQuery = "SELECT * FROM UserProfile WHERE UserID = $userID ";
 $selectUserProfileResult = mysqli_query($connection, $selectUserProfileQuery);
@@ -19,12 +18,13 @@ $isSet = false;
 if (mysqli_num_rows($selectUserProfileResult)) {
     $isSet = true;
     $userProfileDetail = mysqli_fetch_assoc($selectUserProfileResult);
+    $profilePic = $userProfileDetail['ProfilePicture'];
 
     $gender = $userProfileDetail['Gender'];
     $genderNameQuery = " SELECT * FROM ReferenceData WHERE ID =  $gender  and IsActive = 1 ";
     $genderNameResult = mysqli_query($connection, $genderNameQuery);
     $genderName = mysqli_fetch_assoc($genderNameResult);
-    $gender = $genderName['Value'];
+    $genderName = $genderName['Value'];
 
     $phoneCode =  $userProfileDetail['PhonenNumberCountryCode'];
     $phoneNumber = $userProfileDetail['PhoneNumber'];
@@ -166,7 +166,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                             <div class="dropdown">
                                 <label for="gender" required>Gender</label>
                                 <button type="button" id="gender" class="select-field" data-toggle="dropdown">
-                                    <?php echo $gender; ?><img src="../images/form/arrow-down.png" alt="Down">
+                                    <?php if($isSet){ echo $genderName; } else{ echo "Select Your Gender";}?><img src="../images/form/arrow-down.png" alt="Down">
                                 </button>
                                 <ul class="dropdown-menu gender" aria-labelledby="gender">
                                     <?php
@@ -175,14 +175,14 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                                     $genderResult = mysqli_query($connection, $genderQuery);
 
                                     while ($gender = mysqli_fetch_assoc($genderResult)) {
-                                        echo '<li class="dropdown-item" value="' . $gender['Value'] . '">' . $gender['Value'] . '</li>';
+                                        echo '<li class="dropdown-item" value="' . $gender['ID'] . '">' . $gender['Value'] . '</li>';
                                     }
 
                                     ?>
 
                                 </ul>
                             </div>
-                            <input type="hidden" name="gender">
+                            <input type="hidden" name="gender" value="<?php if($isSet){echo $gender;}?>">
                         </div>
                     </div>
 
@@ -197,7 +197,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                                 <div class="col-lg-3 col-md-3 col-sm-3">
                                     <div class="dropdown">
                                         <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
-                                            +<?php echo $phoneCode; ?><img src="../images/form/arrow-down.png" alt="Down">
+                                            +<?php if($isSet){echo $phoneCode;}else{echo "91";} ?><img src="../images/form/arrow-down.png" alt="Down">
                                         </button>
                                         <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
                                             <?php
@@ -212,7 +212,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                                             ?>
                                         </ul>
                                     </div>
-                                    <input type="hidden" name="phoneCode" id="phoneCode">
+                                    <input type="hidden" name="phoneCode" id="phoneCode" value="<?php if($isSet){ echo $phoneCode;}?>">
                                 </div>
 
                                 <div class="col-lg-9 col-md-9 col-sm-9 pl-0">
@@ -402,7 +402,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/user-profile.js?version=12050255"></script>
+    <script src="../js/user/user-profile.js?version=120255250255"></script>
 
 </body>
 
@@ -415,12 +415,13 @@ if (isset($_POST['submit'])) {
     // Basic Profile Details 
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
-    $email = $userEmail;
+    $email = $_SESSION['userEmail'];
     $dateOfBirth = $_POST['dateOfBirth'];
-    $gender = $_POST['gender'];
+    $genderID = $_POST['gender'];
     $phoneCode = (int)$_POST['phoneCode'];
     $phoneNumber = $_POST['phoneNumber'];
 
+    echo $email;
     // Address Details 
     $addrLine1 = $_POST['addrLine1'];
     $addrLine2 = $_POST['addrLine2'];
@@ -438,83 +439,64 @@ if (isset($_POST['submit'])) {
     $dateTime  = new DateTime();
     $timeStamp = $dateTime->getTimestamp();
 
-    // Update Users FirstName and LastName in Users Table 
-    $updateUsersQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName' WHERE ID = $userID";
-    $updateUsersResult = mysqli_query($connection, $updateUsersQuery);
+    // Profile Pic Path 
+    $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
+    $profilePic = $userProfileDetail['ProfilePicture'];
 
-    // If user already present in table 
-    $getUserProfileQuery  = "SELECT * FROM UserProfile WHERE UserID = $userID ";
-    $getUserProfileResult = mysqli_query($connection, $getUserProfileQuery);
-
-    if (mysqli_num_rows($getUserProfileResult) != 0) {
-
-        $userProfile = mysqli_fetch_assoc($getUserProfileResult);
-        $userProfilePic = $userProfile['ProfilePicture'];
-
-        unlink($userProfilePic);
-
-        if (file_exists($_FILES['profile-picture']['tmp_name'])) {
-
-            $profilePic = $_FILES['profile-picture']['tmp_name'];
-            $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
-            $profilePicUploaded = move_uploaded_file($profilePic, $profilePicPath);
-
-            if ($profilePicUploaded) {
-                $path = $profilePicPath;
-            }
-        } else {
-
-            $defaultProfilePic = $userProfilePic;
-            $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
-            $profilePicUploaded = copy($defaultProfilePic, $profilePicPath);
-
-            if ($profilePicUploaded) {
-                $path = $profilePicPath;
-            }
+    $path = "path";
+    if ($_FILES['profile-picture']['size'] != 0) {
+        if ($profilePic != null) {
+            unlink($profilePic);
         }
-    }
-
-    // Set Profile Picture of User 
-
-    else if (file_exists($_FILES['profile-picture']['tmp_name']) && mysqli_num_rows($getUserProfileResult) == 0) {
-        $profilePic = $_FILES['profile-picture']['tmp_name'];
-        $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
-        $profilePicUploaded = move_uploaded_file($profilePic, $profilePicPath);
-        if ($profilePicUploaded) {
+        $user_image  = $_FILES['profile-picture']['tmp_name'];
+        $ext = pathinfo($_FILES['profile-picture']['name'], PATHINFO_EXTENSION);
+        unset($_FILES['profile-picture']);
+        $profilePicPath = $profilePicPath.".".$ext;
+        $bookImageUploades = move_uploaded_file($user_image, $profilePicPath);
+        if ($bookImageUploades) {
             $path = $profilePicPath;
         }
+    } else if (($profilePic != null) && ($_FILES['profile-picture']['size'] == 0)) {
+        $path = $profilePic;
     } else {
-        $defaultProfilePic = "../members/default/defaultDP.jpg";
-        $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
-        $profilePicUploaded = copy($defaultProfilePic, $profilePicPath);
-        if ($profilePicUploaded) {
+        $defaultDPQuery = "SELECT * FROM SystemConfiguration WHERE KeyFields = 'DefaultMemberDisplayPicture' ";
+        $defaultDPResult = mysqli_query($connection, $defaultDPQuery);
+        $defaultDP = mysqli_fetch_assoc($defaultDPResult);
+        $dp = $defaultDP['Value'];
+        $dpExt = 
+        $dp = str_replace("../../", "../", $dp);
+        $ext = pathinfo($dp, PATHINFO_EXTENSION);
+        $profilePicPath = $profilePicPath.".".$ext;
+        $isDefaultSeted = copy($dp, $profilePicPath);
+        if ($isDefaultSeted) {
             $path = $profilePicPath;
         }
     }
-
-    global $path;
-    // Get GenderID
-    $getGenderID = "SELECT * FROM ReferenceData WHERE RefCategory = 'Gender' and Value = '$gender'";
-    $getGenderIDResult = mysqli_query($connection, $getGenderID);
-    $getGenderDetail = mysqli_fetch_assoc($getGenderIDResult);
-    $genderID = $getGenderDetail['ID'];
-
 
     // inserting data into UserProfile Table if User data is not present in UserProfil Data
-    if (mysqli_num_rows($getUserProfileResult) == 0) {
+    if (!$isSet) {
 
+        echo $path;
         $addProfileQuery = "INSERT INTO UserProfile( UserID , DOB , Gender , SecondaryEmailAddress , PhonenNumberCountryCode , PhoneNumber , ProfilePicture , AddressLine1 , AddressLine2 , City , State , ZipCode , Country , University , College) VALUES( $userID ,  '$dateOfBirth' , $genderID , '$email' , '$phoneCode' , '$phoneNumber' , '$path' , '$addrLine1' , '$addrLine2' , '$city' , '$state' ,'$zipCode' , '$country' , '$university' , '$college' )";
         $addProfileResult = mysqli_query($connection, $addProfileQuery);
         if (!$addProfileResult) {
             die(mysqli_error($connection));
+        } else{
+            $_SESSION['UserProfilePic'] = $path;
+            header("Refresh:0");
         }
-    } else if (mysqli_num_rows($getUserProfileResult) != 0) {
-        $updateUserProfileQuery = "UPDATE UserProfile SET DOB = '$dateOfBirth' , Gender = $genderID , SecondaryEmailAddress = '$email' , PhonenNumberCountryCode = '$phoneCode' , PhoneNumber = '$phoneNumber' , ProfilePicture = '$path' , AddressLine1 = '$addrLine1' , AddressLine2 = '$addrLine2' , City = '$city' , State = '$state' , ZipCode = '$zipCode' , Country = '$country' , University = '$university' , College = '$college' WHERE UserID = $userID ";
+    } else {
+        echo $path;
+        echo $genderID;
+        $updateUserProfileQuery = "UPDATE UserProfile SET DOB = '$dateOfBirth' , Gender = $genderID ,SecondaryEmailAddress = '$email' , PhonenNumberCountryCode = '$phoneCode' , PhoneNumber = '$phoneNumber' , ProfilePicture = '$path' , AddressLine1 = '$addrLine1' , AddressLine2 = '$addrLine2' , City = '$city' , State = '$state' , ZipCode = '$zipCode' , Country = '$country' , University = '$university' , College = '$college' WHERE UserID = $userID ";
         $updateUserProfileResult = mysqli_query($connection, $updateUserProfileQuery);
         if (!$updateUserProfileResult) {
             die(mysqli_error($connection));
+        }  else{
+            $_SESSION['UserProfilePic'] = $path;
+            header("Refresh:0");
         }
     }
 }
-
+ob_flush();
 ?>
