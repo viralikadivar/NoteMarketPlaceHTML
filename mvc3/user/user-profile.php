@@ -19,6 +19,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
     $isSet = true;
     $userProfileDetail = mysqli_fetch_assoc($selectUserProfileResult);
     $profilePic = $userProfileDetail['ProfilePicture'];
+    $dob = $userProfileDetail['DOB'];
 
     $gender = $userProfileDetail['Gender'];
     $genderNameQuery = " SELECT * FROM ReferenceData WHERE ID =  $gender  and IsActive = 1 ";
@@ -156,9 +157,12 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="dob" required>Date Of Birth </label>
-                            <input type="date" name="dateOfBirth" class="form-control" id="dob" placeholder="Enter Your date of birth">
+                            <input type="text" name="dateOfBirth" class="form-control" id="dob"value="<?php if ($isSet) {
+                                                                                                            echo $dob;
+                                                                                                        } ?>" placeholder="Enter Your date of birth" onfocus="(this.type='date')">
                         </div>
                     </div>
+ 
 
                     <!-- Select Gender-->
                     <div class="col-lg-6">
@@ -443,7 +447,7 @@ if (isset($_POST['submit'])) {
     $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
     $profilePic = $userProfileDetail['ProfilePicture'];
 
-    $path = "path";
+    $path = "";
     if ($_FILES['profile-picture']['size'] != 0) {
         if ($profilePic != null) {
             unlink($profilePic);
