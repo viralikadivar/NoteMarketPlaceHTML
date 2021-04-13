@@ -19,13 +19,13 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     if ($userRole == 3) {
         $profilePic = $_SESSION['UserProfilePic'];
         $profilePic = str_replace('../', '', $profilePic);
-        $profilePicPath = $linkURL  . $profilePic;
+        $profilePicPath = $linkURL.$profilePic;
 
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
         <div class="container navbar-wrapper">
             <a class="navbar-brand" href="' . $linkURL . 'index.php">
-                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
+                <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="LOGO">
             </a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -64,7 +64,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     } else if ($userRole == 1) {
         $profilePic = $_SESSION['UserProfilePic'];
         $profilePic = str_replace('../', '', $profilePic);
-        $profilePicPath = $linkURL . $profilePic . ".jpg";
+        $profilePicPath = $linkURL . $profilePic;
 
         echo '<header id="header">
         <nav class="navbar white-navbar navbar-expand-lg">
