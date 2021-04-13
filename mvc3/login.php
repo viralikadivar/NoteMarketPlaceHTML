@@ -51,7 +51,12 @@ if (isset($_POST["submit"])) {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'] . ' ' . $user_detail['LastName'];
                     $_SESSION['logged_in'] = true;
-
+                    $defaultDPQuery = "SELECT * FROM SystemConfiguration WHERE KeyFields = 'DefaultMemberDisplayPicture' ";
+                    $defaultDPResult = mysqli_query($connection, $defaultDPQuery);
+                    $defaultDP = mysqli_fetch_assoc($defaultDPResult);
+                    $dp = $defaultDP['Value'];
+                    $dp = str_replace("../../", "", $dp);
+                    $_SESSION['UserProfilePic'] = $dp;
                     header("Location:admin/admin-profile.php");
                     exit();
                 }
@@ -73,6 +78,12 @@ if (isset($_POST["submit"])) {
                     $_SESSION['UserID'] = $user_detail['ID'];
                     $_SESSION['UserName'] = $user_detail['FirstName'] . ' ' . $user_detail['LastName'];
                     $_SESSION['logged_in'] = true;
+                    $defaultDPQuery = "SELECT * FROM SystemConfiguration WHERE KeyFields = 'DefaultMemberDisplayPicture' ";
+                    $defaultDPResult = mysqli_query($connection, $defaultDPQuery);
+                    $defaultDP = mysqli_fetch_assoc($defaultDPResult);
+                    $dp = $defaultDP['Value'];
+                    $dp = str_replace("../../", "", $dp);
+                    $_SESSION['UserProfilePic'] = $dp;
                     header("Location:user/user-profile.php");
                     exit();
                 }
