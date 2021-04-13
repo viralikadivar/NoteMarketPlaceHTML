@@ -272,7 +272,6 @@ if($isSubmit){
         unset($_FILES['adminDP']);
         $ext = pathinfo($_FILES['adminDP']['name'], PATHINFO_EXTENSION);
         $dp_path = $dp_path.".".$ext;
-        echo $dp_path;
         $bookImageUploades = move_uploaded_file($book_image, $dp_path);
         if ($bookImageUploades) {
             $path = $dp_path;
@@ -287,7 +286,6 @@ if($isSubmit){
         $dp = str_replace("../../", "../", $dp);
         $ext = pathinfo($dp, PATHINFO_EXTENSION);
         $dp_path = $dp_path.".".$ext;
-        echo $dp_path;
         $isDefaultSeted = copy($dp, $dp_path);
         if ($isDefaultSeted) {
             $path = $dp_path;
