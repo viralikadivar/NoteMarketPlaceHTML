@@ -62,7 +62,7 @@ try {
     $mail->Subject = 'Note Marketplace - Email Verification';
     $mail->Body    =  'Hello '.$userName.','.'<br>'.
                     'Thank you for signing up with us. Please click on below link to verify your email address and to do login.'.'<br>'.
-'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc2/user/activation.php?token='.$token.'<br>'.
+'http://localhost/NotesMarketPlace/NoteMarketPlaceHTML/mvc3/user/activation.php?token='.$token.'<br>'.
 'Regards,'.'<br>'.
 'Notes Marketplace';
     // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
