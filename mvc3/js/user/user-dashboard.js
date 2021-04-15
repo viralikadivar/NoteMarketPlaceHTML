@@ -35,14 +35,14 @@ var input = $('#DataTables_Table_0_filter label input');
 $("#DataTables_Table_0_filter label").html("");
 $("#DataTables_Table_0_filter label").append(input);
 input.attr("id", "search-row");
-$("#DataTables_Table_0_filter label").append('<button class="btn" id="table-btn-1"  type="submit">Search</button>');
+$("#DataTables_Table_0_filter label").append('<button class="btn" id="table-btn-1" type="button">Search</button>');
 $("#DataTables_Table_0_filter label input").attr("placeholder", "Search");
 
 var input2 = $('#DataTables_Table_1_filter label input');
 $("#DataTables_Table_1_filter label").html("");
 $("#DataTables_Table_1_filter label").append(input2);
 input2.attr("id", "search-row-2");
-$("#DataTables_Table_1_filter label").append('<button class="btn" id="table-btn-2" type="submit">Search</button>');
+$("#DataTables_Table_1_filter label").append('<button class="btn" id="table-btn-2" type="button">Search</button>');
 $("#DataTables_Table_1_filter label input").attr("placeholder", "Search");
 
 $(function () {
