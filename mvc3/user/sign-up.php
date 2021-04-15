@@ -4,6 +4,7 @@
 <?php
 
     session_start();
+    ob_start();
     global $connection ;
 
     $succesSubmissionMsgDisplay  = "none";
@@ -43,21 +44,7 @@
             }
         }
         
-        
 
-        // InserQuery 
-        if($toSubmit){
-        $query = "INSERT INTO Users( RoleID , FirstName , LastName ,EmailID , Password , IsEmailVerified ) VALUES( 3 , '$firstName' , '$lastName' , '$email' , '$hashedPassword' , 0  )";
-        
-        $queryResult = mysqli_query($connection ,$query );
-
-        
-
-        if($queryResult){
-            header("location:email-varification.php");
-        }
-       }
-        
     }
 
 
@@ -175,3 +162,21 @@
 </body>
 
 </html>
+<?php 
+
+// InserQuery 
+if($toSubmit){
+    $query = "INSERT INTO Users( RoleID , FirstName , LastName ,EmailID , Password , IsEmailVerified ) VALUES( 3 , '$firstName' , '$lastName' , '$email' , '$hashedPassword' , 0  )";
+    
+    $queryResult = mysqli_query($connection ,$query );
+
+    
+
+    if($queryResult){
+        header("Location:email-varification.php");
+    } else {
+        die("Data not inserted :" . mysqli_error($connection));
+    }
+   }
+    ob_flush();
+?>
