@@ -10,9 +10,11 @@
     $succesSubmissionMsgDisplay  = "none";
     $emailValidationMessage = "Please enter valid Email id";
     $emailValidationClass = "validation";
+    $toSubmit = false;
 
     if(isset($_POST['submit'])){
-    
+
+        $toSubmit = true;
         date_default_timezone_set("Asia/Kolkata");
         $currentDate = date("d-m-Y H:i:s");
 
@@ -27,7 +29,7 @@
         $password = $_POST['password'];
         $createdDate = $currentDate;
         $modifiedDate = $currentDate;
-        $toSubmit = true;
+        
         
         // Password Hashing 
         $hashedPassword = password_hash($password , PASSWORD_DEFAULT);
@@ -43,8 +45,8 @@
             }
         }
         
-
     }
+    
 
 
 
@@ -163,7 +165,7 @@
 </html>
 <?php 
 
-// InserQuery 
+// Insert Query 
 if($toSubmit){
     $query = "INSERT INTO Users( RoleID , FirstName , LastName ,EmailID , Password , IsEmailVerified ) VALUES( 3 , '$firstName' , '$lastName' , '$email' , '$hashedPassword' , 0  )";
     
@@ -177,5 +179,7 @@ if($toSubmit){
         die("Data not inserted :" . mysqli_error($connection));
     }
    }
+
     ob_flush();
+
 ?>
