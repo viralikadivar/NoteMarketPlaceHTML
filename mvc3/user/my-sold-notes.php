@@ -4,6 +4,10 @@ require "../db_connection.php";
 global $connection;
 
 session_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+
 $userEmail = $_SESSION['userEmail'];
 $userID = $_SESSION['UserID'];
 
