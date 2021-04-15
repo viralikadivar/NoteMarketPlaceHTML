@@ -5,18 +5,18 @@ $(window).on("load", function () {
 });
 
 // add pagination to table
-var table = $(".dashboard-table").DataTable({
-  dom: '<"top"f>t<"bottom"p><"clear">',
-  pagingType: "simple_numbers",
-  pageLength: "5",
-  lengthChange: "5",
-  language: {
-    zeroRecords: "No Record Found",
-  },
-  aoColumnDefs: [
-    { bSortable: true, aTargets: ["_all"] }, //disable ordering events and takeout the icon
-  ],
-});
+// var table = $(".dashboard-table").DataTable({
+//   dom: '<"top"f>t<"bottom"p><"clear">',
+//   pagingType: "simple_numbers",
+//   pageLength: "5",
+//   lengthChange: "5",
+//   language: {
+//     zeroRecords: "No Record Found",
+//   },
+//   aoColumnDefs: [
+//     { bSortable: true, aTargets: ["_all"] }, //disable ordering events and takeout the icon
+//   ],
+// });
 
 var tableLong = $(".dashboard-table-long").DataTable({
   dom: '<"top"f>t<"bottom"p><"clear">',
@@ -38,19 +38,18 @@ $("#DataTables_Table_0_filter label").append(input);
 input.attr("type", "text");
 input.attr("id", "search-row");
 $("#DataTables_Table_0_filter label").append(
-  '<button class="btn" id="table-btn"  type="submit">Search</button>'
+  '<button class="btn" type="button" id="table-btn">Search</button>'
 );
 $("#DataTables_Table_0_filter label input").attr("placeholder", "Search");
 
 $(function () {
   var res;
-  $("#search-row").on("keyup", function () {
-    res = table.column(1).search(this.value);
-    resLong = tableLong.column(1).search(this.value);
+  $("#search-row").on("keyup change", function () {
+    // resLong = tableLong.column(1).search(this.value);
+    tableLong.column(3).search(this.value).draw();
   });
 
   $("#table-btn").click(function () {
-    res.draw();
     resLong.draw();
   });
 });
@@ -92,3 +91,7 @@ $(function () {
   });
   
 });
+  // dtable
+  //     .column(3).search(this.value)
+  //     .column(4).search(this.value)
+  //     .draw();
