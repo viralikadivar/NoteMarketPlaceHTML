@@ -6,6 +6,9 @@ use PHPMailer\PHPMailer\Exception;
 
 session_start();
 ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
 
 require "../db_connection.php";
 global $connection;
@@ -239,7 +242,7 @@ $bookRequestsResult = mysqli_query($connection, $bookRequestsQuery);
 
     <!-- custom js  -->
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/buyers-request.js?version=12554562563351"></script>
+    <script src="../js/user/buyers-request.js?version=125112363351"></script>
 
 
 </body>
