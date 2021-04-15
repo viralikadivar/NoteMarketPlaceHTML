@@ -37,7 +37,7 @@ $("#DataTables_Table_0_filter label").html("");
 $("#DataTables_Table_0_filter label").append(input);
 input.attr("type", "text");
 input.attr("id", "search-row");
-$("#DataTables_Table_0_filter label").append('<button class="btn" id="table-btn"  type="submit">Search</button>');
+$("#DataTables_Table_0_filter label").append('<button class="btn" id="table-btn" type="button">Search</button>');
 $("#DataTables_Table_0_filter label input").attr("placeholder", "Search");
 
 
