@@ -22,3 +22,6 @@ $(function(){
         count++;
     });
 });
+
+
+// for onclick adding class active  
