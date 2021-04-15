@@ -39,7 +39,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                         <div class="dropdown user-image">
                         <img id="user-menu" data-toggle="dropdown" src="' . $profilePicPath . '" alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
-                                <a class="dropdown-item active" href="' . $linkURL . 'user/user-profile.php">My Profile</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'user/user-profile.php">My Profile</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-download.php">My Downloads</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-sold-notes.php">My Sold Notes</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-rejected-notes.php">My Rejected Notes</a>
@@ -95,7 +95,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <div class="dropdown-menu" aria-labelledby="setting-menu">
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/super-admin/manage-config.php">Manage System Configuration</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/super-admin/manage-admin.php">Manage Administrator</a>
-                                <a class="dropdown-item active" href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/manage-type.php">Manage Type</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/manage-country.php">Manage Countries</a>
                             </div>
@@ -137,7 +137,6 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
             <a class="navbar-brand" href="' . $linkURL . 'index.php">
                 <img class="img-responsive" src="' . $linkURL . 'images/logo/logo-dark.png" alt="logo">
             </a>
-
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'admin/admin-dashboard.php">Dashboard</a></li>
@@ -158,7 +157,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                         <div class="dropdown">
                             <div id="setting-menu" data-toggle="dropdown">Setting</div>
                             <div class="dropdown-menu" aria-labelledby="setting-menu">
-                                <a class="dropdown-item active" href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
+                                <a class="dropdown-item " href="' . $linkURL . 'admin/manage-category.php">Manage Category</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/manage-type.php">Manage Type</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/manage-country.php">Manage Countries</a>
                             </div>
