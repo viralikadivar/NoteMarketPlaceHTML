@@ -27,7 +27,7 @@
         $password = $_POST['password'];
         $createdDate = $currentDate;
         $modifiedDate = $currentDate;
-        $toSubmit = false;
+        $toSubmit = true;
         
         // Password Hashing 
         $hashedPassword = password_hash($password , PASSWORD_DEFAULT);
@@ -39,8 +39,7 @@
             if($presentEmail['EmailID'] == $email) {
                 $emailValidationMessage = "User with this EmailID is alredy Present";
                 $emailValidationClass = "wrong-info";
-            } else{
-                $toSubmit = true;
+                $toSubmit = false;
             }
         }
         
