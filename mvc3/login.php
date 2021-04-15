@@ -3,6 +3,16 @@ session_start();
 $password_class = "";
 $warning_class = "text-hide";
 
+$isRemember = false;
+if(isset($_COOKIE['userDetail'])) {
+    $isRemember = true;
+    $userPassword = $_COOKIE['userDetail'];
+    $userDetails = explode(',' , $userPassword );
+
+    $userEmail = $userDetails[0];
+    $userPassword = $userDetails[1];
+}
+
 if (isset($_POST["submit"])) {
 
     global $connection;
@@ -11,6 +21,16 @@ if (isset($_POST["submit"])) {
     $_SESSION['userEmail'] = $email;
     $password  = $_POST["password"];
 
+
+    if(isset($_POST['remember'])){
+        if(isset($_COOKIE['userDetail'])) {
+            unset($_COOKIE['userDetail']);
+        }
+    $cookie_name = 'userDetail';
+    $cookie_value = $email.','. $password  ;
+    setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");   
+    }
+    
 
     $query = "SELECT * FROM Users WHERE EmailId = '$email' AND 	IsActive = 1 ";
     $query_result = mysqli_query($connection, $query);
@@ -155,16 +175,16 @@ if (isset($_POST["submit"])) {
                 <form action="login.php" method="post">
                     <div class="form-group">
                         <label for="inputEmail">Email</label>
-                        <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Enter your email" required>
+                        <input type="email" name="email" class="form-control" id="inputEmail" value="<?php if($isRemember){echo $userEmail;} ?>" placeholder="Enter your email" required>
 
                     </div>
                     <div class="form-group <?php echo $password_class; ?>">
                         <label for="inputPassword">Password<a href="forgot-password.php" id="forgot-password">Forgot Password?</a></label>
-                        <input type="password" name="password" class="form-control" id="inputPassword" aria-describedby="passwordVarification" placeholder="Enter your password" required><img id="show-hide" src="images/form/eye.png" alt="eye">
+                        <input type="password" name="password" class="form-control" id="inputPassword" aria-describedby="passwordVarification" value="<?php if($isRemember){echo $userPassword;} ?>" placeholder="Enter your password" required><img id="show-hide" src="images/form/eye.png" alt="eye">
                         <small id="passwordVarification" class=<?php echo $warning_class; ?>>The password that you've entered is incorrect</small>
                     </div>
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="check">
+                        <input type="checkbox" class="form-check-input" name="remember" id="check">
                         <label class="form-check-label" for="check">Remember Me</label>
                     </div>
                     <!-- <button type="submit" name="submit"><span class="text-center"><a href="user/user-dashboard.html">Login</a></span></button> -->
