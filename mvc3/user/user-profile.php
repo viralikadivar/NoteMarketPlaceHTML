@@ -2,6 +2,10 @@
 require "../db_connection.php";
 session_start();
 ob_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+
 $userEmail =  $_SESSION['userEmail'];
 
 $selectUserQuery = "SELECT * FROM Users WHERE EmailID = '$userEmail'";
