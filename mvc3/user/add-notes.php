@@ -1,9 +1,12 @@
 <?php
-ob_start();
 require "../db_connection.php";
 global $connection;
 
 session_start();
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
+}
+ob_start();
 $sellerID =  $_SESSION['UserID'];
 
 $isNoteSet = isset($_SESSION['noteID']);
