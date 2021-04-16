@@ -39,7 +39,6 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
     $editNoteSellingPrice    = $noteDetails['SellingPrice'];
     $editNoteNotesPreview    = $noteDetails['NotesPreview'];
 
-
     $getCountryName = mysqli_query($connection, "SELECT * FROM Countries WHERE ID = $editNoteCountryID ");
     $getCountryNameResult = mysqli_fetch_assoc($getCountryName);
     $editNoteCountry = $getCountryNameResult['Name'];
@@ -137,6 +136,8 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
 
             <form action="add-notes.php" method="post" enctype="multipart/form-data">
 
+            <input type="hidden" id="editBook" value="<?php echo $isNoteSet;?>">
+
                 <!-- Basic Notes detail Heading -->
                 <div class="row">
                     <div class="col-lg-12 heading">
@@ -180,7 +181,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     $queryType = "SELECT * FROM NoteTypes WHERE IsActive = 1";
                                     $noteType = mysqli_query($connection, $queryType);
                                     while ($type = mysqli_fetch_assoc($noteType)) {
-                                        echo "<li value='" . $type['Name'] . "'>" . $type['Name'] . "</li>";
+                                        echo "<li value='" . $type['ID'] . "'>" . $type['Name'] . "</li>";
                                     }
 
                                     ?>
@@ -189,7 +190,9 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
 
 
                             </div>
-                            <input type="hidden" name="type">
+                            <input type="hidden" name="type" value="<?php if ($isNoteSet) {
+                                                                        echo $editNoteTypeID;
+                                                                    } ?>">
                         </div>
 
                     </div>
@@ -209,7 +212,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
                                     $noteCategories = mysqli_query($connection, $queryCategories);
                                     while ($categories = mysqli_fetch_assoc($noteCategories)) {
-                                        echo "<li value='" . $categories['Name'] . "'>" . $categories['Name'] . "</li>";
+                                        echo "<li value='" . $categories['ID'] . "'>" . $categories['Name'] . "</li>";
                                     }
 
                                     ?>
@@ -217,7 +220,9 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                 </ul>
 
                             </div>
-                            <input type="hidden" name="category">
+                            <input type="hidden" name="category" value="<?php if ($isNoteSet) {
+                                                                            echo $editNoteCategoryID;
+                                                                        } ?>">
                         </div>
 
                         <!-- Upload Notes -->
@@ -250,7 +255,9 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     <label for="description">Description</label>
                                 </div>
                             </div>
-                            <textarea name="book-description" placeholder="Enter your description" id="description" required><?php echo $editNoteDescription; ?></textarea>
+                            <textarea name="book-description" placeholder="Enter your description" id="description" required><?php if ($isNoteSet) {
+                                                                                                                                    echo $editNoteDescription;
+                                                                                                                                } ?></textarea>
                         </div>
 
                     </div>
@@ -281,14 +288,16 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
                                     $countryResult = mysqli_query($connection, $queryCountry);
                                     while ($country = mysqli_fetch_assoc($countryResult)) {
-                                        echo "<li value='" . $country['Name'] . "'>" . $country['Name'] . "</li>";
+                                        echo "<li value='" . $country['ID'] . "'>" . $country['Name'] . "</li>";
                                     }
 
                                     ?>
 
                                 </ul>
                             </div>
-                            <input type="hidden" name="country">
+                            <input type="hidden" name="country" value="<?php if ($isNoteSet) {
+                                                                            echo $editNoteCountryID;
+                                                                        } ?>">
 
                         </div>
                     </div>
@@ -464,7 +473,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/user/add-notes.js?version=12552016"></script>
+    <script src="../js/user/add-notes.js?version=125521215016"></script>
 
 </body>
 
@@ -472,15 +481,21 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
 
 <?php
 
+// file To upload 
+date_default_timezone_set("Asia/Kolkata");
+$dateTime  = new DateTime();
+$timeStamp = $dateTime->getTimestamp();
+
+
 if (isset($_POST['save'])) {
 
     $Status = 6;
     $title = $_POST['book-title'];
-    $category = $_POST['category'];
-    $type = $_POST['type'];
+    $categoryID = (int)$_POST['category'];
+    $typeID = (int)$_POST['type'];
     $noOfPages = (int)$_POST['number-of-pages'];
     $description = $_POST['book-description'];
-    $counrty = $_POST['country'];
+    $countryID  = (int)$_POST['country'];
     $institutionName = $_POST['institute-name'];
     $courseName = $_POST['course-name'];
     $courseCode = $_POST['course-code'];
@@ -492,46 +507,93 @@ if (isset($_POST['save'])) {
     $sellForResult = mysqli_fetch_assoc($sellFor);
     $isPaid = (int)$sellForResult['ID'];
 
-    $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
-    $getCountryResult = mysqli_fetch_assoc($getCountry);
-    $countryID = (int)$getCountryResult['ID'];
-
-    $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
-    $getTypeResult = mysqli_fetch_assoc($getType);
-    $typeID = (int)$getTypeResult['ID'];
-
-    $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
-    $getCategoryResult = mysqli_fetch_assoc($getCategory);
-    $categoryID = (int)$getCategoryResult['ID'];
-
     $resultNote = mysqli_query($connection, "SELECT MAX(ID) FROM  NotesDetails");
     $rowNote = mysqli_fetch_row($resultNote);
     $highestNoteID = $rowNote[0];
     $currentNoteID = (int)$highestNoteID + 1;
 
     if ($isNoteSet) {
-        if ($_POST['country'] != "") {
-            $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
-            $getCountryResult = mysqli_fetch_assoc($getCountry);
-            $countryID = (int)$getCountryResult['ID'];
-        } else {
-            $countryID = (int)$editNoteCountryID;
+
+        $pathToCreateNoteFolder = "../members/" . $sellerID . "/" . $editNoteID . "/";
+        $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
+        // Book Image
+        if ($_FILES['book-image']['size'] != 0) {
+            $editNoteDisplayPicture  = $noteDetails['DisplayPicture'];
+            if ($editNoteDisplayPicture != null) {
+                unlink($editNoteDisplayPicture);
+            }
+            $book_image  = $_FILES['book-image']['tmp_name'];
+            $book_path = $pathToCreateNoteFolder . "DP_" . $timeStamp;
+            $ext = pathinfo($_FILES['book-image']['name'], PATHINFO_EXTENSION);
+            $book_path = $book_path . "." . $ext;
+            $bookImageUploades = move_uploaded_file($book_image, $book_path);
+            if ($bookImageUploades) {
+                mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $editNoteID ");
+            } else {
+                echo "not uploaded";
+            }
         }
 
-        if ($_POST['type'] != "") {
-            $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
-            $getTypeResult = mysqli_fetch_assoc($getType);
-            $typeID = (int)$getTypeResult['ID'];
-        } else {
-            $typeID = (int)$editNoteTypeID;
+        //Book Preview
+        if ($_FILES['notes-preview']['size'] != 0) {
+            $editNoteNotesPreview = $noteDetails['NotesPreview'];
+            if ($editNoteNotesPreview != null) {
+                unlink($editNoteNotesPreview);
+            }
+
+            $bookPreview = $_FILES['notes-preview']['tmp_name'];
+            $preview_path = $pathToCreateNoteFolder . "Preview_" . $timeStamp;
+
+            $notePreviewUploaded =  move_uploaded_file($bookPreview, $preview_path);
+
+            if ($notePreviewUploaded) {
+                mysqli_query($connection, "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID = $editNoteID ");
+            }
         }
 
-        if ($_POST['category'] != "") {
-            $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
-            $getCategoryResult = mysqli_fetch_assoc($getCategory);
-            $categoryID = (int)$getCategoryResult['ID'];
-        } else {
-            $categoryID = (int)$editNoteCategoryID;
+        //Book PDF
+        if ($_FILES['note-file']['size'] != 0) {
+
+            $book_file = $_FILES['note-file']['tmp_name'];
+            $fileNumber = count($book_file);
+
+            $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $editNoteID";
+            $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+            while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+                $filePath = $attachmentDetails['FilePath']; 
+                $deleteID = $attachmentDetails['ID'];
+                $deleteQuery = "DELETE FROM NotesAttachments WHERE ID =  $deleteID ";
+                $deleteResult = mysqli_query($connection,$deleteQuery);
+                if($deleteResult){
+                    unlink($filePath);
+                } else {
+                    die(mysqli_error($connection));
+                }
+            }
+
+
+            for ($i = 0; $i < $fileNumber; $i++) {
+
+                $result = mysqli_query($connection, "SELECT MAX(ID) FROM NotesAttachments ");
+                $row = mysqli_fetch_row($result);
+                $highest_id = $row[0];
+                $currentID = (int)$highest_id + 1;
+
+                $fileName = $_FILES['note-file']['name'][$i];
+                $fileTempName = $_FILES['note-file']['tmp_name'][$i];
+
+                $file_path = $FolderNotesAttachments . $currentID . "_" . $timeStamp;
+
+
+                $fileUploaded = move_uploaded_file($fileTempName, $file_path);
+
+                if ($fileUploaded) {
+                    mysqli_query($connection, "INSERT INTO NotesAttachments( ID , NoteID , FileName , FilePath ) VALUES( $currentID ,$editNoteID , '$fileName' , '$file_path' )");
+                }
+                if (!$fileUploaded) {
+                    echo "Not Uploaded";
+                }
+            }
         }
 
         $queryUpdateNotes = "UPDATE NotesDetails SET  Status = $Status , Title = '$title' , Category = $categoryID , NoteType = $typeID ,
@@ -545,7 +607,7 @@ if (isset($_POST['save'])) {
             die(mysqli_error($connection));
         } else {
             $_SESSION['noteID'] = $editNoteID;
-            header("Refresh:0");
+            // header("Refresh:0");
         }
     } else {
 
@@ -556,31 +618,21 @@ if (isset($_POST['save'])) {
 
         if ($queryAddNotesResult) {
 
+
             $addedNote = mysqli_insert_id($connection);
+            $_SESSION['noteID'] = $addedNote;
             $pathToCreateNoteFolder = "../members/" . $sellerID . "/" . $addedNote . "/";
             mkdir($pathToCreateNoteFolder, $mode = 0777, $recursive = false, $context = null);
             $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
             mkdir($FolderNotesAttachments, $mode = 0777, $recursive = false, $context = null);
 
-            // file To upload 
-            date_default_timezone_set("Asia/Kolkata");
-            $dateTime  = new DateTime();
-            $timeStamp = $dateTime->getTimestamp();
 
-            
-            // Book Image
-            if (isset($_FILES['book-image'])) {
-
-                if ($bookImageUploades) {
-                    mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
-                }
-            }
             if ($_FILES['book-image']['size'] != 0) {
-               
+
                 $book_image  = $_FILES['book-image']['tmp_name'];
                 $book_path = $pathToCreateNoteFolder . "DP_" . $timeStamp;
                 $ext = pathinfo($_FILES['book-image']['name'], PATHINFO_EXTENSION);
-                $book_path = $book_path.".".$ext;
+                $book_path = $book_path . "." . $ext;
                 $bookImageUploades = move_uploaded_file($book_image, $book_path);
                 if ($bookImageUploades) {
                     mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
@@ -593,11 +645,10 @@ if (isset($_POST['save'])) {
                 $book_path = $pathToCreateNoteFolder . "DP_" . $timeStamp;
                 $dp = str_replace("../../", "../", $dp);
                 $ext = pathinfo($dp, PATHINFO_EXTENSION);
-                $book_path =  $book_path.".".$ext;
+                $book_path =  $book_path . "." . $ext;
                 $isDefaultSeted = copy($dp,  $book_path);
                 if ($isDefaultSeted) {
                     mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
-
                 }
             }
             //Book Preview
@@ -642,86 +693,59 @@ if (isset($_POST['save'])) {
                     }
                 }
             }
-        }else {
+        } else {
             die(mysqli_error($connection));
         }
     }
-    
 }
 
 if (isset($_POST['publish'])) {
 
     $Status = 7;
     $title = $_POST['book-title'];
-    $category = $_POST['category'];
-    $type = $_POST['type'];
+    $categoryID  = (int)$_POST['category'];
+    $typeID = (int)$_POST['type'];
     $noOfPages = (int)$_POST['number-of-pages'];
     $description = $_POST['book-description'];
-    $counrty = $_POST['country'];
+    $countryID = (int)$_POST['country'];
     $institutionName = $_POST['institute-name'];
     $courseName = $_POST['course-name'];
     $courseCode = $_POST['course-code'];
     $professor = $_POST['pofessor-name'];
     $sellFor = $_POST['free-paid'];
     $sellPrice = (int)$_POST['sell-price'];
- 
+
     $sellFor = mysqli_query($connection, "SELECT * FROM ReferenceData WHERE Value = '$sellFor' ");
     $sellForResult = mysqli_fetch_assoc($sellFor);
     $isPaid = (int)$sellForResult['ID'];
 
-    if ($_POST['country'] != "") {
-        $getCountry = mysqli_query($connection, "SELECT * FROM Countries WHERE Name = '$counrty'");
-        $getCountryResult = mysqli_fetch_assoc($getCountry);
-        $countryID = (int)$getCountryResult['ID'];
-    } else {
-        $countryID = (int)$editNoteCountryID;
-    }
+    $pathToCreateNoteFolder = "../members/" . $sellerID . "/" . $editNoteID . "/";
+    $FolderNotesAttachments = $pathToCreateNoteFolder . "Attachements/";
 
-    if ($_POST['type'] != "") {
-        $getType = mysqli_query($connection, "SELECT * FROM NoteTypes WHERE Name = '$type' ");
-        $getTypeResult = mysqli_fetch_assoc($getType);
-        $typeID = (int)$getTypeResult['ID'];
-    } else {
-        $typeID = (int)$editNoteTypeID;
-    }
-
-    if ($_POST['category'] != "") {
-        $getCategory = mysqli_query($connection, "SELECT * FROM NoteCategories WHERE Name =  '$category' ");
-        $getCategoryResult = mysqli_fetch_assoc($getCategory);
-        $categoryID = (int)$getCategoryResult['ID'];
-    } else {
-        $categoryID = (int)$editNoteCategoryID;
-    }
-
-    $queryUpdateNotes = "UPDATE NotesDetails SET  Status = $Status , Title = '$title' , Category = $categoryID , NoteType = $typeID ,
-         NumberofPages = $noOfPages , Description = '$description' , UniversityName = '$institutionName' , Country = $countryID  ,
-          Course = '$courseName' , CourseCode = '$courseCode' , Professor = '$professor' , IsPaid =  $isPaid , 
-          SellingPrice = $sellPrice WHERE ID = $editNoteID ";
-
-    $updateNotesResult = mysqli_query($connection, $queryUpdateNotes);
-
-    if (!$updateNotesResult) {
-        die(mysqli_error($connection));
-    } else {
-        unset($_SESSION['noteID']);
-        header("Refresh:0");
-    }
-    
     // Book Image
     if ($_FILES['book-image']['size'] != 0) {
-
+        $editNoteDisplayPicture  = $noteDetails['DisplayPicture'];
+        if ($editNoteDisplayPicture != null) {
+            unlink($editNoteDisplayPicture);
+        }
         $book_image  = $_FILES['book-image']['tmp_name'];
         $book_path = $pathToCreateNoteFolder . "DP_" . $timeStamp;
         $ext = pathinfo($_FILES['book-image']['name'], PATHINFO_EXTENSION);
-        $book_path = $book_path.".".$ext;
+        $book_path = $book_path . "." . $ext;
         $bookImageUploades = move_uploaded_file($book_image, $book_path);
         if ($bookImageUploades) {
-            mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $addedNote");
+            mysqli_query($connection, "UPDATE NotesDetails SET DisplayPicture = '$book_path' WHERE ID =  $editNoteID ");
+        } else {
+            echo "not uploaded";
         }
     }
 
     //Book Preview
-    if (isset($_FILES['notes-preview'])) {
+    if ($_FILES['notes-preview']['size'] != 0) {
+        $editNoteNotesPreview = $noteDetails['NotesPreview'];
+        if ($editNoteNotesPreview != null) {
+            unlink($editNoteNotesPreview);
+        }
 
         $bookPreview = $_FILES['notes-preview']['tmp_name'];
         $preview_path = $pathToCreateNoteFolder . "Preview_" . $timeStamp;
@@ -729,15 +753,30 @@ if (isset($_POST['publish'])) {
         $notePreviewUploaded =  move_uploaded_file($bookPreview, $preview_path);
 
         if ($notePreviewUploaded) {
-            mysqli_query($connection, "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID =  $addedNote");
+            mysqli_query($connection, "UPDATE NotesDetails SET NotesPreview = '$preview_path' WHERE ID = $editNoteID ");
         }
     }
 
-    //Book PDF
-    if (isset($_FILES['note-file'])) {
+     //Book PDF
+     if ($_FILES['note-file']['size'] != 0) {
 
         $book_file = $_FILES['note-file']['tmp_name'];
         $fileNumber = count($book_file);
+
+        $getAttachmentPathQuery = "SELECT * FROM NotesAttachments WHERE NoteID = $editNoteID";
+        $getAttachmentPathResult = mysqli_query($connection, $getAttachmentPathQuery);
+        while ($attachmentDetails = mysqli_fetch_assoc($getAttachmentPathResult)) {
+            $filePath = $attachmentDetails['FilePath']; 
+            $deleteID = $attachmentDetails['ID'];
+            $deleteQuery = "DELETE FROM NotesAttachments WHERE ID =  $deleteID ";
+            $deleteResult = mysqli_query($connection,$deleteQuery);
+            if($deleteResult){
+                unlink($filePath);
+            } else {
+                die(mysqli_error($connection));
+            }
+        }
+
 
         for ($i = 0; $i < $fileNumber; $i++) {
 
@@ -755,14 +794,26 @@ if (isset($_POST['publish'])) {
             $fileUploaded = move_uploaded_file($fileTempName, $file_path);
 
             if ($fileUploaded) {
-                mysqli_query($connection, "INSERT INTO NotesAttachments( ID , NoteID , FileName , FilePath ) VALUES( $currentID , $addedNote , '$fileName' , '$file_path' )");
+                mysqli_query($connection, "INSERT INTO NotesAttachments( ID , NoteID , FileName , FilePath ) VALUES( $currentID ,$editNoteID , '$fileName' , '$file_path' )");
             }
             if (!$fileUploaded) {
                 echo "Not Uploaded";
             }
         }
     }
+
+    $queryUpdateNotes = "UPDATE NotesDetails SET  Status = $Status , Title = '$title' , Category = $categoryID , NoteType = $typeID ,
+         NumberofPages = $noOfPages , Description = '$description' , UniversityName = '$institutionName' , Country = $countryID  ,
+          Course = '$courseName' , CourseCode = '$courseCode' , Professor = '$professor' , IsPaid =  $isPaid , 
+          SellingPrice = $sellPrice WHERE ID = $editNoteID ";
+
+    $updateNotesResult = mysqli_query($connection, $queryUpdateNotes);
+
+    if (!$updateNotesResult) {
+        die(mysqli_error($connection));
+    } else {
+        header("Location:user-dashboard.php");
+    }
 }
 ob_flush();
 ?>
-<!-- $ext = pathinfo($_FILES['adminDP']['name'], PATHINFO_EXTENSION); -->
