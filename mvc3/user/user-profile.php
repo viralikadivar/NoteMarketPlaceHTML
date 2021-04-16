@@ -25,13 +25,13 @@ if (mysqli_num_rows($selectUserProfileResult)) {
     $profilePic = $userProfileDetail['ProfilePicture'];
     $dob = $userProfileDetail['DOB'];
 
-    $gender = $userProfileDetail['Gender'];
-    $genderNameQuery = " SELECT * FROM ReferenceData WHERE ID =  $gender  and IsActive = 1 ";
+    $genderID = $userProfileDetail['Gender'];
+    $genderNameQuery = " SELECT * FROM ReferenceData WHERE ID =  $genderID  and IsActive = 1 ";
     $genderNameResult = mysqli_query($connection, $genderNameQuery);
     $genderName = mysqli_fetch_assoc($genderNameResult);
     $genderName = $genderName['Value'];
 
-    $phoneCode =  $userProfileDetail['PhonenNumberCountryCode'];
+    $userPhoneCode =  $userProfileDetail['PhonenNumberCountryCode'];
     $phoneNumber = $userProfileDetail['PhoneNumber'];
 
     $add1 = $userProfileDetail['AddressLine1'];
@@ -190,7 +190,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
 
                                 </ul>
                             </div>
-                            <input type="hidden" name="gender" value="<?php if($isSet){echo $gender;}?>">
+                            <input type="hidden" name="gender" value="<?php if($isSet){echo $genderID;}?>">
                         </div>
                     </div>
 
@@ -205,7 +205,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                                 <div class="col-lg-3 col-md-3 col-sm-3">
                                     <div class="dropdown">
                                         <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
-                                            +<?php if($isSet){echo $phoneCode;}else{echo "91";} ?><img src="../images/form/arrow-down.png" alt="Down">
+                                            +<?php if($isSet){echo $userPhoneCode;}else{echo "91";} ?><img src="../images/form/arrow-down.png" alt="Down">
                                         </button>
                                         <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
                                             <?php
@@ -220,7 +220,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                                             ?>
                                         </ul>
                                     </div>
-                                    <input type="hidden" name="phoneCode" id="phoneCode" value="<?php if($isSet){ echo $phoneCode;}?>">
+                                    <input type="hidden" name="phoneCode" id="phoneCode" value="<?php if($isSet){ echo $userPhoneCode;}?>">
                                 </div>
 
                                 <div class="col-lg-9 col-md-9 col-sm-9 pl-0">
