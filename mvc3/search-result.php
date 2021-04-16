@@ -12,16 +12,13 @@ $bookUniversity =  "";
 $bookCourse = "";
 $bookCountry = "";
 $bookRating  = "";
-
+$currentPage = 1;
 $noOFResultPerPage = 9;
 
-if (!isset($_GET['page'])) {
-    $currentPage = 1;
-} else {
-    $currentPage = (int)$_GET['page'];
+if(isset($_POST['page'])){
+    $currentPage = (int)$_POST['page'];
 }
 $thisPAgeResult = ($currentPage - 1) * $noOFResultPerPage;
-
 
 // Book Title 
 if (isset($_POST['searchName'])) {
@@ -83,16 +80,37 @@ $showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 
 $showBookResult = mysqli_query($connection, $showBooksQuery);
 $totalSearhedBooks = mysqli_num_rows($showBookResult);
 
-$pageNo = "";
 $noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
-for ($page = 1; $page <= $noOfPages; $page++) {
-    $pageNo = $pageNo . '<li class="page-item "><a class="page-link" href="search-notes.php?page=' . $page . '">' . $page . '</a></li>';
-}
+$pagination = '<div id="pagination">
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item arrow">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&#8249;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>';
+        $noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
+                    for ($page = 1; $page <= $noOfPages; $page++) {
+                        if($page == $currentPage){
+                            $className = 'active';
+                        } else {
+                            $className = '';
+                        }
+                        $pagination .= '<li class="page-item '.$className .'"><a class="page-link" id="'.$page.'" href="">' . $page . '</a></li>';
+                    }
+           $pagination  .= '  <li class="page-item arrow">
+            <a class="page-link text-center" href="#" aria-label="Next">
+                <span aria-hidden="true">&#8250;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+</div>';
 
 $showBooksQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 " . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating. ' LIMIT '  . $thisPAgeResult . ',' . $noOFResultPerPage;
 $showBookResult = mysqli_query($connection, $showBooksQuery);
-
-
 
 if ($totalSearhedBooks != 0) {
     $output =  "";
@@ -183,6 +201,8 @@ if ($totalSearhedBooks != 0) {
     $output =  '<div class="col-lg-4 col-md-6 col-sm-12">No Such Book Found!</div>';
 }
 
+
+
 echo '<div class="container">
 
         <div class="row heading">
@@ -193,24 +213,5 @@ echo '<div class="container">
 
         <div class="row" >' . $output . '</div>
 
-    </div>'.'<div id="pagination">
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item arrow">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&#8249;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-            </li>
-            '.$pageNo.'
-            <li class="page-item arrow">
-                <a class="page-link text-center" href="#" aria-label="Next">
-                    <span aria-hidden="true">&#8250;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>'
+    </div>'.$pagination;
     ;
-?>
