@@ -21,7 +21,7 @@ $getUsersProfileQuery  = "SELECT * FROM UserProfile WHERE UserID = $userID  ";
 $getUserProfileResult = mysqli_query($connection, $getUsersProfileQuery);
 mysqli_num_rows($getUserProfileResult);
 $userProfile = mysqli_fetch_assoc($getUserProfileResult);
-$phoneCode = $userProfile['PhonenNumberCountryCode'];
+$userPhoneCode = $userProfile['PhonenNumberCountryCode'];
 $phoneNumber = $userProfile['PhoneNumber'];
 $secondaryEmail = $userProfile['SecondaryEmailAddress'];
 
@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
                                         <div class="col-lg-3 col-md-3 col-sm-4">
                                             <div class="dropdown">
                                                 <button type="button" id="phone-code" class="select-field" data-toggle="dropdown">
-                                                    +<?php echo $phoneCode; ?><img src="../images/form/arrow-down.png" alt="Down">
+                                                    +<?php echo $userPhoneCode; ?><img src="../images/form/arrow-down.png" alt="Down">
                                                 </button>
                                                 <ul class="dropdown-menu phoneCode" aria-labelledby="phone-code">
                                                     <?php
@@ -183,7 +183,7 @@ if (isset($_POST['submit'])) {
                                                     ?>
                                                 </ul>
                                             </div>
-                                            <input type="hidden" name="phoneCode" id="phoneCode" value="<?php echo $phoneCode; ?>">
+                                            <input type="hidden" name="phoneCode" id="phoneCode" value="<?php echo $userPhoneCode; ?>">
                                         </div>
                                         <div class="col-lg-9 col-md-9 col-sm-8 pl-0">
                                             <input type="tel" class="form-control" id="Phone-number" value="<?php echo $phoneNumber; ?>" name="phoneNo" placeholder="Enter your phone number">
@@ -269,7 +269,6 @@ if($isSubmit){
             unlink($profilePic);
         }
         $book_image  = $_FILES['adminDP']['tmp_name'];
-        unset($_FILES['adminDP']);
         $ext = pathinfo($_FILES['adminDP']['name'], PATHINFO_EXTENSION);
         $dp_path = $dp_path.".".$ext;
         $bookImageUploades = move_uploaded_file($book_image, $dp_path);
