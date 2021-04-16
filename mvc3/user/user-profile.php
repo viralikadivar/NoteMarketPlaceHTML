@@ -429,7 +429,6 @@ if (isset($_POST['submit'])) {
     $phoneCode = (int)$_POST['phoneCode'];
     $phoneNumber = $_POST['phoneNumber'];
 
-    echo $email;
     // Address Details 
     $addrLine1 = $_POST['addrLine1'];
     $addrLine2 = $_POST['addrLine2'];
@@ -471,7 +470,6 @@ if (isset($_POST['submit'])) {
         $defaultDPResult = mysqli_query($connection, $defaultDPQuery);
         $defaultDP = mysqli_fetch_assoc($defaultDPResult);
         $dp = $defaultDP['Value'];
-        $dpExt = 
         $dp = str_replace("../../", "../", $dp);
         $ext = pathinfo($dp, PATHINFO_EXTENSION);
         $profilePicPath = $profilePicPath.".".$ext;
@@ -484,7 +482,6 @@ if (isset($_POST['submit'])) {
     // inserting data into UserProfile Table if User data is not present in UserProfil Data
     if (!$isSet) {
 
-        echo $path;
         $addProfileQuery = "INSERT INTO UserProfile( UserID , DOB , Gender , SecondaryEmailAddress , PhonenNumberCountryCode , PhoneNumber , ProfilePicture , AddressLine1 , AddressLine2 , City , State , ZipCode , Country , University , College) VALUES( $userID ,  '$dateOfBirth' , $genderID , '$email' , '$phoneCode' , '$phoneNumber' , '$path' , '$addrLine1' , '$addrLine2' , '$city' , '$state' ,'$zipCode' , '$country' , '$university' , '$college' )";
         $addProfileResult = mysqli_query($connection, $addProfileQuery);
         if (!$addProfileResult) {
