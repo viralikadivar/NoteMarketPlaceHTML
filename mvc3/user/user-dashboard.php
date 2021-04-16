@@ -9,7 +9,7 @@ global $connection;
 
 $userEmail = $_SESSION['userEmail'];
 $userID = $_SESSION['UserID'];
-
+unset($_SESSION['noteID']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
