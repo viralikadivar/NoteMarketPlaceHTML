@@ -41,6 +41,8 @@ $(function () {
     '<span>Select rating</span><img src="images/form/arrow-down.png" alt="Down">'
   );
 
+  
+
   // Selecting Fields
   var searchBookName = "";
   var bookTye = "";
@@ -49,6 +51,28 @@ $(function () {
   var bookCourse = "";
   var bookCountry = "";
   var bookRating = "";
+
+ function onLoad(pageNO){
+ 
+    $.ajax({
+      url: "search-result.php",
+      type: "POST",
+      data: {
+        page : pageNO ,
+        searchName: searchBookName,
+        type: bookTye,
+        category: bookCategory,
+        university: bookUniversity,
+        course: bookCourse,
+        country: bookCountry,
+        rating: bookRating,
+      },
+      success: function (data) {
+        $("#search-result").html(data);
+      },
+    });
+  }
+  onLoad(); 
 
   // Select Book Type
   $(".types li").click(function () {
@@ -251,7 +275,7 @@ $(function () {
   // Search By Book Name
   $("#filter-with-icon").on("keyup click", function () {
     searchBookName = $(this).val();
-
+ 
     $.ajax({
       url: "search-result.php",
       type: "POST",
@@ -270,4 +294,14 @@ $(function () {
       },
     });
   });
+
+ // pagination 
+    $(document).on("click" , "#pagination nav ul li a" , function(e) {
+
+      var pageNO = $(this).attr("id");
+     
+     e.preventDefault();
+       onLoad(pageNO);
+     });
+  
 });
