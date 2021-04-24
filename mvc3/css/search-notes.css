@@ -12,9 +12,13 @@ color : #6255a5  OR rbg(98,85,165)
 /* =========================================
                 Html, Body
 ============================================ */
+html{
+    overflow-x: hidden;
+}
 html,
 body {
     height: 100%;
+    /* overflow-x: hidden; */
 }
 section {
     background: #fff;
@@ -44,7 +48,7 @@ section {
     position: fixed; 
     z-index: -1;
     height: 200px;
-    width: 100%;
+    /* width: 100%; */
     background-size: cover;
     top: 85px;
 }
@@ -172,9 +176,7 @@ input.search-icon {
 
 /* book image */
 .book-info img.book-img {
-    overflow: hidden;
      max-width: 100%;
-     height: inherit;
 }
 
 .book-short-info {
