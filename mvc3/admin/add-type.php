@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../login.php");
 }
@@ -9,6 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
+$isPresent = false;
 if (!empty($_SESSION['EditTypeID'])) {
     $isEdit = true;
     $editID  = $_SESSION['EditTypeID'];
@@ -24,10 +26,18 @@ if (isset($_POST['submit'])) {
     $isSubmit = true;
     $name = $_POST['name'];
     $description = $_POST['comments'];
+
+    $getTypesDetail = "SELECT * FROM NoteTypes WHERE Name = '$name'";
+    $getTypeResult = mysqli_query($connection,$getTypesDetail);
+    if(mysqli_num_rows($getTypeResult) && !$isEdit){
+        $isSubmit = false;
+        $isPresent = true;
+        $presentStyle = 'style="border-color:red"';
+    }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden"> 
 
 <head>
 
@@ -58,12 +68,11 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/field-add.css">
+    <link rel="stylesheet" href="../css/admin/field-add.css?version=6575">
 
 </head>
 
 <body>
-
 
     <!-- Preloader -->
     <div id="preloader">
@@ -71,10 +80,9 @@ if (isset($_POST['submit'])) {
     </div>
     <!-- Preloader Ends -->
 
-
     <!-- Header -->
     <?php
-    require "../header.php";
+        require "../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -98,11 +106,13 @@ if (isset($_POST['submit'])) {
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Type *</label>
-                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                            <input type="text" class="form-control" <?php if($isPresent){echo $presentStyle ;}?> id="title" name="name" value="<?php if ($isSubmit) {
                                                                                                         echo $name;
                                                                                                     } else if ($isEdit) {
                                                                                                         echo $typeName;
                                                                                                     } ?>" placeholder="Enter type">
+                            <?php if( $isPresent ) {echo '<small style="color:red;">Note Type is already present</small>';}?>
+
                         </div>
 
                         <!-- description of field -->
@@ -125,8 +135,11 @@ if (isset($_POST['submit'])) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                        <div class="col-md-3 col-sm-3">
                                 <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button class="submit" type="submit" name="cancle" style="background-color:#d1d1d1"><span class="text-center">cancle</span></button>
                             </div>
                         </div>
                     </form>
@@ -137,19 +150,9 @@ if (isset($_POST['submit'])) {
 
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -164,7 +167,7 @@ if (isset($_POST['submit'])) {
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/manage-fileds.js?version=18652395427845"></script>
+    <script src="../js/admin/manage-fileds.js?version=18651121357845"></script>
 
 </body>
 
@@ -173,22 +176,27 @@ if (isset($_POST['submit'])) {
 
 if ($isSubmit) {
     if ($isEdit) {
-        $updateQuery = "UPDATE NoteTypes SET Name = '$name',Description='$description' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateQuery = "UPDATE NoteTypes SET Name = '$name',Description='$description' , ModifiedBy = $userID , IsActive = 1 WHERE ID = $editID ";
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
         } else {
             unset($_SESSION['EditTypeID']);
+            header("Location:manage-type.php");
         }
     } else {
         $addTypeQuery = "INSERT INTO NoteTypes(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
         $addTypeResult = mysqli_query($connection,$addTypeQuery);
         if ($addTypeResult) {
             $isSubmit = false;
+            header("Location:manage-type.php");
         } else {
             die(mysqli_error($connection));
         }
     }
 }
-
+if(isset($_POST['cancle'])){
+    header("Location:manage-type.php");
+}
+ob_flush();
 ?>
