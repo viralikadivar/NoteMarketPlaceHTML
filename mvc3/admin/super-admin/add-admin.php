@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../../login.php");
 }
@@ -64,7 +65,7 @@ if (isset($_POST['submit'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -101,8 +102,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-
-
+ 
     <!-- Preloader -->
     <div id="preloader">
         <div id="status">&nbsp;</div>
@@ -222,8 +222,12 @@ if (isset($_POST['submit'])) {
                             </div>
 
                             <!-- submit button  -->
-                            <div class="col-md-12 col-sm-12">
+                            <div class="col-md-3 col-sm-3">
                                 <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
+                            </div>
+
+                            <div class="col-md-3 col-sm-3">
+                                <button class="submit" type="submit" name="cancle" style="background-color:#d1d1d1;"><span class="text-center">cancle</span></button>
                             </div>
 
                         </div>
@@ -236,19 +240,9 @@ if (isset($_POST['submit'])) {
 
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -263,7 +257,7 @@ if (isset($_POST['submit'])) {
     <script src="../../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../../js/header/header.js"></script>
-    <script src="../../js/admin/admin-profile.js?version=2142111111081"></script>
+    <script src="../../js/admin/admin-profile.js?version=2142111081"></script>
 
 </body>
 
@@ -302,6 +296,7 @@ if ($isSubmit) {
             $addUserProfileResult = mysqli_query($connection, $addUserProfileQuery);
             if ($addUserProfileResult) {
                 mkdir("../../members/" . $adminID, 0700);
+                header("Location:manage-admin.php");
             } else {
                 die(mysqli_error($connection));
             }
@@ -310,5 +305,8 @@ if ($isSubmit) {
         }
     }
 }
-
+if(isset($_POST['cancle'])){
+    header("Location:manage-admin.php");
+}
+ob_flush();
 ?>
