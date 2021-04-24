@@ -1,5 +1,24 @@
 $(function () {
 
+    $("#fullName").on("keyup" , function() {
+        $("#fullName").css("border-color","#d1d1d1");
+    });
+
+    $("#inputEmail").on("keyup" , function() {
+        $("#inputEmail").css("border-color","#d1d1d1");
+    });
+
+    $("#subject").on("keyup" , function() {
+        $("#subject").css("border-color","#d1d1d1");
+    });
+
+
+    $("#comments-questions").on("keyup" , function() {
+        $("#comments-questions").css("border-color","#d1d1d1");
+    });
+
+
+
   $("button[name='submit']").click(function (event) {
 
     var fullName = $("#fullName").val();
