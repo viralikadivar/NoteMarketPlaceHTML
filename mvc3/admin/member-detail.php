@@ -11,7 +11,7 @@ $memberID = $_SESSION['MemberID'];
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -293,19 +293,9 @@ $memberID = $_SESSION['MemberID'];
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
