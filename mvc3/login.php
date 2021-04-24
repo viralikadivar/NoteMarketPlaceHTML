@@ -2,6 +2,7 @@
 session_start();
 $password_class = "";
 $warning_class = "text-hide";
+$notLoginMSG = "The password that you've entered is incorrect";
 
 $isRemember = false;
 if(isset($_COOKIE['userDetail'])) {
@@ -32,7 +33,7 @@ if (isset($_POST["submit"])) {
     }
     
 
-    $query = "SELECT * FROM Users WHERE EmailId = '$email' AND 	IsActive = 1 ";
+    $query = "SELECT * FROM Users WHERE EmailId = '$email'";
     $query_result = mysqli_query($connection, $query);
 
     // NO User with Given email id
@@ -41,13 +42,16 @@ if (isset($_POST["submit"])) {
         $warning_class = "";
     }
 
-    // When get user with email id 
-    $user_detail = mysqli_fetch_assoc($query_result);
-
     if (mysqli_num_rows($query_result)) {
 
-        // Password get matched 
-        if (password_verify($password, $user_detail["Password"])) {
+            // When get user with email id 
+         $user_detail = mysqli_fetch_assoc($query_result);
+         $isUserActive = $user_detail['IsActive'];
+         if(!$isUserActive){
+            $password_class = "wrong-password";
+            $warning_class = "";
+            $notLoginMSG = "Your account has been Deactivated";
+         } else if (password_verify($password, $user_detail["Password"])) {
 
             $password_class = "";
             $warning_class = "text-hide";
@@ -83,7 +87,7 @@ if (isset($_POST["submit"])) {
             } else {
                 $userID = $user_detail['ID'];
 
-                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID  AND 	IsActive = 1 ";
+                $firstLoginQuery = "SELECT * FROM UserProfile WHERE UserID = $userID  AND IsActive = 1 ";
                 $userHasUserId = mysqli_query($connection, $firstLoginQuery);
                 if (mysqli_num_rows($userHasUserId) == 1) {
                     $usreProfile = mysqli_fetch_assoc($userHasUserId);
@@ -109,7 +113,6 @@ if (isset($_POST["submit"])) {
                 }
             }
         }
-
         // Password not match 
         else {
             $password_class = "wrong-password";
@@ -181,7 +184,7 @@ if (isset($_POST["submit"])) {
                     <div class="form-group <?php echo $password_class; ?>">
                         <label for="inputPassword">Password<a href="forgot-password.php" id="forgot-password">Forgot Password?</a></label>
                         <input type="password" name="password" class="form-control" id="inputPassword" aria-describedby="passwordVarification" value="<?php if($isRemember){echo $userPassword;} ?>" placeholder="Enter your password" required><img id="show-hide" src="images/form/eye.png" alt="eye">
-                        <small id="passwordVarification" class=<?php echo $warning_class; ?>>The password that you've entered is incorrect</small>
+                        <small id="passwordVarification" class=<?php echo $warning_class; ?>><?php echo $notLoginMSG ; ?></small>
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" name="remember" id="check">
