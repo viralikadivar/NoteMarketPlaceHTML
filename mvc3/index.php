@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -27,7 +27,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/header-footer/user-header.css">
-    <link rel="stylesheet" href="css/header-footer/footer.css">
+    <link rel="stylesheet" href="css/header-footer/footer.css?version=456425412">
     <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -152,7 +152,7 @@
                     <h4>Download Free/Paid Notes</h4>
                     <h5>Get Material for your<br>Course etc.</h5>
                     <div class="home-work-btn">
-                        <a href="login.php" title="Download" role="button">Download</a>
+                        <a href="search-notes.php" title="Download" role="button">Download</a>
                     </div>
 
                 </div>
@@ -268,25 +268,9 @@
     <!-- Home Customer Ends -->
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
