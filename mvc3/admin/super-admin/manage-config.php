@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../../login.php");
 }
@@ -9,7 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -56,7 +57,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- Header -->
     <?php
-    require "../../header.php";
+        require "../../header.php";
     ?>
     <!-- Header Ends -->
 
@@ -65,10 +66,52 @@ $userID = $_SESSION['UserID'];
 
     <!-- addition detail -->
     <section id="add">
+
+    <!-- get configuration details  -->
+    <?php
+
+        $emailSet = false;
+        $phoneSet = false;
+        $secondaryEmailSet = false;
+        $fbSet = false;
+        $twitterSet = false;
+        $linkedInSet = false;
+
+        $getConfigurationDetailQuery = "SELECT * FROM SystemConfiguration WHERE IsActive= 1";
+        $getConfigurationDetailResult = mysqli_query($connection,$getConfigurationDetailQuery);
+
+        if(!$getConfigurationDetailResult){
+            die("Not able to find Configuration Details".mysqli_error($connection));
+        }
+        while($configDetails = mysqli_fetch_assoc($getConfigurationDetailResult)){
+            if($configDetails['KeyFields'] == 'SupportEmailAddress' && $configDetails['Value'] != null ) {
+                $emailSet = true;
+                $givenEmail = $configDetails['Value'] ;  
+            } else if($configDetails['KeyFields'] == 'SupportContactNumber' && $configDetails['Value'] != null ) {
+                $phoneSet = true;
+                $givenPhoneNumber = $configDetails['Value'] ;  
+            } else if($configDetails['KeyFields'] == 'EmailAddressesForNotify' && $configDetails['Value'] != null ) {
+                $secondaryEmailSet = true;
+                $givenSecondaryEmail = $configDetails['Value'] ;  
+            } else if($configDetails['KeyFields'] == 'FBIcon' && $configDetails['Value'] != null ) {
+                $fbSet = true;
+                $givenfbLink = $configDetails['Value'] ;  
+            } else if($configDetails['KeyFields'] == 'TwitterIcon' && $configDetails['Value'] != null ) {
+                $twitterSet = true;
+                $givenTwitterLink = $configDetails['Value'] ;  
+            } else if($configDetails['KeyFields'] == 'LinkedInIcon' && $configDetails['Value'] != null ) {
+                $linkedInSet = true;
+                $givenLinkedInLink = $configDetails['Value'] ;  
+            }
+        }
+    
+
+    ?>
         <div class="container">
             <div class="row">
 
                 <div class="col-lg-8 col-md-9 col-sm-10">
+
                     <!-- Heading -->
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 heading">
@@ -78,13 +121,14 @@ $userID = $_SESSION['UserID'];
 
                     <!-- form  -->
                     <form action="manage-config.php" method="post" enctype="multipart/form-data">
+
                         <div class="row">
 
                             <!-- Support Email -->
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="email" required>Support email address *</label>
-                                    <input type="email" class="form-control" id="email" name="supportEmail" placeholder="Enter email address">
+                                    <input type="email" class="form-control" id="email" name="supportEmail" value="<?php if($emailSet){echo $givenEmail; }?>" placeholder="Enter email address">
                                 </div>
                             </div>
 
@@ -92,7 +136,7 @@ $userID = $_SESSION['UserID'];
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="phone-number" required>Support phone number *</label>
-                                    <input type="tel" class="form-control" id="phone-number" name="supportPhoneNo" placeholder="Enter phone number">
+                                    <input type="tel" class="form-control" id="phone-number" name="supportPhoneNo" value="<?php if($phoneSet){echo $givenPhoneNumber; }?>" placeholder="Enter phone number">
                                 </div>
                             </div>
 
@@ -101,7 +145,7 @@ $userID = $_SESSION['UserID'];
                                 <div class="form-group">
                                     <label for="email-sys" required>Email Address(es) (for various events system will
                                         send notifications to these users) *</label>
-                                    <input type="email" class="form-control" id="email-sys" name="sysEmail" placeholder="Enter email address">
+                                    <input type="email" class="form-control" id="email-sys" name="sysEmail" value="<?php if($secondaryEmailSet){echo $givenSecondaryEmail; }?>" placeholder="Enter email address">
                                 </div>
                             </div>
 
@@ -109,7 +153,7 @@ $userID = $_SESSION['UserID'];
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="facebook" required>Facebook URL</label>
-                                    <input type="url" class="form-control" id="facebook" name="facebookURL" placeholder="Enter facebook url">
+                                    <input type="url" class="form-control" id="facebook" name="facebookURL" value="<?php if($fbSet){echo $givenfbLink; }?>" placeholder="Enter facebook url">
                                 </div>
                             </div>
 
@@ -117,7 +161,7 @@ $userID = $_SESSION['UserID'];
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label for="twitter" required>Twitter URL</label>
-                                    <input type="url" class="form-control" id="twitter" placeholder="Enter twitter url" name="twitterURL">
+                                    <input type="url" class="form-control" id="twitter" value="<?php if($twitterSet){echo $givenTwitterLink; }?>" placeholder="Enter twitter url" name="twitterURL">
                                 </div>
                             </div>
 
@@ -125,7 +169,7 @@ $userID = $_SESSION['UserID'];
                             <div class="col-lg-12 col-md-12 col-sm-12 ">
                                 <div class="form-group">
                                     <label for="linkedin" required>LinkedIn URL</label>
-                                    <input type="url" class="form-control" id="linkedin" name="linkedInURL" placeholder="Enter linkedIn url">
+                                    <input type="url" class="form-control" id="linkedin" name="linkedInURL" value="<?php if($linkedInSet){echo $givenLinkedInLink; }?>" placeholder="Enter linkedIn url">
                                 </div>
                             </div>
 
@@ -170,19 +214,9 @@ $userID = $_SESSION['UserID'];
 
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -196,7 +230,7 @@ $userID = $_SESSION['UserID'];
     <script src="../../js/bootstrap/bootstrap.bundle.js"></script>
     <script src="../../js/bootstrap/bootstrap.min.js"></script>
 
-    <script src="../../js/header/header.js"></script>
+    <script src="../../js/header/header.js?version=7381761768"></script>
     <!-- <script src="../../js/admin/manage-config.js?varsion=31381113137"></script> -->
 
 </body>
@@ -304,6 +338,9 @@ if (isset($_POST['submit'])) {
             mysqli_query($connection, "UPDATE SystemConfiguration SET Value = '$member_DP_path'  WHERE KeyFields = 'DefaultMemberDisplayPicture'");
         } 
     }
-}
 
+    header("Refresh:0");
+
+}
+ob_flush();
 ?>
