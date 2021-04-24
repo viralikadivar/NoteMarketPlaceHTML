@@ -15,7 +15,7 @@ $bookRating  = "";
 $currentPage = 1;
 $noOFResultPerPage = 9;
 
-if(isset($_POST['page'])){
+if (isset($_POST['page'])) {
     $currentPage = (int)$_POST['page'];
 }
 $thisPAgeResult = ($currentPage - 1) * $noOFResultPerPage;
@@ -76,7 +76,7 @@ if (isset($_POST['rating'])) {
     }
 }
 
-$showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 ' . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating ;
+$showBooksQuery = 'SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 ' . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating;
 $showBookResult = mysqli_query($connection, $showBooksQuery);
 $totalSearhedBooks = mysqli_num_rows($showBookResult);
 
@@ -90,16 +90,16 @@ $pagination = '<div id="pagination">
                 <span class="sr-only">Previous</span>
             </a>
         </li>';
-        $noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
-                    for ($page = 1; $page <= $noOfPages; $page++) {
-                        if($page == $currentPage){
-                            $className = 'active';
-                        } else {
-                            $className = '';
-                        }
-                        $pagination .= '<li class="page-item '.$className .'"><a class="page-link" id="'.$page.'" href="">' . $page . '</a></li>';
-                    }
-           $pagination  .= '  <li class="page-item arrow">
+$noOfPages = ceil($totalSearhedBooks / $noOFResultPerPage);
+for ($page = 1; $page <= $noOfPages; $page++) {
+    if ($page == $currentPage) {
+        $className = 'active';
+    } else {
+        $className = '';
+    }
+    $pagination .= '<li class="page-item ' . $className . '"><a class="page-link" id="' . $page . '" href="">' . $page . '</a></li>';
+}
+$pagination  .= '  <li class="page-item arrow">
             <a class="page-link text-center" href="#" aria-label="Next">
                 <span aria-hidden="true">&#8250;</span>
                 <span class="sr-only">Next</span>
@@ -109,7 +109,7 @@ $pagination = '<div id="pagination">
 </nav>
 </div>';
 
-$showBooksQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 " . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating. ' LIMIT '  . $thisPAgeResult . ',' . $noOFResultPerPage;
+$showBooksQuery = "SELECT * FROM NotesDetails WHERE IsActive = 1 AND Status = 9 " . $bookSearch . $boookType . $bookcategory . $bookUniversity . $bookCourse . $bookCountry . $bookRating . ' LIMIT '  . $thisPAgeResult . ',' . $noOFResultPerPage;
 $showBookResult = mysqli_query($connection, $showBooksQuery);
 
 if ($totalSearhedBooks != 0) {
@@ -147,6 +147,21 @@ if ($totalSearhedBooks != 0) {
             $spamReports = mysqli_num_rows($totalSpamResult);
         }
 
+        // Ratings
+        $star = "";
+        $bookRating = $bookDetails['Ratings'];
+        if ($totalRatings == 0) {
+            for ($i = 1; $i <= 5; $i++) {
+                $star = $star . '<img src="images/note-detail/rating/star-white.png" alt="star">';
+            }
+        } else {
+            for ($s = 1; $s <= $bookRating; $s++) {
+                $star = $star . '<img src="images/note-detail/rating/star.png" alt="star">';
+            }
+            for ($sw = 1; $sw <= (5 - $bookRating); $sw++) {
+                $star = $star . '<img src="images/note-detail/rating/star-white.png" alt="star">';
+            }
+        }
         $output =  $output . '<div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="book-info">
                             <img src="' . $imageSRC . '" class="img-responsive book-img" alt="Book">
@@ -154,8 +169,8 @@ if ($totalSearhedBooks != 0) {
                             <div class="book-short-info">
 
                                 <div class="book-heading">
-                                    <a class="link-to-note-preview">
-                                        <h5>' . $bookTitle . '</h5>
+                                    <a>
+                                        <h5 class="link-to-note-preview">' . $bookTitle . '</h5>
                                     </a>
 
                                     <input type="hidden" name="noteID" value="' . $bookID . '">
@@ -185,11 +200,7 @@ if ($totalSearhedBooks != 0) {
                                 </ul>
                                 <div class="row star">
                                     <div class="col-lg-5 col-md-5 col-sm-5">
-                                        <img src="images/search/star.png" alt="Star">
-                                        <img src="images/search/star.png" alt="Star">
-                                        <img src="images/search/star.png" alt="Star">
-                                        <img src="images/search/star.png" alt="Star">
-                                        <img src="images/search/star.png" alt="Star">
+                                        '.$star.'
                                     </div>
                                     <div class="col-lg-7 col-md-7 col-sm-7">' . $totalRatings . ' reviews</div>
                                 </div>
@@ -213,5 +224,4 @@ echo '<div class="container">
 
         <div class="row" >' . $output . '</div>
 
-    </div>'.$pagination;
-    ;
+    </div>' . $pagination;;
