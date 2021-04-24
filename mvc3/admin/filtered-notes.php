@@ -91,10 +91,10 @@ if (isset($_POST['inReviewSellerID'])) {
     }
 }
 
-if (isset($_POST['publishedSellerID'])) {
-    $sellerId = $_POST['publishedSellerID'];
+else if (isset($_POST['publishedSellerID'])) {
+    $sellerPublisherId = $_POST['publishedSellerID'];
 
-    $getPublishedNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 9 AND IsActive = 1 AND SellerID =   $sellerId  ";
+    $getPublishedNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 9 AND IsActive = 1 AND SellerID =  $sellerPublisherId ";
     $getPublishedNotesResult = mysqli_query($connection, $getPublishedNotesQuery);
 
     $count = 1;
@@ -225,11 +225,11 @@ if (isset($_POST['publishedSellerID'])) {
     }
 }
 
-if (isset($_POST['rejectedSellerID'])) {
+else if (isset($_POST['rejectedSellerID'])) {
 
     $ellerID = $_POST['rejectedSellerID'];
 
-    $getRejectededNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 10 AND IsActive = 1 AND SellerID = $ellerID ";
+    $getRejectededNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 10 AND SellerID = $ellerID ";
     $getRejectededNotesResult = mysqli_query($connection, $getRejectededNotesQuery);
 
     $count = 1;
@@ -296,3 +296,130 @@ if (isset($_POST['rejectedSellerID'])) {
     }
 }
 
+else if (isset($_POST['selectedMonthID'])) {
+
+    $month = $_POST['selectedMonthID'];
+
+    $getPublishedNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 9 AND IsActive = 1 AND  month(PublishedDate) = $month";
+    $getPublishedNotesResult = mysqli_query($connection, $getPublishedNotesQuery);
+
+    $tableRow = "";
+    if ($getPublishedNotesResult) {
+
+        $count = 1;
+
+        while ($publishedNotes = mysqli_fetch_assoc($getPublishedNotesResult)) {
+
+            $bookID = $publishedNotes['ID'];
+            $bookTitle = $publishedNotes['Title'];
+            $bookCategoryID = $publishedNotes['Category'];
+            $publisher = $publishedNotes['SellerID'];
+            $publishedDate = $publishedNotes['PublishedDate'];
+            $noOfDownloads =  0;
+
+            // For Category 
+            $getCategoryNameQuery = "SELECT * FROM NoteCategories WHERE ID = $bookCategoryID ";
+            $getCategoryNameResult = mysqli_query($connection, $getCategoryNameQuery);
+            $categoryDetails = mysqli_fetch_assoc($getCategoryNameResult);
+            $categoryName = $categoryDetails['Name'];
+
+            // For file size 
+            $attachmentFileSize  = "";
+            $attachmentSize = 0;
+
+            $getAttachmentPath = "SELECT * FROM NotesAttachments WHERE NoteID = $bookID ";
+            $getAttachmentPathResult =  mysqli_query($connection, $getAttachmentPath);
+            while ($attachmentPath = mysqli_fetch_assoc($getAttachmentPathResult)) {
+                $filePath = $attachmentPath['FilePath'];
+                $attachmentSize = $attachmentSize + filesize($filePath);
+            }
+
+            $attachmentSizeInKB = $attachmentSize / 1024;
+            $attachmentSizeInMB = $attachmentSizeInKB / 1024;
+
+            $attachmentSizeInKB = ceil($attachmentSizeInKB);
+            $attachmentSizeInMB = ceil($attachmentSizeInMB);
+
+            if ($attachmentSizeInKB >= 1024) {
+                $attachmentFileSize = $attachmentSizeInMB . 'MB';
+            } else {
+                $attachmentFileSize = $attachmentSizeInKB . 'KB';
+            }
+
+            // For paid or free
+            $sellType = $publishedNotes['IsPaid'];
+            $priceDollar = 0;
+            $freeOrPaid = "Free";
+            if ($sellType == 4) {
+                $freeOrPaid = "Paid";
+                $priceINR = (int)$publishedNotes['SellingPrice'];
+                $priceINR = bcdiv($priceINR, 1, 2);
+                $dollarRate = 72.67;
+                $priceDollar = bcdiv($priceINR, $dollarRate, 2);
+            }
+
+            // For Publisher Name
+            $getPublisherNameQuery = "SELECT * FROM Users WHERE ID = $publisher ";
+            $getPublisherNameResult = mysqli_query($connection, $getPublisherNameQuery);
+            $publisherDetail = mysqli_fetch_assoc($getPublisherNameResult);
+            $publisherFirstName = $publisherDetail['FirstName'];
+            $publisherLastName = $publisherDetail['LastName'];
+            $publisherName = $publisherFirstName . ' ' . $publisherLastName;
+            $bookSeller = $publisherDetail['EmailID'];
+
+            // For Published Date
+            $publishedDate = strtotime($publishedDate);
+            $publishedDate = date("d-m-Y,h:i", $publishedDate);
+
+            // For Number of Downloads 
+            $noOfDownloads =  0;
+            $noOfDownloadsQuery = "SELECT * FROM NotesDownloads WHERE NoteID = $bookID AND IsAttachmentDownloaded = 1";
+            $noOfDownloadsResult = mysqli_query($connection, $noOfDownloadsQuery);
+            if ($noOfDownloadsResult) {
+                $noOfDownloads = mysqli_num_rows($noOfDownloadsResult);
+            }
+
+
+            $tableRow .=    '<tr class="table-row">
+                        <td>' . $count . '</td>
+                        <td class="noteTitle">' . $bookTitle . '</td>
+                                                            <td>' . $categoryName . '</td>
+                                                            <td>' . $attachmentFileSize . '</td>
+                                                            <td>' . $freeOrPaid . '</td>
+                                                            <td>$' . $priceDollar . '</td>
+                                                            <td class="sellerName">' . $publisherName . '</td>
+                                                            <td>' . $publishedDate . '</td>
+                                                            <td class="noOfDownloads">' . $noOfDownloads . '</td>
+                                                            <td class="dropup dropleft">
+                                                                <div data-toggle="dropdown">
+                                                                    <img src="../images/form/dots.png" id="row' . $count . '" alt="Detail">
+                                                                </div>
+                                                                <div class="dropdown-menu" aria-labelledby="row' . $count . '">
+                                                                    <button type="submit" class="dropdown-item"  name="download">Download Notes</button>
+                                                                    <button type="submit" class="dropdown-item" name="noteDetail">View More Details</button>
+                                                                    <button type="button" name="unpublish" class="dropdown-item"  data-toggle="modal" data-target="#unpublishNote">Unpublish</button>
+                                                                </div>
+                                                            </td>
+                                                            <input type = "hidden" name="givenNoteID" class="noteID" value="' . $bookID . '">
+                                                            <input type = "hidden" name="noteID">
+
+                                                            <input type = "hidden" name="noteTitle">
+                                                            <input type = "hidden" name="sellerName">
+
+                                                            <input type = "hidden" name="givenSellerEmail" class="noteSeller" value="' . $bookSeller . '">
+                                                            <input type = "hidden" name="sellerEmail">
+
+                                                            <button type="submit" name="getNoOfDownloads" style="display:none">Unpublish</button>
+
+
+                                                            </tr>';
+
+            $count++;
+        }
+    }
+    if(!mysqli_num_rows($getPublishedNotesResult)){
+        $tableRow = '<tr><td colspan="10">No Record Found<tr>';
+    }
+
+    echo $tableRow ;
+} 
