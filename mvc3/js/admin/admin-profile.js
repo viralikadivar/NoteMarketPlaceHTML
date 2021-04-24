@@ -21,6 +21,27 @@ $(function () {
     value =
       "+" + value + '<img src="../../images/form/arrow-down.png" alt="Down">';
     $("#phone-code").html(value);
+  }); 
+
+  // On Changingg the field 
+  $("#first-name").on("click , change" , function() {
+    $("#first-name").css("border-color", "#d1d1d1");
+  });
+
+  $("#last-name").on("click , change" , function() {
+    $("#last-name").css("border-color", "#d1d1d1");
+  });
+
+  $("#email").on("click , change" , function() {
+    $("#email").css("border-color", "#d1d1d1");
+  });
+
+  $("#Phone-number").on("click , change" , function() {
+    $("#Phone-number").css("border-color", "#d1d1d1");
+  });
+
+  $("#phone-code").on("click , change" , function() {
+    $("#phone-code").css("border-color", "#d1d1d1");
   });
 
   $('button[name="submit"]').click(function (event) {
