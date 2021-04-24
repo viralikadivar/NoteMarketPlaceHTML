@@ -17,7 +17,7 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -156,25 +156,9 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -192,8 +176,8 @@ $rejecteddNotesResult = mysqli_query($connection, $rejectedNotesQuery);
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/user/data-table.js?version=4562163"></script>
-    <script src="../js/header/header.js"></script>
+    <!-- <script src="../js/user/data-table.js?version=4562163"></script> -->
+    <script src="../js/header/header.js?version=4562163"></script>
     <script src="../js/user/my-downloads.js?version=545104"></script>
 
 
