@@ -1,5 +1,18 @@
 $(function() {
 
+    // On Chnage the details 
+    $("#title").on("click , change" , function() {
+        $("#title").css("border-color","#d1d1d1");
+        $("small").css("display","none");
+    });
+
+    $("#description").on("click , change" , function() {
+        $("#description").css("border-color","#d1d1d1");
+    });
+
+    $("#country-code").on("click , change" , function() {
+        $("#country-code").css("border-color","#d1d1d1");
+    });
     // for validation 
     $('button[name="submit"]').click(function(event) {
 
