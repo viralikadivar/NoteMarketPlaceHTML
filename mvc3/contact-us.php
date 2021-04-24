@@ -22,17 +22,17 @@ if (isset($_SESSION['userEmail']) && !empty($_SESSION['userEmail'])) {
 }
 
 if (isset($_POST['submit'])) {
-    $isSubmit = true;
 
+    $isSubmit =  true;
     $userGivenEmail = $_POST['emailID'];
     $userGivenName = $_POST['fullName'];
     $subjectGiven = $_POST['subject'];
     $commentsGiven = $_POST['comments'];
 }
 ?>
-
+ 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -61,9 +61,10 @@ if (isset($_POST['submit'])) {
 
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/header-footer/user-header.css">
+    <link rel="stylesheet" href="css/header-footer/admin-header.css?version=52444218">
     <link rel="stylesheet" href="css/header-footer/footer.css">
-    <link rel="stylesheet" href="css/user/contact-us.css">
+    <link rel="stylesheet" href="css/contact-us.css">
+
 
 
 </head>
@@ -118,9 +119,7 @@ if (isset($_POST['submit'])) {
                         <!-- Last Name -->
                         <div class="form-group">
                             <label for="fullName" required>Full Name *</label>
-                            <input type="text" class="form-control" id="fullName" name="fullName" value="<?php if ($isSubmit) {
-                                                                                                                echo $userGivenName;
-                                                                                                            } else if ($isSet) {
+                            <input type="text" class="form-control" id="fullName" name="fullName" value="<?php if ($isSet) {
                                                                                                                 echo $userName;
                                                                                                             } ?>" placeholder="Enter Your Fullname">
                         </div>
@@ -128,9 +127,7 @@ if (isset($_POST['submit'])) {
                         <!-- Email Address -->
                         <div class="form-group">
                             <label for="inputEmail" required>Email Address *</label>
-                            <input type="email" class="form-control" id="inputEmail" name="emailID" value="<?php if ($isSubmit) {
-                                                                                                                echo $userGivenEmail;
-                                                                                                            } else if ($isSet) {
+                            <input type="email" class="form-control" id="inputEmail" name="emailID" value="<?php if ($isSet) {
                                                                                                                 echo $emailUser;
                                                                                                             } ?>" placeholder="Enter Email id">
                         </div>
@@ -138,9 +135,7 @@ if (isset($_POST['submit'])) {
                         <!-- Enter Subject-->
                         <div class="form-group">
                             <label for="subject" required>Subject *</label>
-                            <input type="text" class="form-control" name="subject" id="subject" value="<?php if ($isSubmit) {
-                                                                                                            echo $subjectGiven;
-                                                                                                        } ?>" placeholder="Enter your subject">
+                            <input type="text" class="form-control" name="subject" id="subject"  placeholder="Enter your subject">
                         </div>
 
                     </div>
@@ -153,14 +148,12 @@ if (isset($_POST['submit'])) {
                                 </div>
                             </div>
 
-                            <textarea placeholder="Comments..." name="comments" id="comments-questions"><?php if ($isSubmit) {
-                                                                                                            echo $commentsGiven;
-                                                                                                        } ?></textarea>
+                            <textarea placeholder="Comments..." name="comments" id="comments-questions"></textarea>
                         </div>
 
                     </div>
                     <div class="col-lg-12">
-                        <button type="submit" name="submit" class="submit"><span class="text-center">Submit</span></button>
+                        <button type="submit" name="submit" id="submit"><span class="text-center">Submit</span></button>
                     </div>
                 </div>
 
@@ -171,25 +164,9 @@ if (isset($_POST['submit'])) {
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -203,8 +180,8 @@ if (isset($_POST['submit'])) {
     <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
-    <script src="js/header/header.js"></script>
-    <script src="js/contact-us.js?version=54528451254"></script>
+    <script src="js/header/header.js?version=54528451254"></script>
+    <script src="js/contact-us.js?version=5452845125254"></script>
 
 </body>
 
