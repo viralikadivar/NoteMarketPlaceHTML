@@ -37,14 +37,14 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                     <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'contact-us.php">Contact Us</a></li>
                     <li class="nav-item">
                         <div class="dropdown user-image">
-                        <img id="user-menu" data-toggle="dropdown" src="' . $profilePicPath . '" alt="User">
+                            <img id="user-menu" data-toggle="dropdown" src="' . $profilePicPath . '" alt="User">
                             <div class="dropdown-menu" aria-labelledby="user-menu">
                                 <a class="dropdown-item" href="' . $linkURL . 'user/user-profile.php">My Profile</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-download.php">My Downloads</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-sold-notes.php">My Sold Notes</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'user/my-rejected-notes.php">My Rejected Notes</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout" data-toggle="modal" data-target="#logoutModal">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -108,7 +108,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <div class="dropdown-menu" aria-labelledby="user-menu">
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/admin-profile.php">Update Profile</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout" data-toggle="modal" data-target="#logoutModal">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -170,7 +170,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <div class="dropdown-menu" aria-labelledby="user-menu">
                                 <a class="dropdown-item" href="' . $linkURL . 'admin/admin-profile.php">Update Profile</a>
                                 <a class="dropdown-item" href="' . $linkURL . 'change-password.php">Change Password</a>
-                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout">Logout</a>
+                                <a class="dropdown-item" href="' . $linkURL . 'index.php" id="logout" data-toggle="modal" data-target="#logoutModal">Logout</a>
                             </div>
                         </div>
                     </li>
@@ -199,11 +199,11 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="search-notes.php">Search Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.php">Sell Your Notes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="faq.php">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact-us.php">Contact Us</a></li>
-                    <li class="nav-item loginNavTab"><a class="nav-link" href="login.php">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'search-notes.php">Search Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'login.php">Sell Your Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'faq.php">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="' . $linkURL . 'contact-us.php">Contact Us</a></li>
+                    <li class="nav-item loginNavTab"><a class="nav-link" href="' . $linkURL . 'login.php">Login</a></li>
                 </ul>
             </div>
         </div>
