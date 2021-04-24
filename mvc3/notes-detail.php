@@ -112,9 +112,25 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     $modelBodyDetail = '<h4 class="text-center">Please <a href="login.php">sign in/register</a> to download this note.</h4>';
 }
 
+// Ratings
+$star = "";
+$bookRating = $notesDetails['Ratings'];
+if($totalRatings == 0 ){
+    for ($i = 1; $i <= 5; $i++) {
+        $star = $star . '<img src="images/note-detail/rating/star-white.png" alt="star">';
+    }
+} else {
+    for ($s = 1; $s <= $bookRating; $s++) {
+        $star = $star . '<img src="images/note-detail/rating/star.png" alt="star">';
+    }
+    for ($sw = 1; $sw <= (5 - $bookRating); $sw++) {
+        $star = $star . '<img src="images/note-detail/rating/star-white.png" alt="star">';
+    }
+}
+
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -230,11 +246,7 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
                             <h5><?php echo $notesDetails['NumberofPages']; ?></h5>
                             <h5><?php echo $publishedDate; ?></h5>
                             <h5 class="star">
-                                <img src="images/note-detail/rating/star.png" alt="star">
-                                <img src="images/note-detail/rating/star.png" alt="star">
-                                <img src="images/note-detail/rating/star.png" alt="star">
-                                <img src="images/note-detail/rating/star.png" alt="star">
-                                <img src="images/note-detail/rating/star-white.png" alt="star">
+                                <?php echo $star; ?>
                                 <?php echo $totalRatings; ?> Reviews
                             </h5>
 
@@ -352,25 +364,9 @@ if (isset($_SESSION['userRoleID']) && !empty($_SESSION['userRoleID'])) {
     </div>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
