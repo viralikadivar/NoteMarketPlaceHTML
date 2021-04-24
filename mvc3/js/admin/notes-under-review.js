@@ -8,8 +8,7 @@ $(window).on("load", function () {
 var table = $(".dashboard-table").DataTable({
   dom: '<"top"f>t<"bottom"p><"clear">',
   pagingType: "simple_numbers",
-  pageLength: "5",
-  lengthChange: "5",
+  lengthMenu: [ 5, 5, 5, 5, 5 , "ALL"],
   language: {
     zeroRecords: "No Record Found",
   },
@@ -53,28 +52,28 @@ $(function () {
 
   $(".sellerName li").click(function () {
 
-    let value = $(this).html();
+    let name = $(this).html();
     let selectedSellerID = $(this).attr("value");
 
     value =
-      value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    name + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#seller").html(value);
 
-    $.ajax({
-      url: "filtered-notes.php",
-      type: "POST",
-      data: {
-        inReviewSellerID : selectedSellerID
-      },
-      success: function (data) {
-        $("#table-body").html(data);
-      },
-    });
+    res = table.column(3).search(name);
+    res.draw();
+    // $.ajax({
+    //   url: "filtered-notes.php",
+    //   type: "POST",
+    //   data: {
+    //     inReviewSellerID : selectedSellerID
+    //   },
+    //   success: function (data) {
+    //     $("#table-body").html(data);
+    //   },
+    // });
   });
 
-  $(
-    "button[name='download'] , button[name='noteDetail'], button[name='isApprove'], button[name='isReject'], button[name='isInReview'] "
-  ).click(function () {
+  $("#table-body").on("click" ,"button[name='download'] , button[name='noteDetail'], button[name='isApprove'], button[name='isReject'], button[name='isInReview'] " , function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -82,7 +81,7 @@ $(function () {
     $("input[name='noteID']").val(noteID);
   });
 
-  $(".noteTitle").click(function () {
+  $("#table-body").on("click" , ".noteTitle" , function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -90,4 +89,5 @@ $(function () {
     $("input[name='noteID']").val(noteID);
     $("button[name='noteDetail']").trigger("click");
   });
+
 });
