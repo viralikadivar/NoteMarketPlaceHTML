@@ -10,7 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -53,9 +53,9 @@ $userID = $_SESSION['UserID'];
 <body>
 
     <!-- Preloader -->
-    <div id="preloader">
+    <!-- <div id="preloader">
         <div id="status">&nbsp;</div>
-    </div>
+    </div> -->
     <!-- Preloader Ends -->
 
     <!-- Header -->
@@ -126,7 +126,7 @@ $userID = $_SESSION['UserID'];
 
                                             // Note title 
                                             $bookID = $spamReports['NoteID'];
-                                            $getReportedNotesQuery = "SELECT * FROM NotesDetails WHERE ID = $bookID AND IsActive = 1 ";
+                                            $getReportedNotesQuery = "SELECT * FROM NotesDetails WHERE ID = $bookID";
                                             $getReportedNotesResult = mysqli_query($connection, $getReportedNotesQuery);
 
                                             $bookDetail =  mysqli_fetch_assoc($getReportedNotesResult);
@@ -217,19 +217,9 @@ $userID = $_SESSION['UserID'];
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -248,7 +238,7 @@ $userID = $_SESSION['UserID'];
 
     <!-- custom js  -->
     <script src="../js/admin/spam-reports.js?version=5412321"></script>
-    <script src="../js/header/header.js"></script>
+    <script src="../js/header/header.js?version=5412321"></script>
 
 </body>
 
@@ -299,6 +289,12 @@ if (isset($_POST['deleteReport'])) {
 
     $deleteReportQuery = "DELETE FROM ReportedIssues WHERE ID = $reportID ";
     $deleteReportResult = mysqli_query($connection,$deleteReportQuery);
+    if($deleteReportResult){
+        header("refresh:0");
+    } else{
+        die("Report Not Deleted".mysqli_error($connection));
+    }
+    
     
 }
 ob_flush();
