@@ -47,14 +47,22 @@ label {
 }
 
 /* title field  */
-#country-code,
-#title{
+#country-code{
     border: 1px solid #d1d1d1;
     border-radius: 3px;
     height: 45px;
     width: 650px;
     margin-bottom: 25px;
 }
+#title{
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    height: 45px;
+    width: 650px;
+}
+/* small {
+    margin-top: -25px;
+} */
 #country-code:focus,
 #title:focus{
     outline: none;
