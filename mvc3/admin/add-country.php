@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../login.php");
 }
@@ -9,6 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
+$isPresent = false;
 if (!empty($_SESSION['EditCountryID'])) {
     $isEdit = true;
     $editID  = $_SESSION['EditCountryID'];
@@ -24,10 +26,18 @@ if (isset($_POST['submit'])) {
     $isSubmit = true;
     $name = $_POST['name'];
     $code = $_POST['code'];
+
+    $getCountryDetail = "SELECT * FROM Countries WHERE Name = '$name'";
+    $getCountryResult = mysqli_query($connection,$getCountryDetail);
+    if(mysqli_num_rows($getCountryResult) && !$isEdit){
+        $isSubmit = false;
+        $isPresent = true;
+        $presentStyle = 'style="border-color:red"';
+    }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -58,7 +68,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/field-add.css">
+    <link rel="stylesheet" href="../css/admin/field-add.css?version=18254715">
 
 </head>
 
@@ -98,11 +108,12 @@ if (isset($_POST['submit'])) {
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Country Name *</label>
-                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                            <input type="text" class="form-control" id="title" name="name" <?php if($isPresent){echo $presentStyle ;}?> value="<?php if ($isSubmit) {
                                                                                             echo $name;
                                                                                         } else if ($isEdit) {
                                                                                             echo $countryName;
                                                                                         } ?>" placeholder="Enter Country Name">
+                            <?php if( $isPresent ) {echo '<small style="color:red;">Country is already present</small>';}?>
                         </div>
 
                         <!-- description of field -->
@@ -121,8 +132,11 @@ if (isset($_POST['submit'])) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                        <div class="col-md-3 col-sm-3">
                                 <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button class="submit" type="submit" name="cancle" style="background-color:#d1d1d1"><span class="text-center">cancle</span></button>
                             </div>
                     </form>
                 </div>
@@ -132,19 +146,9 @@ if (isset($_POST['submit'])) {
 
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -159,7 +163,7 @@ if (isset($_POST['submit'])) {
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/manage-fileds.js?version=742168345"></script>
+    <script src="../js/admin/manage-fileds.js?version=7421681312545"></script>
 
 </body>
 
@@ -168,22 +172,27 @@ if (isset($_POST['submit'])) {
 
 if ($isSubmit) {
     if ($isEdit) {
-        $updateQuery = "UPDATE Countries SET Name = '$name',CountryCode='$code' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateQuery = "UPDATE Countries SET Name = '$name',CountryCode='$code' , ModifiedBy = $userID , IsActive = 1 WHERE ID = $editID ";
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
         } else{
             unset($_SESSION['EditCountryID']);
+            header("Location:manage-country.php");
         }
     } else {
         $addCountryQuery = "INSERT INTO Countries(Name ,CountryCode , CreatedBy) VALUES('$name','$code',$userID)";
         $addCountryResult = mysqli_query($connection,$addCountryQuery);
         if ($addCountryResult) {
             $isSubmit = false;
+            header("Location:manage-country.php");
         } else {
             die(mysqli_error($connection));
         }
     }
 }
-
+if(isset($_POST['cancle'])){
+    header("Location:manage-country.php");
+}
+ob_flush();
 ?>
