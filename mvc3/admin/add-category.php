@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 if (!isset($_SESSION['logged_in'])) {
     header("Location:../login.php");
 }
@@ -9,6 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 $isEdit = false;
 $isSubmit = false;
+$isPresent = false;
 if (!empty($_SESSION['EditCategoryID'])) { 
     $isEdit = true;
     $editID  = $_SESSION['EditCategoryID'];
@@ -24,10 +26,18 @@ if (isset($_POST['submit'])) {
     $isSubmit = true;
     $name = $_POST['name'];
     $description = $_POST['comments'];
+
+    $getCategoryDetail = "SELECT * FROM NoteCategories WHERE Name = '$name'";
+    $getCategoryResult = mysqli_query($connection, $getCategoryDetail);
+    if(mysqli_num_rows($getCategoryResult) && !$isEdit){
+        $isPresent = true;
+        $isSubmit = false;
+        $presentStyle = 'style="border-color:red"';
+    }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -58,7 +68,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="../css/header-footer/admin-footer.css">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/admin/field-add.css">
+    <link rel="stylesheet" href="../css/admin/field-add.css?version=12786412">
 
 </head>
 
@@ -96,11 +106,13 @@ if (isset($_POST['submit'])) {
                         <!-- Title of field -->
                         <div class="form-group">
                             <label for="title" required>Category Name *</label>
-                            <input type="text" class="form-control" id="title" name="name" value="<?php if ($isSubmit) {
+                            <input type="text" class="form-control" id="title" <?php if( $isPresent ){echo $presentStyle;} ?> name="name" value="<?php if ($isSubmit) {
                                                                                                                         echo $name;
                                                                                                                     } else if($isEdit){
                                                                                                                         echo  $categoryName;
                                                                                                                     }?>" placeholder="Enter Category">
+                            <?php if( $isPresent ) {echo '<small style="color:red;">Note Category is already present</small>';}?>
+                            
                         </div>
 
                         <!-- description of field -->
@@ -123,8 +135,11 @@ if (isset($_POST['submit'])) {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-3 col-sm-3">
                                 <button class="submit" type="submit" name="submit"><span class="text-center">submit</span></button>
+                            </div>
+                            <div class="col-md-3 col-sm-3">
+                                <button class="submit" type="submit" name="cancle" style="background-color:#d1d1d1"><span class="text-center">cancle</span></button>
                             </div>
                         </div>
                     </form>
@@ -135,19 +150,9 @@ if (isset($_POST['submit'])) {
 
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -162,31 +167,35 @@ if (isset($_POST['submit'])) {
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
     <script src="../js/header/header.js"></script>
-    <script src="../js/admin/manage-fileds.js?version=8745854854"></script>
+    <script src="../js/admin/manage-fileds.js?version=874581512554854"></script>
 
 </body>
 
 </html>
 <?php
-
 if ($isSubmit) {
     if ($isEdit) {
-        $updateQuery = "UPDATE NoteCategories SET Name = '$name',Description='$description' , ModifiedBy = $userID WHERE ID = $editID ";
+        $updateQuery = "UPDATE NoteCategories SET Name = '$name',Description='$description' , ModifiedBy = $userID , IsActive = 1 WHERE ID = $editID ";
         $updateResult = mysqli_query($connection, $updateQuery);
         if (!$updateResult) {
             die(mysqli_error($connection));
         } else {
             unset($_SESSION['EditCategoryID']);
+            header("Location:manage-category.php");
         }
     } else {
         $addCategoryQuery = "INSERT INTO NoteCategories(Name ,Description , CreatedBy) VALUES('$name','$description',$userID)";
         $addCategoryResult = mysqli_query($connection, $addCategoryQuery);
         if ($addCategoryResult) {
             $isSubmit = false;
+            header("Location:manage-category.php");
         } else {
             die(mysqli_error($connection));
         }
     }
 }
-
+if(isset($_POST['cancle'])){
+    header("Location:manage-category.php");
+}
+ob_flush();
 ?>
