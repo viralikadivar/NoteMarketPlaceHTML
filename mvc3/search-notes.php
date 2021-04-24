@@ -6,7 +6,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -110,11 +110,13 @@ session_start();
                                     <button class="form-control text-left" id="selectBookType" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db types" aria-labelledby="selectBookType" style="width:100%">
                                         <?php
+                                        $noteList = "<li value=''>All Types</li>";
                                         $queryType = "SELECT * FROM NoteTypes WHERE IsActive = 1 ";
                                         $noteType = mysqli_query($connection, $queryType);
                                         while ($type = mysqli_fetch_assoc($noteType)) {
-                                            echo "<li value='" . $type['ID'] . "'>" . $type['Name'] . "</li>";
+                                            $noteList .=  "<li value='" . $type['ID'] . "'>" . $type['Name'] . "</li>";
                                         }
+                                        echo $noteList;
                                         ?>
                                     </ul>
                                 </div>
@@ -129,11 +131,13 @@ session_start();
                                     <button class="form-control text-left" id="book-category" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db categories" aria-labelledby="book-category" style="width:100%">
                                         <?php
+                                        $categoryList = "<li value=''>All Categories</li>";
                                         $queryCategories = "SELECT * FROM NoteCategories WHERE IsActive = 1";
                                         $noteCategories = mysqli_query($connection, $queryCategories);
                                         while ($categories = mysqli_fetch_assoc($noteCategories)) {
-                                            echo "<li value='" . $categories['ID'] . "'>" . $categories['Name'] . "</li>";
+                                            $categoryList .= "<li value='" . $categories['ID'] . "'>" . $categories['Name'] . "</li>";
                                         }
+                                        echo  $categoryList;
                                         ?>
                                     </ul>
                                 </div>
@@ -148,11 +152,13 @@ session_start();
                                     <button class="form-control text-left" id="selectUniversity" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db university" aria-labelledby="selectUniversity" style="width:100%">
                                         <?php
+                                        $universityList = "<li value=''>All Universities</li>";
                                         $queryUniversity = "SELECT DISTINCT UniversityName FROM NotesDetails WHERE IsActive = 1";
                                         $universityResult = mysqli_query($connection, $queryUniversity);
                                         while ($university = mysqli_fetch_assoc($universityResult)) {
-                                            echo "<li value='" . $university['UniversityName'] . "'>" . $university['UniversityName'] . "</li>";
+                                            $universityList .=  "<li value='" . $university['UniversityName'] . "'>" . $university['UniversityName'] . "</li>";
                                         }
+                                        echo  $universityList;
                                         ?>
                                     </ul>
                                 </div>
@@ -167,11 +173,13 @@ session_start();
                                     <button class="form-control text-left" id="selectCourse" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db course" aria-labelledby="selectCourse" style="width:100%">
                                         <?php
+                                        $courseList = "<li value=''>All Courses</li>";
                                         $queryCourse = "SELECT DISTINCT Course FROM NotesDetails WHERE IsActive = 1";
                                         $courseResult = mysqli_query($connection, $queryCourse);
                                         while ($course = mysqli_fetch_assoc($courseResult)) {
-                                            echo "<li value='" . $course['Course'] . "'>" . $course['Course'] . "</li>";
+                                            $courseList .= "<li value='" . $course['Course'] . "'>" . $course['Course'] . "</li>";
                                         }
+                                        echo $courseList;
                                         ?>
                                     </ul>
                                 </div>
@@ -186,11 +194,13 @@ session_start();
                                     <button class="form-control text-left" id="selectCountry" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db countries" aria-labelledby="selectCountry" style="width:100%">
                                         <?php
+                                        $counrtyList = "<li value=''>All Countries</li>";
                                         $queryCountry = "SELECT * FROM Countries WHERE IsActive = 1";
                                         $countryResult = mysqli_query($connection, $queryCountry);
                                         while ($country = mysqli_fetch_assoc($countryResult)) {
-                                            echo "<li value='" . $country['ID'] . "'>" . $country['Name'] . "</li>";
+                                            $counrtyList .= "<li value='" . $country['ID'] . "'>" . $country['Name'] . "</li>";
                                         }
+                                        echo $counrtyList;
                                         ?>
                                     </ul>
                                 </div>
@@ -204,6 +214,7 @@ session_start();
                                 <div class="dropdown seach-fields">
                                     <button class="form-control text-left" id="selectBookRatings" data-toggle="dropdown"></button>
                                     <ul class="dropdown-menu dropdown-from-db rating" aria-labelledby="selectBookRatings" style="width:100%">
+                                        <li value="">Any Ratings</li>
                                         <li value="1">1 +</li>
                                         <li value="2">2 +</li>
                                         <li value="3">3 +</li>
@@ -224,31 +235,15 @@ session_start();
         <!-- Search Fields Ends -->
 
         <!-- Search Result Ends -->
-<section id="search-result"></section>
+        <section id="search-result"></section>
     
 
     </form>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -262,8 +257,8 @@ session_start();
     <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
-    <script src="js/header/header.js"></script>
-    <script src="js/search-notes.js?version=2045245115512"></script>
+    <script src="js/header/header.js?version=551542"></script>
+    <script src="js/search-notes.js?version=2245112585512"></script>
 
 </body>
 
@@ -277,5 +272,5 @@ if (isset($_POST['getNoteDetail'])) {
 
     header('Location:notes-detail.php');
 }
-ob_end_flush();
+ob_flush();
 ?>
