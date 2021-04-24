@@ -14,6 +14,8 @@ $(function () {
       'Select your Note Type<img src="../images/form/arrow-down.png" alt="Down">'
     );
   }
+
+
   //Listen for a click on any of the dropdown items
   $(".countries li").click(function () {
     //Get the value
@@ -51,6 +53,34 @@ $(function () {
     $("#book-category").html(show);
   });
 
+  // on Changing of field 
+  $("#book-title").on("click , change" , function() {
+    $("#book-title").css("border-color", "#d1d1d1");
+  });
+
+  $("#description").on("click , change" , function() {
+    $("#description").css("border-color", "#d1d1d1");
+  });
+
+  $("#book-category").on("click , change" , function() {
+    $("#book-category").css("border-color", "#d1d1d1");
+  });
+
+  $("#selectCountry").on("click , change" , function() {
+    $("#selectCountry").css("border-color", "#d1d1d1");
+  });
+
+  $("#file").on("click , change" , function() {
+    $("#file").parents(".take-note-detail").css("border-color", "#d1d1d1");
+  });
+
+  $("#preview").on("click , change" , function() {
+    $("#preview")
+    .parents(".take-note-detail")
+    .css("border-color", "#d1d1d1");
+  });
+
+  // Validation on Button save
   $('button[name="save"]').click(function (event) {
     let noteTitle = $("#book-title").val();
     let noteCategory = $('input[name="category"]').val();
