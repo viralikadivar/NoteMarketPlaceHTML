@@ -8,6 +8,7 @@ require "../db_connection.php";
 global $connection;
 
 $userID = $_SESSION['UserID'];
+$userEmail = $_SESSION['userEmail'];
 
 $getUsersDetailsQuery  = "SELECT * FROM Users WHERE ID = $userID  ";
 $getUserDetailsResult = mysqli_query($connection, $getUsersDetailsQuery);
@@ -54,7 +55,7 @@ if (isset($_POST['submit'])) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -71,7 +72,7 @@ if (isset($_POST['submit'])) {
     <link rel="shortcut icon" href="../images/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="../fonts/fonts.css">
+    <link rel="stylesheet" href="../css/fonts/fonts.css">
 
     <!-- ================================================
                         CSS Files 
@@ -218,19 +219,9 @@ if (isset($_POST['submit'])) {
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
     <!-- ================================================
                         JS Files 
@@ -242,8 +233,9 @@ if (isset($_POST['submit'])) {
     <!-- Bootstrap -->
     <script src="../js/bootstrap/bootstrap.bundle.js"></script>
     <script src="../js/bootstrap/bootstrap.min.js"></script>
-    <script src="../js/header/header.js"></script>
-    <script src="../js/admin/admin-profile.js?version=12117451"></script>
+
+    <script src="../js/header/header.js?version=12117451"></script>
+    <script src="../js/admin/admin-profile.js?version=1211712521451"></script>
 
 </body>
 
@@ -300,9 +292,14 @@ if($isSubmit){
         if (!$updateUserProfileResult) {
             die(mysqli_error($connection));
         } else {
-            $_SESSION['UserProfilePic'] = $path;
-            header("Refresh:0");
-
+        
+            if($userEmail == $emailID ){
+                $_SESSION['UserProfilePic'] = $path;
+                header("Refresh:0");
+            } else{
+                header("Location:../login.php");
+            }
+            
         }
     } else {
         die(mysqli_error($connection));
