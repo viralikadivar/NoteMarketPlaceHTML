@@ -8,8 +8,7 @@ $(window).on("load", function () {
   var table = $(".dashboard-table").DataTable({
     dom: '<"top"f>t<"bottom"p><"clear">',
     pagingType: "simple_numbers",
-    pageLength: "5",
-    lengthChange: "5",
+    lengthMenu: [ 5, 5, 5, 5, 5 , "ALL"],
     language: {
       zeroRecords: "No Record Found",
     },
@@ -50,33 +49,55 @@ $(window).on("load", function () {
   });
   
   $(function () {
+    // AJAX 
     $(".sellerName  li").click(function () {
 
-      let value = $(this).html();
+      let name = $(this).html();
       selectedSellerID = $(this).attr("value");
   
       value =
-        value + '<img src="../images/form/arrow-down.png" alt="Down">';
+      name + '<img src="../images/form/arrow-down.png" alt="Down">';
       $("#seller").html(value);
-      $.ajax({
-        url: "filtered-notes.php",
-        type: "POST",
-        data: {
-          rejectedSellerID : selectedSellerID
-        },
-        success: function (data) {
-          $("#table-body").html(data);
-        },
-      });
+
+      res = table.column(3).search(name);
+    res.draw();
+      // $.ajax({
+      //   url: "filtered-notes.php",
+      //   type: "POST",
+      //   data: {
+      //     rejectedSellerID : selectedSellerID
+      //   },
+      //   success: function (data) {
+      //     $("#table-body").html(data);
+      //   },
+      // });
     });
-    $("button[name='download'] , button[name='noteDetail'] , button[name='publish'] ").click(function () {
+
+    $("#table-body").on("click" , "button[name='download'] " , function () {
       let noteID = $(this)
         .parents(".table-row")
         .children(".noteID")
         .attr("value");
       $("input[name='noteID']").val(noteID);
     });
-    $(".view-note-details").click(function () {
+    
+    $("#table-body").on("click" , "button[name='noteDetail']" , function () {
+      let noteID = $(this)
+        .parents(".table-row")
+        .children(".noteID")
+        .attr("value");
+      $("input[name='noteID']").val(noteID);
+    });
+
+    $("#table-body").on("click" , "button[name='publish']" , function () {
+      let noteID = $(this)
+        .parents(".table-row")
+        .children(".noteID")
+        .attr("value");
+      $("input[name='noteID']").val(noteID);
+    });
+   
+    $("#table-body").on("click" , ".view-note-details" ,function () {
       let noteID = $(this)
         .parents(".table-row")
         .children(".noteID")
@@ -84,7 +105,8 @@ $(window).on("load", function () {
       $("input[name='noteID']").val(noteID);
       $("button[name='noteDetail']").trigger('click');
     });
-    $(".viewMemberDetail").click(function() {
+   
+    $("#table-body").on("click" , ".viewMemberDetail" ,function() {
       let sellerID = $(this)
       .parents(".table-row")
       .children(".sellerID")
@@ -92,6 +114,5 @@ $(window).on("load", function () {
     $("input[name='sellerID']").val(sellerID);
     $("button[name='viewMemberDetail']").trigger('click');
     });
-  
   });
   
