@@ -8,8 +8,7 @@ $(window).on("load", function () {
 var table = $(".dashboard-table").DataTable({
   dom: '<"top"f>t<"bottom"p><"clear">',
   pagingType: "simple_numbers",
-  pageLength: "5",
-  lengthChange: "5",
+  lengthMenu: [ 5, 5, 5, 5, 5 , "ALL"],
   language: {
     zeroRecords: "No Record Found",
   },
@@ -53,32 +52,43 @@ $(function () {
   
   $(".sellerName li").click(function () {
 
-    let value = $(this).html();
+    let name = $(this).html();
     selectedSellerID = $(this).attr("value");
 
     value =
-      value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    name + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#seller").html(value);
+
+    res = table.column(5).search(name);
+    res.draw();
     // table-body
-    $.ajax({
-      url: "filtered-notes.php",
-      type: "POST",
-      data: {
-        publishedSellerID : selectedSellerID
-      },
-      success: function (data) {
-        $("#table-body").html(data);
-      },
-    });
+    // $.ajax({
+    //   url: "filtered-notes.php",
+    //   type: "POST",
+    //   data: {
+    //     publishedSellerID : selectedSellerID
+    //   },
+    //   success: function (data) {
+    //     $("#table-body").html(data);
+    //   },
+    // });
   });
-  $("button[name='download'] , button[name='noteDetail']").click(function () {
+
+  $("#table-body").on("click" , "button[name='download'] , button[name='noteDetail']" , function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
       .attr("value");
     $("input[name='noteID']").val(noteID);
   });
-  $(".noteTitle").click(function () {
+  // $("button[name='download'] , button[name='noteDetail']").click(function () {
+  //   let noteID = $(this)
+  //     .parents(".table-row")
+  //     .children(".noteID")
+  //     .attr("value");
+  //   $("input[name='noteID']").val(noteID);
+  // });
+  $("#table-body").on("click" , ".noteTitle" ,function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -86,8 +96,15 @@ $(function () {
     $("input[name='noteID']").val(noteID);
     $("button[name='noteDetail']").trigger("click");
   });
-
-  $(".noOfDownloads").click(function () {
+  // $(".noteTitle").click(function () {
+  //   let noteID = $(this)
+  //     .parents(".table-row")
+  //     .children(".noteID")
+  //     .attr("value");
+  //   $("input[name='noteID']").val(noteID);
+  //   $("button[name='noteDetail']").trigger("click");
+  // });
+  $("#table-body").on("click" , ".noOfDownloads" ,function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -95,8 +112,15 @@ $(function () {
     $("input[name='noteID']").val(noteID);
     $("button[name='getNoOfDownloads']").trigger("click");
   });
-
-  $("button[name='unpublish']").click(function () {
+  // $(".noOfDownloads").click(function () {
+  //   let noteID = $(this)
+  //     .parents(".table-row")
+  //     .children(".noteID")
+  //     .attr("value");
+  //   $("input[name='noteID']").val(noteID);
+  //   $("button[name='getNoOfDownloads']").trigger("click");
+  // });
+  $("#table-body").on("click" , "button[name='unpublish']" ,function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -118,15 +142,44 @@ $(function () {
       .attr("value");
     $("input[name='sellerEmail']").val(noteSellerEmail);
   });
-  $("button[name='unpublishNote']").click(function (e) {
-     if( $('#description').val() == ""){
-        $('#description').css("border-color","red");
-        e.preventDefault();
-     }
-  });
+  // $("button[name='unpublish']").click(function () {
+  //   let noteID = $(this)
+  //     .parents(".table-row")
+  //     .children(".noteID")
+  //     .attr("value");
+  //   $("input[name='noteID']").val(noteID);
+
+  //   let noteName = $(this).parents(".table-row").children(".noteTitle").html();
+  //   $("input[name='noteTitle']").val(noteName);
+
+  //   let sellerName = $(this)
+  //     .parents(".table-row")
+  //     .children(".sellerName")
+  //     .html();
+  //   $("input[name='sellerName']").val(sellerName);
+
+  //   let noteSellerEmail = $(this)
+  //     .parents(".table-row")
+  //     .children(".noteSeller")
+  //     .attr("value");
+  //   $("input[name='sellerEmail']").val(noteSellerEmail);
+  // });
+
+  $("#table-body").on("click" , "[name='unpublishNote']" ,function (e) {
+    if( $('#description').val() == ""){
+       $('#description').css("border-color","red");
+       e.preventDefault();
+    }
+  }); 
+  // $("button[name='unpublishNote']").click(function (e) {
+  //    if( $('#description').val() == ""){
+  //       $('#description').css("border-color","red");
+  //       e.preventDefault();
+  //    }
+  // }); 
  
   // view Seller 
-  $(".view-seller").click(function () {
+  $("#table-body").on("click" , ".view-seller" ,function () {
     let memberID = $(this)
       .parents(".table-row")
       .children(".seller")
@@ -134,4 +187,5 @@ $(function () {
     $("input[name='memberID']").val( memberID);
     $("button[name='viewMember']").trigger("click");
   });
+  
 });
