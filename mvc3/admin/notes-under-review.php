@@ -11,7 +11,7 @@ $userID = $_SESSION['UserID'];
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -289,19 +289,9 @@ $userID = $_SESSION['UserID'];
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -319,8 +309,8 @@ $userID = $_SESSION['UserID'];
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/header/header.js"></script>
-    <script src="../js/admin/notes-under-review.js?version=7872725946"></script>
+    <script src="../js/header/header.js?version=787202725946"></script>
+    <script src="../js/admin/notes-under-review.js?version=7872027225946"></script>
 
 </body>
 
@@ -338,9 +328,9 @@ if (isset($_POST['download'])) {
     }
 
     if (count($attachments) == 1) {
-        header('Content-Type: application/octet-stream');
+        header('Content-Type: octet-stream.pdf');
         header("Content-Transfer-Encoding: Binary");
-        header("Content-disposition: attachment; filename=\"" . basename($attachments[0]) . ".pdf");
+        header("Content-disposition: attachment; filename=" . basename($attachments[0]) . ".pdf");
         readfile($attachments[0]);
     } else {
         $zipname = 'notes.zip';
