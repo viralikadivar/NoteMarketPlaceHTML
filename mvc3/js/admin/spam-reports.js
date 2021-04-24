@@ -8,8 +8,7 @@ $(window).on("load", function () {
 var table = $(".dashboard-table").DataTable({
   dom: '<"top"f>t<"bottom"p><"clear">',
   pagingType: "simple_numbers",
-  pageLength: "5",
-  lengthChange: "5",
+  lengthMenu: [ 5, 5, 5, 5, 5 , "ALL"],
   language: {
     zeroRecords: "No Record Found",
   },
