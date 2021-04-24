@@ -3,10 +3,11 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
 session_start();
 ob_start();
-if(!isset($_SESSION['logged_in'])) {
-    header("Location:../login.php");  
+if (!isset($_SESSION['logged_in'])) {
+    header("Location:../login.php");
 }
 $userID = $_SESSION['UserID'];
 
@@ -14,7 +15,7 @@ require "../db_connection.php";
 global $connection;
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -143,12 +144,12 @@ global $connection;
                 <div class="row table-data">
 
                     <div class="col-lg-12 col-md-12 col-sm-12 heading">
-                        <h4>In Progress Notes</h4>
+                        <h4>Published Notes</h4>
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 ">
                         <!-- inprogress table -->
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="table">
                             <table class="table dashboard-table">
 
                                 <thead>
@@ -166,7 +167,7 @@ global $connection;
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="table-body">
 
                                     <?php
 
@@ -292,32 +293,32 @@ global $connection;
                                 </tbody>
                             </table>
 
-                           <!-- Modal For Unpublish Book -->
-                        <div class="modal fade" id="unpublishNote" tabindex="-1" role="dialog" aria-labelledby="unpublisBbookTitle" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header heading">
-                                            <h4 class="modal-title" id="unpublisBbookTitle">
 
-                                            </h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="rating">
-                                                <p>Are you sure you want to Unpublish this note?”</p>
-                                            </div>
-                                            <textarea placeholder="Write remarks" name="remark" id="description"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" name="unpublishNote" style="color:#ffffff ; background-color:red">Unpublish</button>
-                                            <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:grey">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
+
                         </div>
-
+                    </div>
+                </div>
+                <!-- Modal For Unpublish Book -->
+                <div class="modal fade" id="unpublishNote" tabindex="-1" role="dialog" aria-labelledby="unpublisBbookTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header heading">
+                                <h4 class="modal-title" id="unpublisBbookTitle">
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><img src="../images/form/close.png" alt="close"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="rating">
+                                    <p>Are you sure you want to Unpublish this note?”</p>
+                                </div>
+                                <textarea placeholder="Write remarks" name="remark" id="description"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" name="unpublishNote" style="color:#ffffff ; background-color:red">Unpublish</button>
+                                <button type="button" class="btn-sm" data-dismiss="modal" style="color:#ffffff ; background-color:grey">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -326,19 +327,9 @@ global $connection;
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -356,8 +347,8 @@ global $connection;
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/header/header.js"></script>
-    <script src="../js/admin/admin-dashboard.js?version=84251245"></script>
+    <script src="../js/header/header.js?version=842023124"></script>
+    <script src="../js/admin/admin-dashboard.js?version=8420231451241245"></script>
 
 </body>
 
@@ -412,63 +403,60 @@ if (isset($_POST['unpublishNote'])) {
 
     // Unpublish Note 
     $updateNoteDetailsQuery = "UPDATE NotesDetails SET AdminRemarks = '$remark' , ActionedBy = $userID , Status = 11 , IsActive = 0 WHERE ID = $unpublishNoteID ";
-    $updateNoteDetailsResult =  mysqli_query($connection,$updateNoteDetailsQuery);
-    if($updateNoteDetailsResult) {
+    $updateNoteDetailsResult =  mysqli_query($connection, $updateNoteDetailsQuery);
+    if ($updateNoteDetailsResult) {
 
-            $query = "SELECT * FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
-            $queryResult = mysqli_query($connection, $query);
-            $supportField = mysqli_fetch_assoc($queryResult);
-            $senderEmail = $supportField['Value'];
-        
-            // For Sending Confirmation Mail 
-            require "../smtp/src/Exception.php";
-            require "../smtp/src/PHPMailer.php";
-            require "../smtp/src/SMTP.php";
-            $mail = new PHPMailer(true);
-            
-            try {
-                //Server settings
-                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                $mail->isSMTP();                                            //Send using SMTP
-                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-                $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-    
-                // UserName And Password
-                $mail->Username   = $senderEmail;                     //SMTP username
-                $mail->Password   = 'vira3333';                               //SMTP password
-    
-                // Sender And Receiver Detail 
-                $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
-                $mail->addAddress($sellerEmailID, 'Notes MarkePlace Reported Issue');  //Receiver Detail
-    
-                //Content
-                $mail->isHTML(true);                                  //Set email format to HTML
-                $mail->Subject = 'Sorry! We need to remove your notes from our portal.';
-                $mail->Body    = 'Hello'.' '.$sellerName.',' . '<br>' .
-                'We want to inform you that, your note "'.$noteTitle.'" has been removed from the portal.'. '<br>' .
-                'Please find our remarks as below -'. '<br>' .
-                '"'.$remark.'"'. '<br>' .
+        $query = "SELECT * FROM systemConfiguration WHERE KeyFields = 'SupportEmailAddress' ";
+        $queryResult = mysqli_query($connection, $query);
+        $supportField = mysqli_fetch_assoc($queryResult);
+        $senderEmail = $supportField['Value'];
+
+        // For Sending Confirmation Mail 
+        require "../smtp/src/Exception.php";
+        require "../smtp/src/PHPMailer.php";
+        require "../smtp/src/SMTP.php";
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+            // UserName And Password
+            $mail->Username   = $senderEmail;                     //SMTP username
+            $mail->Password   = 'vira3333';                               //SMTP password
+
+            // Sender And Receiver Detail 
+            $mail->setFrom($senderEmail, 'Notes MarkePlace');  //Sender Detail
+            $mail->addAddress($sellerEmailID, 'Notes MarkePlace Reported Issue');  //Receiver Detail
+
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Sorry! We need to remove your notes from our portal.';
+            $mail->Body    = 'Hello' . ' ' . $sellerName . ',' . '<br>' .
+                'We want to inform you that, your note "' . $noteTitle . '" has been removed from the portal.' . '<br>' .
+                'Please find our remarks as below -' . '<br>' .
+                '"' . $remark . '"' . '<br>' .
                 'Regards,' . '<br>' .
                 'Notes Marketplace';
-                
-                $mail->send();
 
-            } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
-        
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     } else {
         die(mysqli_error($connection));
     }
-
 }
 
-if(isset($_POST['getNoOfDownloads'])) {
+if (isset($_POST['getNoOfDownloads'])) {
 
     $getNoOfDownloadsNoteID = $_POST['noteID'];
-    $_SESSION['noteID'] = $getNoOfDownloadsNoteID;
+    $_SESSION['downloadsOfBook'] = $getNoOfDownloadsNoteID;
 
     header("Location:downloaded-notes.php");
 }
