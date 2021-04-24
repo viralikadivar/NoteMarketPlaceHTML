@@ -61,7 +61,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -403,7 +403,7 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                                     <label for="sell-price" required>Sell Price *</label>
                                     <input type="text" name="sell-price" class="form-control" id="sell-price" placeholder="Enter Your price" value="<?php if ($isNoteSet) {
                                                                                                                                                         echo $editNoteSellingPrice;
-                                                                                                                                                    } ?>" required>
+                                                                                                                                                    } else { echo 0;}?>" required>
                                 </div>
                             </div>
                         </div>
@@ -429,9 +429,14 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
                     <div class="col-lg-3 col-md-3 col-sm-3">
                         <button type="submit" name="save" class="save-finish"><span class="text-center">save</span></button>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3">
-                        <button type="submit" name="publish" class="save-finish"><span class="text-center">publish</span></button>
-                    </div>
+                    <?php
+                        if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
+                            echo '<div class="col-lg-3 col-md-3 col-sm-3">
+                            <button type="submit" name="publish" class="save-finish"><span class="text-center">publish</span></button>
+                        </div>';
+                        }
+                    ?>
+                    
                 </div>
 
             </form>
@@ -440,25 +445,9 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -472,8 +461,8 @@ if (isset($_SESSION['noteID']) && !empty($_SESSION['noteID'])) {
     <script src="../js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
-    <script src="../js/header/header.js"></script>
-    <script src="../js/user/add-notes.js?version=125521215016"></script>
+    <script src="../js/header/header.js?version=125521215016"></script>
+    <script src="../js/user/add-notes.js?version=1255226"></script>
 
 </body>
 
@@ -607,7 +596,7 @@ if (isset($_POST['save'])) {
             die(mysqli_error($connection));
         } else {
             $_SESSION['noteID'] = $editNoteID;
-            // header("Refresh:0");
+            header("Refresh:0");
         }
     } else {
 
@@ -693,9 +682,12 @@ if (isset($_POST['save'])) {
                     }
                 }
             }
+            $_SESSION['noteID'] =  $addedNote;
+            header("Refresh:0");
         } else {
             die(mysqli_error($connection));
         }
+
     }
 }
 
