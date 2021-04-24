@@ -1,12 +1,13 @@
 $(function () {
-  // for notes Details
-  $(".link-to-note-preview").click(function () {
+  // });
+  $('#search-result').on('click' , '.link-to-note-preview' , function() {
     let noteID = $(this)
-      .parents(".book-heading")
-      .children('input[name="noteID"]')
-      .attr("value");
-    $("input[name='getNoteID']").val(noteID);
-    $("button[name='getNoteDetail']").trigger("click");
+    .parents(".book-heading")
+    .children('input[name="noteID"]')
+    .attr("value");
+  $("input[name='getNoteID']").val(noteID);
+  $("button[name='getNoteDetail']").trigger("click");
+  
   });
 
   // Searching Fields
@@ -72,7 +73,9 @@ $(function () {
       },
     });
   }
-  onLoad(); 
+
+    onLoad();
+  
 
   // Select Book Type
   $(".types li").click(function () {
