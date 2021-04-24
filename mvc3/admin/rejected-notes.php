@@ -10,7 +10,7 @@ global $connection;
 $userID = $_SESSION['UserID'];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -94,7 +94,7 @@ $userID = $_SESSION['UserID'];
 
                 <div class="col-lg-3 col-md-2 col-sm-2 sellerDropdownName">
                     <?php
-                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE IsActive = 1 ";
+                    $getSellerIDQuery = "SELECT DISTINCT SellerID FROM NotesDetails WHERE Status = 10 ";
                     $getSellerIDResult = mysqli_query($connection, $getSellerIDQuery);
                     ?>
                     <label>Seller</label>
@@ -148,7 +148,7 @@ $userID = $_SESSION['UserID'];
                                 <tbody id="table-body">
                                     <?php
 
-                                    $getRejectededNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 10 AND IsActive = 1 ";
+                                    $getRejectededNotesQuery = "SELECT * FROM NotesDetails WHERE Status = 10 ";
                                     $getRejectededNotesResult = mysqli_query($connection, $getRejectededNotesQuery);
 
                                     if ($getRejectededNotesResult) {
@@ -257,19 +257,9 @@ $userID = $_SESSION['UserID'];
     </form>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3" id="version">
-                    <h6>Version:1.1.24</h6>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-9" id="copyright">
-                    <h6>Copyright &copy; TatvaSoft All rights reserved.</h6>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -287,8 +277,8 @@ $userID = $_SESSION['UserID'];
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/admin/rejected-notes.js?version=1542125578248"></script>
-    <script src="../js/header/header.js"></script>
+    <script src="../js/admin/rejected-notes.js?version=1542123255578248"></script>
+    <script src="../js/header/header.js?version=45145148"></script>
 
 </body>
 
