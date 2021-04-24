@@ -19,6 +19,52 @@ $(function () {
     $("#phone-code").html(value);
   });
 
+  // Changing style on chnaging the field 
+  $("#first-name").on("click , change" , function() {
+    $("#first-name").parent().removeClass("wrong-info");
+  });
+
+  $("#last-name").on("click , change" , function() {
+    $("#last-name").parent().removeClass("wrong-info");
+  });
+
+  $("#phone-code").on("click , change" , function() {
+    $("#phone-code").parent().removeClass("wrong-info");
+  });
+
+  $("#phone-number").on("click , change" , function() {
+    $("#phone-number").parent().removeClass("wrong-info");
+    $("#phoneNumberValidation").css("display", "none");
+  });
+
+  $("#gender").on("click , change" , function() {
+    $("#gender").css("border-color", "#d1d1d1");
+  });
+ 
+  $("#add-1").on("click , change" , function() {
+    $("#add-1").parent().removeClass("wrong-info");
+  });
+
+  $("#add-2").on("click , change" , function() {
+    $("#add-2").parent().removeClass("wrong-info");
+  });
+
+  $("#city").on("click , change" , function() {
+    $("#city").parent().removeClass("wrong-info");
+  });
+
+  $("#state").on("click , change" , function() {
+    $("#state").parent().removeClass("wrong-info");
+  });
+
+  $("#zipcode").on("click , change" , function() {
+    $("#zipcode").parent().removeClass("wrong-info");
+  });
+
+  $("#country").on("click , change" , function() {
+    $("#country").parent().removeClass("wrong-info");
+  });
+
   //   Form Validation
   $(document).on("click", "#submit", function (event) {
     var firstName = $("#first-name").val();
@@ -31,6 +77,7 @@ $(function () {
     var state = $("#state").val();
     var zipCode = $("#zipcode").val();
     var country = $("#country").val();
+    var gender =  $("input[name='gender']").val();
 
     // FirstName Validation
     if (/^[0-9]+$/.test(firstName)) {
@@ -136,6 +183,14 @@ $(function () {
       event.preventDefault();
     } else {
       $("#country").parent().removeClass("wrong-info");
+    }
+
+    // Gender Validation 
+    if (gender == "") {
+      $("#gender").css("border-color", "red");
+      event.preventDefault();
+    } else {
+      $("#gender").css("border-color", "#d1d1d1");
     }
   });
 });
