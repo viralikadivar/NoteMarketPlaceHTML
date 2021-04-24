@@ -12,6 +12,22 @@ $(function() {
 
     });
 
+    // on change of field 
+    $("#inputPassword").on("click , change" , function() {
+        $("#inputPassword").parent().removeClass("wrong-info");
+        $("#inputPassword").parent().addClass("validation");
+    });
+
+    $("#confirmPassword").on("click , change" , function() {
+        $("#confirmPassword").parent().removeClass("wrong-info");
+        $("#confirmPassword").parent().addClass("validation");
+    });
+
+    $("#inputOldPassword").on("click , change" , function() {
+        $("#inputOldPassword").parent().removeClass("wrong-info");
+        $("#inputOldPassword").parent().addClass("validation");
+    });
+
     $(document).on('click' , '#submit' , function(event){
 
         var password = $("#inputPassword").val();
