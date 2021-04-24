@@ -8,8 +8,7 @@ $(window).on("load", function () {
 var table = $(".dashboard-table").DataTable({
   dom: '<"top"f>t<"bottom"p><"clear">',
   pagingType: "simple_numbers",
-  pageLength: "5",
-  lengthChange: "5",
+  lengthMenu: [5, 5, 5, 5, 5, "ALL"],
   language: {
     zeroRecords: "No Record Found",
   },
@@ -56,75 +55,87 @@ $(function () {
   var selectedBuyerID = "";
 
   $(".sellerName li").click(function () {
-    let value = $(this).html();
+    let name = $(this).html();
     selectedSellerID = $(this).attr("value");
-    value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    value = name + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#seller").html(value);
-    $.ajax({
-      url: "download-search.php",
-      type: "POST",
-      data: {
-        downloadedBookID: selectedBookID,
-        downloadedSellerID: selectedSellerID,
-        downloadedBuyerID: selectedBuyerID,
-      },
-      success: function (data) {
-        $("#table-body").html(data);
-      },
-    });
+
+    res = table.column(5).search(name);
+    res.draw();
+    // $.ajax({
+    //   url: "download-search.php",
+    //   type: "POST",
+    //   data: {
+    //     downloadedBookID: selectedBookID,
+    //     downloadedSellerID: selectedSellerID,
+    //     downloadedBuyerID: selectedBuyerID,
+    //   },
+    //   success: function (data) {
+    //     $("#table-body").html(data);
+    //   },
+    // });
   });
 
   $(".bookName li").click(function () {
-    let value = $(this).html();
+    let name = $(this).html();
     selectedBookID = $(this).attr("value");
 
-    value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    value = name + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#bookName").html(value);
 
-    $.ajax({
-      url: "download-search.php",
-      type: "POST",
-      data: {
-        downloadedBookID: selectedBookID,
-        downloadedSellerID: selectedSellerID,
-        downloadedBuyerID: selectedBuyerID,
-      },
-      success: function (data) {
-        $("#table-body").html(data);
-      },
-    });
+    res = table.column(1).search(name);
+    res.draw();
+
+    // $.ajax({
+    //   url: "download-search.php",
+    //   type: "POST",
+    //   data: {
+    //     downloadedBookID: selectedBookID,
+    //     downloadedSellerID: selectedSellerID,
+    //     downloadedBuyerID: selectedBuyerID,
+    //   },
+    //   success: function (data) {
+    //     $("#table-body").html(data);
+    //   },
+    // });
   });
 
   $(".buyerName li").click(function () {
-    let value = $(this).html();
+    let name = $(this).html();
     selectedBuyerID = $(this).attr("value");
-    value = value + '<img src="../images/form/arrow-down.png" alt="Down">';
+    value = name + '<img src="../images/form/arrow-down.png" alt="Down">';
     $("#buyer").html(value);
-    $.ajax({
-      url: "download-search.php",
-      type: "POST",
-      data: {
-        downloadedBookID: selectedBookID,
-        downloadedSellerID: selectedSellerID,
-        downloadedBuyerID: selectedBuyerID,
-      },
-      success: function (data) {
-        $("#table-body").html(data);
-      },
-    });
+    res = table.column(3).search(name);
+    res.draw();
+    // $.ajax({
+    //   url: "download-search.php",
+    //   type: "POST",
+    //   data: {
+    //     downloadedBookID: selectedBookID,
+    //     downloadedSellerID: selectedSellerID,
+    //     downloadedBuyerID: selectedBuyerID,
+    //   },
+    //   success: function (data) {
+    //     $("#table-body").html(data);
+    //   },
+    // });
   });
 
   // getiing detail
+  $("#table-body").on(
+    "click",
+    "button[name='download'] , button[name='noteDetail']",
+    function () {
+      let noteID = $(this)
+        .parents(".table-row")
+        .children(".noteID")
+        .attr("value");
+      $("input[name='noteID']").val(noteID);
+    }
+  );
 
-  $("button[name='download'] , button[name='noteDetail']").click(function () {
-    let noteID = $(this)
-      .parents(".table-row")
-      .children(".noteID")
-      .attr("value");
-    $("input[name='noteID']").val(noteID);
-  });
-
-  $(".viewNote").click(function () {
+  // view more note details
+  $("#table-body").on("click", ".viewNote", function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".noteID")
@@ -134,14 +145,14 @@ $(function () {
   });
 
   // view buyer
-  $(".view-downloader").click(function () {
+  $("#table-body").on("click", ".view-downloader", function () {
     let noteID = $(this).parents(".table-row").children(".buyer").attr("value");
     $("input[name='memberID']").val(noteID);
     $("button[name='viewMember']").trigger("click");
   });
 
   // view Seller
-  $(".view-seller").click(function () {
+  $("#table-body").on("click", ".view-seller", function () {
     let noteID = $(this)
       .parents(".table-row")
       .children(".seller")
