@@ -47,7 +47,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -161,7 +161,7 @@ if (mysqli_num_rows($selectUserProfileResult)) {
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="dob" required>Date Of Birth </label>
-                            <input type="text" name="dateOfBirth" class="form-control" id="dob"value="<?php if ($isSet) {
+                            <input type="text" name="dateOfBirth" class="form-control" id="dob"value="<?php if ($isSet && $dob != "0000-00-00" ) {
                                                                                                             echo $dob;
                                                                                                         } ?>" placeholder="Enter Your date of birth" onfocus="(this.type='date')">
                         </div>
@@ -377,25 +377,9 @@ if (mysqli_num_rows($selectUserProfileResult)) {
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -409,8 +393,8 @@ if (mysqli_num_rows($selectUserProfileResult)) {
     <script src="../js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../js/bootstrap/bootstrap.min.js"></script>
 
-    <script src="../js/header/header.js"></script>
-    <script src="../js/user/user-profile.js?version=120255250255"></script>
+    <script src="../js/header/header.js?version=1202552255"></script>
+    <script src="../js/user/user-profile.js?version=120255210255"></script>
 
 </body>
 
@@ -447,12 +431,14 @@ if (isset($_POST['submit'])) {
     $timeStamp = $dateTime->getTimestamp();
 
     // Profile Pic Path 
+  
     $profilePicPath = "../members/" . $userID . "/DP_" . $timeStamp;
-    $profilePic = $userProfileDetail['ProfilePicture'];
+    
 
     $path = "";
     if ($_FILES['profile-picture']['size'] != 0) {
-        if ($profilePic != null) {
+        if ($profilePic != null && $isSet  ) {
+            $profilePic = $userProfileDetail['ProfilePicture'];
             unlink($profilePic);
         }
         $user_image  = $_FILES['profile-picture']['tmp_name'];
@@ -482,6 +468,12 @@ if (isset($_POST['submit'])) {
     // inserting data into UserProfile Table if User data is not present in UserProfil Data
     if (!$isSet) {
 
+        $updateUsersQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName' , ModifiedBy = $userID WHERE ID = $userID ";
+        $updateUserResult = mysqli_query($connection,$updateUsersQuery);
+        if(!$updateUserResult){
+            die("Not able to update User detail".mysqli_error($connection));
+        }
+        
         $addProfileQuery = "INSERT INTO UserProfile( UserID , DOB , Gender , SecondaryEmailAddress , PhonenNumberCountryCode , PhoneNumber , ProfilePicture , AddressLine1 , AddressLine2 , City , State , ZipCode , Country , University , College) VALUES( $userID ,  '$dateOfBirth' , $genderID , '$email' , '$phoneCode' , '$phoneNumber' , '$path' , '$addrLine1' , '$addrLine2' , '$city' , '$state' ,'$zipCode' , '$country' , '$university' , '$college' )";
         $addProfileResult = mysqli_query($connection, $addProfileQuery);
         if (!$addProfileResult) {
@@ -491,8 +483,11 @@ if (isset($_POST['submit'])) {
             header("Refresh:0");
         }
     } else {
-        echo $path;
-        echo $genderID;
+        $updateUsersQuery = "UPDATE Users SET FirstName = '$firstName' , LastName = '$lastName' , ModifiedBy = $userID WHERE ID = $userID ";
+        $updateUserResult = mysqli_query($connection,$updateUsersQuery);
+        if(!$updateUserResult){
+            die("Not able to update User detail".mysqli_error($connection));
+        }
         $updateUserProfileQuery = "UPDATE UserProfile SET DOB = '$dateOfBirth' , Gender = $genderID ,SecondaryEmailAddress = '$email' , PhonenNumberCountryCode = '$phoneCode' , PhoneNumber = '$phoneNumber' , ProfilePicture = '$path' , AddressLine1 = '$addrLine1' , AddressLine2 = '$addrLine2' , City = '$city' , State = '$state' , ZipCode = '$zipCode' , Country = '$country' , University = '$university' , College = '$college' WHERE UserID = $userID ";
         $updateUserProfileResult = mysqli_query($connection, $updateUserProfileQuery);
         if (!$updateUserProfileResult) {
