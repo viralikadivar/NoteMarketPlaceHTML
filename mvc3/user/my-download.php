@@ -16,12 +16,12 @@ $userID = $_SESSION['UserID'];
 
 $myDownloadQuery = "SELECT * FROM NotesDownloads WHERE Downloader = $userID AND IsSellerHasAllowedDownload = 1";
 $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
- 
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head style="overflow-x:hidden">
 
     <!-- important meta tags -->
     <meta charset="utf-8">
@@ -246,25 +246,9 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
     </section>
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="../images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="../images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="../images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "../footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -282,9 +266,8 @@ $myDownloadResult = mysqli_query($connection, $myDownloadQuery);
     <script src="../js/data-table/jquery.dataTables.js"></script>
 
     <!-- custom js  -->
-    <script src="../js/user/data-table.js?version=4562163"></script>
-    <script src="../js/header/header.js"></script>
-    <script src="../js/user/my-downloads.js?version=11004"></script>
+    <script src="../js/header/header.js?version=4562163"></script>
+    <script src="../js/user/my-downloads.js?version=1102310112104"></script>
 
 </body>
 
