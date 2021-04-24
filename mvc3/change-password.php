@@ -9,6 +9,7 @@ global $connection;
 $userEmail = $_SESSION['userEmail'] ;
 $validationClass = "validation";
 $oldPassword = "";
+$isSet = false;
 
 $getUserQuery = "SELECT * FROM Users WHERE EmailID = '$userEmail' ";
 $getUserResult = mysqli_query($connection, $getUserQuery);
@@ -19,9 +20,10 @@ if (mysqli_num_rows($getUserResult) == 1) {
     $oldPassword = $userDetail['Password'];
 
     if (isset($_POST['submit'])) {
-
+        $isSet = true;
         $oldGivenPassword = $_POST['oldPassword'];
         $newPassword = $_POST['inputPassword'];
+        $confirmPassword = $_POST['confirmPassword'];
 
         $isPassVerified =  password_verify($oldGivenPassword, $oldPassword);
         
@@ -38,7 +40,6 @@ if (mysqli_num_rows($getUserResult) == 1) {
             }
 
         } else {
-            echo "NOT Chnged";
             $validationClass = "wrong-info";
         }
     }
@@ -102,7 +103,7 @@ if (mysqli_num_rows($getUserResult) == 1) {
                     <!-- Enter old Password -->
                     <div class="form-group <?php echo $validationClass; ?>">
                         <label for="inputOldPassword">Old Password</label>
-                        <input type="password" name="oldPassword" class="form-control" id="inputOldPassword" placeholder="Enter your old password">
+                        <input type="password" name="oldPassword" class="form-control" id="inputOldPassword" value="<?php if($isSet){echo  $oldGivenPassword; } ?>" placeholder="Enter your old password">
                         <img class="show-hide" src="images/form/eye.png" alt="eye">
                         <small id="passwordCheck" class="form-text">Incorrect Password!</small>
                     </div>
@@ -111,7 +112,7 @@ if (mysqli_num_rows($getUserResult) == 1) {
                     <!-- Enter new Password -->
                     <div class="form-group validation">
                         <label for="inputPassword">New Password</label>
-                        <input type="password" name="inputPassword" class="form-control" id="inputPassword" placeholder="Enter your new password">
+                        <input type="password" name="inputPassword" class="form-control" id="inputPassword" value="<?php if($isSet){echo  $newPassword; } ?>" placeholder="Enter your new password">
                         <img class="show-hide" src="images/form/eye.png" alt="eye">
                         <small id="passwordValidation" class="form-text"></small>
                     </div>
@@ -119,7 +120,7 @@ if (mysqli_num_rows($getUserResult) == 1) {
                     <!-- Re-Enter new Password -->
                     <div class="form-group validation">
                         <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Enter your comfirm password ">
+                        <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" value="<?php if($isSet){echo  $confirmPassword; } ?>" placeholder="Enter your comfirm password ">
                         <img class="show-hide" src="images/form/eye.png" alt="eye">
                         <small id="passwordVarification" class="form-text">Password not matched!</small>
                     </div>
@@ -142,7 +143,7 @@ if (mysqli_num_rows($getUserResult) == 1) {
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
     <!-- Custom Js -->
-    <script src="js/user/changePassword.js?version=415525"></script>
+    <script src="js/user/changePassword.js?version=415525225"></script>
 
 </body>
 
