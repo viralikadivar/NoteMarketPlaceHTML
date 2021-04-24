@@ -2,7 +2,7 @@
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="overflow-x:hidden">
 
 <head>
 
@@ -300,25 +300,9 @@ session_start();
     <!-- FAQ List Ends -->
 
     <!-- Footer  -->
-    <footer id="footer">
-        <hr>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-9">
-                    <p>
-                        Copyright &copy; TatvaSoft All rights reserved.
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <ul class="social-icons">
-                        <li><a href="#"><img src="images/header-footer/facebook.png" alt="Facebook"></a></li>
-                        <li><a href="#"><img src="images/header-footer/twitter.png" alt="Twitter"></a></li>
-                        <li> <a href="#"><img src="images/header-footer/linkedin.png" alt="LinkedIn"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php 
+        include "footer.php";
+    ?>
     <!-- Footer Ends -->
 
     <!-- ================================================
@@ -333,7 +317,7 @@ session_start();
 
     <!-- Custom JS -->
     <script src="js/faq.js"></script>
-    <script src="js/header/header.js"></script>
+    <script src="js/header/header.js?version=22485512"></script>
 
 </body>
 
